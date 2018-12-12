@@ -8,12 +8,14 @@ public class Controller : MonoBehaviour
     public KeyCode Left;
     public KeyCode Right;
 
+    public float jumpMin;
     public float jumpMax;
     public float jumpPower;
     public float speed;
 
     private bool jumpStarted;
     private float maxJumpPos;
+    private float startedJumpPos;
     private bool grounded;
     private bool hitGround;
 
@@ -47,12 +49,13 @@ public class Controller : MonoBehaviour
                 hitGround = true;
             }
 
-            if (Input.GetKeyDown(Jump) || Input.GetKey(Jump))
+            if (Input.GetKeyDown(Jump))
             {
                 if (!jumpStarted)
                 {
-                    maxJumpPos = transform.position.y + jumpMax;
-                    GetComponent<Rigidbody2D>().AddForce(Vector2.up * (jumpPower * 5), ForceMode2D.Impulse);
+                    startedJumpPos = transform.position.y;
+                  //  maxJumpPos = transform.position.y + jumpMax;
+                    GetComponent<Rigidbody2D>().AddForce(Vector2.up * (jumpPower * 1), ForceMode2D.Impulse);
                     jumpStarted = true;
                     hitGround = false;
                 }
@@ -63,18 +66,39 @@ public class Controller : MonoBehaviour
             grounded = false;
         }
 
-        if (Input.GetKey(Jump) && jumpStarted == true)
-        {
-            GetComponent<Rigidbody2D>().AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-        }
-
         if (jumpStarted)
         {
-            if (Input.GetKeyUp(Jump) || transform.position.y >= maxJumpPos)
+            //player wants to jump heiger
+            if (Input.GetKey(Jump))
             {
-                jumpStarted = false;
+                GetComponent<Rigidbody2D>().AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+
+                //continue jump till max height
+                if (transform.position.y >= startedJumpPos + jumpMax)
+                {
+                    jumpStarted = false;
+                }
+            }
+            else
+            {
+                //if they havent reached the minimum height, they continue to jump
+                if (transform.position.y >= startedJumpPos + jumpMin)
+                {
+                    jumpStarted = false;
+                }
+                else
+                {
+                    GetComponent<Rigidbody2D>().AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+                }
             }
         }
+
+            //player wants to end jump
+            if (Input.GetKeyUp(Jump))
+            {
+         
+        }
+    
 
 
         if (Input.GetKey(Right) && Input.GetKey(Left))
@@ -94,12 +118,12 @@ public class Controller : MonoBehaviour
             //moving
             if (Input.GetKey(Left) && Input.GetKey(Right) == false)
             {
-                GetComponent<Rigidbody2D>().AddForce(Vector2.left * speed, ForceMode2D.Force);
+                transform.Translate(-Vector3.right * Time.deltaTime * speed);
             }
 
             if (Input.GetKey(Right) && Input.GetKey(Left) == false)
             {
-                GetComponent<Rigidbody2D>().AddForce(Vector2.right * speed, ForceMode2D.Force);
+                transform.Translate(Vector3.right * Time.deltaTime * speed);
             }
         }
 
