@@ -20,11 +20,11 @@ public class LevelGenerator : MonoBehaviour
         Ground4
     }
 
-    private int[] G0Probs = new int[] {20, 20, 20, 20, 20};
-    private int[] G1Probs = new int[] {20, 20, 20, 20, 20};
-    private int[] G2Probs = new int[] {20, 20, 20, 20, 20};
-    private int[] G3Probs = new int[] {20, 20, 20, 20, 20};
-    private int[] G4Probs = new int[] {20, 20, 20, 20, 20};
+    public int[] G0Probs = new int[] {20, 20, 20, 20, 20};
+    public int[] G1Probs = new int[] {20, 20, 20, 20, 20};
+    public int[] G2Probs = new int[] {20, 20, 20, 20, 20};
+    public int[] G3Probs = new int[] {20, 20, 20, 20, 20};
+    public int[] G4Probs = new int[] {20, 20, 20, 20, 20};
 
     private States currentState;
     private int xPos = 0;
@@ -32,11 +32,6 @@ public class LevelGenerator : MonoBehaviour
 
     public Transform player;
     private Vector2 startPlayerPos;
-
-    public UIManager UImanager;
-    private int generation;
-    private int candidate;
-
 
     // Use this for initialization
     void Start()
@@ -82,9 +77,6 @@ public class LevelGenerator : MonoBehaviour
         }
         GameObject end = Instantiate(endFlag, new Vector3(xPos, (int)currentState, 0), ground.transform.rotation);
         platsformObjects.Add(end);
-
-        candidate++;
-        UImanager.UpdateCandidate(candidate);
     }
 
 
@@ -233,7 +225,7 @@ public class LevelGenerator : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
-            NewLevelCandidate();
+            NewLevelCandidate(true);
         }
     }
 
@@ -251,10 +243,22 @@ public class LevelGenerator : MonoBehaviour
         return chromosone;
     }
 
-
-    public void NewLevelCandidate()
+    public void NewLevelCandidate(bool randomise)
     {
-        RandomChain();
+        if (randomise)
+        {
+            RandomChain();
+        }
+
         GenerateLevel();
+    }
+
+    public void SetNewChain(List<List<int[]>> chain)
+    {
+        G0Probs = chain[0][0];
+        G1Probs = chain[0][1];
+        G2Probs = chain[0][2];
+        G3Probs = chain[0][3];
+        G4Probs = chain[0][4];
     }
 }
