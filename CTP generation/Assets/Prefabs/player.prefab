@@ -84,7 +84,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1546133543106886}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 7.97, z: -0.27349538}
+  m_LocalPosition: {x: 0, y: 8, z: -0.27349538}
   m_LocalScale: {x: 7, y: 7, z: 1}
   m_Children:
   - {fileID: 4534291434232582}
@@ -183,10 +183,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 1
-  m_Mass: 0.82809997
+  m_Mass: 0.55712026
   m_LinearDrag: 0
   m_AngularDrag: 0
-  m_GravityScale: 3
+  m_GravityScale: 6
   m_Material: {fileID: 6200000, guid: 145248f1b98606f47a7b7eabc344c679, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -204,7 +204,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.0025}
+  m_Offset: {x: -0.0009668153, y: -0.0024999976}
   m_SpriteTilingProperty:
     border: {x: 0.049999997, y: 0.049999997, z: 0.049999997, w: 0.049999997}
     pivot: {x: 0.5, y: 0.5}
@@ -215,7 +215,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.13, y: 0.13}
+  m_Size: {x: 0.08746001, y: 0.13}
   m_EdgeRadius: 0
 --- !u!81 &81055642441307496
 AudioListener:
@@ -238,9 +238,9 @@ MonoBehaviour:
   Jump: 32
   Left: 97
   Right: 100
-  jumpMin: 0.3
-  jumpMax: 2
-  jumpPower: 2
+  jumpMin: 0.5
+  jumpMax: 2.3
+  jumpPower: 5
   speed: 5
   groundPoint1: {fileID: 4383387955939084}
   groundPoint2: {fileID: 4606293770406926}

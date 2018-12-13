@@ -18,33 +18,62 @@ public class LevelGenerator : MonoBehaviour
         Ground4
     }
 
-    public int[] G0Probs = new int[] { 20, 20, 20, 20, 20 };
-    public int[] G1Probs = new int[] { 20, 20, 20, 20, 20 };
-    public int[] G2Probs = new int[] { 20, 20, 20, 20, 20 };
-    public int[] G3Probs = new int[] { 20, 20, 20, 20, 20 };
-    public int[] G4Probs = new int[] { 20, 20, 20, 20, 20 };
+    private int[] G0Probs = new int[] { 20, 20, 20, 20, 20 };
+    private int[] G1Probs = new int[] { 20, 20, 20, 20, 20 };
+    private int[] G2Probs = new int[] { 20, 20, 20, 20, 20 };
+    private int[] G3Probs = new int[] { 20, 20, 20, 20, 20 };
+    private int[] G4Probs = new int[] { 20, 20, 20, 20, 20 };
 
     private States currentState;
     private int xPos = 0;
 
+    public Transform player;
+    private Vector2 startPlayerPos;
+
+    public UIManager UImanager;
+    private int generation;
+    private int candidate;
+
 	// Use this for initialization
-	void Start ()
-	{
+    void Start()
+    {
+        startPlayerPos = player.transform.position;
+
         RandomChain();
+        GenerateLevel();
+    }
+
+
+    void GenerateLevel()
+    {
+        player.transform.position = startPlayerPos;
+
+        int xPos = 0;
+
+        foreach (var plat in platsformObjects)
+        {
+            Destroy(plat.gameObject);
+        }
+
+        platsformObjects.Clear();
 
         for (int i = 0; i < 250; i++)
-	    {
-	        SwitchStates();
+        {
+            SwitchStates();
 
-	        if (currentState != States.NoGround)
-	        {
-	            GameObject plat = Instantiate(ground, new Vector3(xPos, (int)currentState, 0), ground.transform.rotation);
+            if (currentState != States.NoGround)
+            {
+                GameObject plat = Instantiate(ground, new Vector3(xPos, (int)currentState, 0), ground.transform.rotation);
                 platsformObjects.Add(plat);
-	        }
+            }
 
-	        xPos++;
+            xPos++;
         }
-	}
+
+        candidate++;
+        UImanager.UpdateCandidate(candidate);
+    }
+
 
     void SwitchStates()
     {
@@ -185,33 +214,25 @@ public class LevelGenerator : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
-            int xPos = 0;
-
-            foreach (var plat in platsformObjects)
-            {
-                Destroy(plat.gameObject);
-            }
-
-            platsformObjects.Clear();
-
-            for (int i = 0; i < 50; i++)
-            {
-                SwitchStates();
-
-                if (currentState != States.NoGround)
-                {
-                    GameObject plat = Instantiate(ground, new Vector3(xPos, (int) currentState, 0),
-                        ground.transform.rotation);
-                    platsformObjects.Add(plat);
-                }
-
-                xPos++;
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha9))
-        {
             RandomChain();
+            GenerateLevel();
         }
+    }
+
+
+    public List<int[]> GetGeneratorChromosome()
+    {
+        List<int[]> chromosone = new List<int[]>();
+
+        chromosone.Add(G0Probs);
+        chromosone.Add(G1Probs);
+        chromosone.Add(G2Probs);
+        chromosone.Add(G3Probs);
+        chromosone.Add(G4Probs);
+
+        RandomChain();
+        GenerateLevel();
+
+        return chromosone;
     }
 }

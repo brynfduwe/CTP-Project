@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class GeneticAlgorthim : MonoBehaviour
 {
+    public Transform player;
+    public int failedYpos;
+
     private List<List<LevelGenerator>> candidateChains = new List<List<LevelGenerator>>();
 
     // Use this for initialization
@@ -12,7 +15,12 @@ public class GeneticAlgorthim : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+	{
+	    if (player.transform.position.y < failedYpos)
+	    {
+	        GetComponent<LevelGenerator>().GetGeneratorChromosome();
+	    }
 		
 	}
 
