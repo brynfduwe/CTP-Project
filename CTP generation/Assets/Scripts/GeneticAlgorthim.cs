@@ -7,7 +7,7 @@ public class GeneticAlgorthim : MonoBehaviour
     public Transform player;
     public int failedYpos;
 
-    private List<List<LevelGenerator>> candidateChains = new List<List<LevelGenerator>>();
+    public List<List<int[]>> CandidateList = new List<List<int[]>>();
 
     // Use this for initialization
     void Start () {
@@ -19,14 +19,19 @@ public class GeneticAlgorthim : MonoBehaviour
 	{
 	    if (player.transform.position.y < failedYpos)
 	    {
-	        GetComponent<LevelGenerator>().GetGeneratorChromosome();
+            GetComponent<LevelGenerator>().NewLevelCandidate();
 	    }
-		
+
+	    if (player.transform.position.x >= GetComponent<LevelGenerator>().levelLength)
+	    {
+            AddCandidate();
+	    }
 	}
 
 
-    public void AddCandidate(List<LevelGenerator> level)
+    void AddCandidate()
     {
-        candidateChains.Add(level);
+        CandidateList.Add(GetComponent<LevelGenerator>().GetGeneratorChromosome());
+        GetComponent<LevelGenerator>().NewLevelCandidate();
     }
 }
