@@ -166,7 +166,7 @@ public class LevelGenerator : MonoBehaviour
     }
 
 
-    void RandomChain()
+    public void RandomChain()
     {
         int leftVal = 100;
         for (int i = 0; i < G0Probs.Length - 1; i++)
@@ -225,7 +225,7 @@ public class LevelGenerator : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
-            NewLevelCandidate(true);
+            NewLevelCandidate();
         }
     }
 
@@ -243,13 +243,8 @@ public class LevelGenerator : MonoBehaviour
         return chromosone;
     }
 
-    public void NewLevelCandidate(bool randomise)
+    public void NewLevelCandidate()
     {
-        if (randomise)
-        {
-            RandomChain();
-        }
-
         GenerateLevel();
     }
 
