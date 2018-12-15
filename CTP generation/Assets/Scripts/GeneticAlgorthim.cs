@@ -15,6 +15,10 @@ public class GeneticAlgorthim : MonoBehaviour
     public List<List<int[]>> CandidateList = new List<List<int[]>>();
     public List<float> CandidateFitness = new List<float>();
 
+    public List<List<int[]>> CurrentOffspring = new List<List<int[]>>();
+
+    private int offspringIter;
+
     // Use this for initialization
     void Start ()
     {
@@ -45,20 +49,48 @@ public class GeneticAlgorthim : MonoBehaviour
 
 	    if (player.transform.position.x >= GetComponent<LevelGenerator>().levelLength)
 	    {
-            AddCandidate();
+	        if (generation == 1)
+	        {
+                AddCandidate();
 	        FitnessTimer = 0;
 
-	        if (CandidateList.Count > 5)
-	        {
-                player.transform.position = new Vector2(-100,-100);
+	            if (CandidateList.Count > 5)
+	            {
+	                player.transform.position = new Vector2(-100, -100);
 
-	            generation++;
-	            UImanager.UpdateGeneration(generation);
-	            candidate = 1;
+	                generation++;
+	                UImanager.UpdateGeneration(generation);
+	                candidate = 1;
+	                UImanager.UpdateCandidate(candidate);
 
-                Selection();
+                    Selection();
+	            }
 	        }
-        }
+	        else
+	        {
+                AddCandidate();
+	            FitnessTimer = 0;
+
+                if (CandidateList.Count > 5)
+	            {
+	                player.transform.position = new Vector2(-100, -100);
+
+	                generation++;
+	                UImanager.UpdateGeneration(generation);
+	                candidate = 1;
+	                UImanager.UpdateCandidate(candidate);
+
+                    Selection();
+	            }
+                else
+                {
+                    
+                    GetComponent<LevelGenerator>().SetNewChain(CurrentOffspring[offspringIter]);
+                    GetComponent<LevelGenerator>().NewLevelCandidate(false);
+                    offspringIter++;
+                }
+            }
+	    }
 	}
 
     void AddCandidate()
@@ -69,7 +101,7 @@ public class GeneticAlgorthim : MonoBehaviour
         CandidateList.Add(GetComponent<LevelGenerator>().GetGeneratorChromosome());
         CandidateFitness.Add(FitnessTimer);
 
-        if (generation < 2)
+        if (generation == 1)
         {
             GetComponent<LevelGenerator>().NewLevelCandidate(true);
         }
@@ -83,66 +115,85 @@ public class GeneticAlgorthim : MonoBehaviour
     void Selection()
     {
         List<List<int[]>> SelectedChains = new List<List<int[]>>();
+        List<List<int[]>> OffspringCandidates = new List<List<int[]>>();
 
-        //parent 1
-        float best = 10000;
-        int bestIter = CandidateFitness.Count;
 
-        for (int i = 0; i < CandidateFitness.Count; i++)
-        {
-            if (CandidateFitness[i] < best)
-            {
-                best = CandidateFitness[i];
-                bestIter = i;
-            }
-        }
+        //change to roulette wheel
 
-        SelectedChains.Add(CandidateList[bestIter]);
-        CandidateList.Remove(CandidateList[bestIter]);
-        CandidateFitness.Remove(CandidateFitness[bestIter]);
+        SelectedChains.Add(CandidateList[4]);
+        SelectedChains.Add(CandidateList[0]);
 
-        //parent2
-        float best2 = 10000;
-        int bestIter2 = CandidateFitness.Count;
-
-        for (int i = 0; i < CandidateFitness.Count; i++)
-        {
-            if (CandidateFitness[i] < best2)
-            {
-                best2 = CandidateFitness[i];
-                bestIter2 = i;
-            }
-        }
-
-        SelectedChains.Add(CandidateList[bestIter2]);
         CandidateList.Clear();
         CandidateFitness.Clear();
 
-        SelectedChains = Crossover(SelectedChains);
 
-        GetComponent<LevelGenerator>().SetNewChain(SelectedChains);
+        OffspringCandidates = Crossover(SelectedChains);
+
+        offspringIter = 0;
+
+        CurrentOffspring = OffspringCandidates;
+
+        GetComponent<LevelGenerator>().SetNewChain(CurrentOffspring[0]);
         GetComponent<LevelGenerator>().NewLevelCandidate(false);
 
+        foreach (var o in CurrentOffspring)
+        {
+            foreach (var i in o)
+            {
+           //     Debug.Log(i[0].ToString() + "," + i[1].ToString() + "," + i[2].ToString() + "," + i[3].ToString() + "," + i[4].ToString());
+            }
+        }
     }
 
 
     List<List<int[]>> Crossover(List<List<int[]>> parents)
     {
-        List<List<int[]>> Offspring = new List<List<int[]>>();
-        Offspring.Add(parents[0]);
-        Offspring.Add(parents[1]);
+        List<List<int[]>> Offsprings = new List<List<int[]>>();
+      //  Offspring.Add(parents[0]);
+      //  Offspring.Add(parents[1]);
 
-        int r = Random.Range(0, parents[0][0].Length);
-
-        for (int i = 0; i < parents[0][0].Length; i++)
+        for (int j = 0; j < 10; j++)
         {
-            if (r < i)
+            bool flipped = false;
+
+            if ((Random.Range(0, 10)) >= 5)
             {
-                Offspring[0][i] = parents[1][i];
-                Offspring[1][i] = parents[0][i];
+                flipped = true;
             }
+
+            int r = Random.Range(0, 5);
+
+            List<int[]> Offspring = new List<int[]>();
+
+            for (int i = 0; i < 5; i++)
+            {
+                if (!flipped)
+                {
+                    if (r < i)
+                    {
+                        Offspring.Add(parents[1][i]);
+                    }
+                    else
+                    {
+                        Offspring.Add(parents[0][i]);
+                    }
+                }
+                else
+                {
+                    if (r < i)
+                    {
+                        Offspring.Add(parents[0][i]);
+                    }
+                    else
+                    {
+                        Offspring.Add(parents[1][i]);
+                    }
+                }
+            }
+
+            Offsprings.Add(Offspring);
         }
 
-        return Offspring;
+        return Offsprings;
     }
 }

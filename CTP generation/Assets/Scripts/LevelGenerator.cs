@@ -253,12 +253,12 @@ public class LevelGenerator : MonoBehaviour
         GenerateLevel();
     }
 
-    public void SetNewChain(List<List<int[]>> chain)
+    public void SetNewChain(List<int[]> chain)
     {
-        G0Probs = chain[0][0];
-        G1Probs = chain[0][1];
-        G2Probs = chain[0][2];
-        G3Probs = chain[0][3];
-        G4Probs = chain[0][4];
+        G0Probs = chain[0];
+        G1Probs = chain[1];
+        G2Probs = chain[2];
+        G3Probs = chain[3];
+        G4Probs = chain[4];
     }
 }
