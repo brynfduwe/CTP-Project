@@ -33,6 +33,8 @@ public class AITesterController : MonoBehaviour {
 
     private bool jumpHitIgnore = true;
 
+    private Vector2 startPos;
+
 
     // Use this for initialization
     void Start()
@@ -41,6 +43,9 @@ public class AITesterController : MonoBehaviour {
         GetComponent<Rigidbody2D>().angularVelocity = GetComponent<Rigidbody2D>().angularVelocity / 2;
 
         jumpTargetPos = transform.position;
+        startPos = transform.position;
+
+        Time.timeScale = Time.timeScale * 2.5f;
     }
 
 
@@ -151,7 +156,7 @@ public class AITesterController : MonoBehaviour {
         if (!jumpStarted)
         {
             //target platform picker.
-            Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 6);
+            Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 25);
 
             Transform nearestCol = cols[0].transform;
             float nearestDist = 100;
@@ -186,9 +191,18 @@ public class AITesterController : MonoBehaviour {
             jumpStarted = true;
             hitGround = false;
 
-            jumpTargetHit = false;
-            jumpHitIgnore = false;
-            stopMoveRight = false;
+            if (nearestDist < 100)
+            {
+                jumpTargetHit = false;
+                jumpHitIgnore = false;
+                stopMoveRight = false;
+            }
+            else
+            {
+                jumpTargetHit = true;
+                jumpHitIgnore = true;
+                stopMoveRight = false;
+            }
 
             if (nearestDist < 1)
             {
@@ -202,10 +216,20 @@ public class AITesterController : MonoBehaviour {
             else
             {
                 //highjump
-                jumpTime = 0.3f;
+                jumpTime = 0.35f;
             }
 
-           // jumpTime = time;
+            // jumpTime = time;
         }
+    }
+
+
+    public void resetPlayer()
+    {
+        jumpTargetHit = true;
+        jumpHitIgnore = true;
+        stopMoveRight = false;
+
+        jumpTargetPos = startPos;
     }
 }

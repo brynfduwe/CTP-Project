@@ -232,6 +232,12 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 212359022972710868, guid: 953626e60cc6c9d4481f2faa267f7cc5,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 293b6f26cb70cad4896042b2ab7447dd,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 953626e60cc6c9d4481f2faa267f7cc5, type: 2}
   m_IsPrefabAsset: 0
@@ -415,6 +421,12 @@ Prefab:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 212880153793565064, guid: 818cce35a4e875542a888740a76b2a3b,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 293b6f26cb70cad4896042b2ab7447dd,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 818cce35a4e875542a888740a76b2a3b, type: 2}
   m_IsPrefabAsset: 0
@@ -566,6 +578,12 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 212459978840458222, guid: 5be56f2bfd70ca544900af5d9287e5dd,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: cbaea6c1953445741a197af494aec498,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5be56f2bfd70ca544900af5d9287e5dd, type: 2}
   m_IsPrefabAsset: 0
@@ -604,7 +622,7 @@ MonoBehaviour:
   G2Probs: 1400000014000000140000001400000014000000
   G3Probs: 1400000014000000140000001400000014000000
   G4Probs: 1400000014000000140000001400000014000000
-  levelLength: 100
+  levelLength: 50
   player: {fileID: 62318585}
 --- !u!4 &1951750621
 Transform:

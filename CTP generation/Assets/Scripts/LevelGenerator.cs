@@ -47,6 +47,11 @@ public class LevelGenerator : MonoBehaviour
     {
         player.transform.position = startPlayerPos;
 
+        if (player.GetComponent<AITesterController>() != null)
+        {
+            player.GetComponent<AITesterController>().resetPlayer();
+        }
+
         int xPos = 0;
 
         foreach (var plat in platsformObjects)
