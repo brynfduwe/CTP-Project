@@ -25,16 +25,16 @@ public class LevelGenerator : MonoBehaviour
         Ground9
     }
 
-    int[] G0Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
-    int[] G1Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
-    int[] G2Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
-    int[] G3Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
-    int[] G4Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
-    int[] G5Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
-    int[] G6Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
-    int[] G7Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
-    int[] G8Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
-    int[] G9Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
+    public int[] G0Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
+    public int[] G1Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
+    public int[] G2Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
+    public int[] G3Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
+    public int[] G4Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
+    public int[] G5Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
+    public int[] G6Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
+    public int[] G7Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
+    public int[] G8Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
+    public int[] G9Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
 
     private States currentState;
     private int xPos = 0;

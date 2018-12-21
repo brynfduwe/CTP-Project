@@ -26,6 +26,6 @@ public class UIManager : MonoBehaviour
 
     public void UpdateCandidate(int cand)
     {
-        candidate.text = "Candidate: " + cand.ToString();
+        candidate.text = "Candidates found: " + cand.ToString();
     }
 }

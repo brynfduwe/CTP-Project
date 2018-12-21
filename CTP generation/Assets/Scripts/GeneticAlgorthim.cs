@@ -19,8 +19,6 @@ public class GeneticAlgorthim : MonoBehaviour
 
     public int offspringIter;
 
-   // public LevelGenerator[] levelGMs;
-
     // Use this for initialization
     void Start ()
     {
