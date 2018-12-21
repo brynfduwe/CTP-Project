@@ -131,7 +131,18 @@ public class GeneticAlgorthim : MonoBehaviour
         for (int i = 0; i < 10; i++)
         {
             List<int[]> Offspring = new List<int[]>();
-            Offspring = Crossover(CandidateList[Random.Range(0, CandidateList.Count)], CandidateList[Random.Range(0, CandidateList.Count)]);
+            int p1 = Random.Range(0, CandidateList.Count);
+
+            int p2 = Random.Range(0, CandidateList.Count);
+
+            //check to ensure parents arent the same 
+            while (p2 == p1)
+            {
+                p2 = Random.Range(0, CandidateList.Count);
+            }
+
+            Offspring = Crossover(CandidateList[p1], CandidateList[p2]);
+
             CurrentOffspring.Add(Offspring);
         }
 
