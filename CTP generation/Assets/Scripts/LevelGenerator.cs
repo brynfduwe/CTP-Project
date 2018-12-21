@@ -77,8 +77,8 @@ public class LevelGenerator : MonoBehaviour
 
             if (currentState != States.NoGround)
             {
-                GameObject plat = Instantiate(ground, new Vector3(xPos, (int) currentState, 0),
-                    ground.transform.rotation);
+                GameObject plat = Instantiate(ground, new Vector3(xPos, transform.position.y + (int) currentState, 0),
+                    ground.transform.rotation, transform);
                 platsformObjects.Add(plat);
             }
 
@@ -90,12 +90,12 @@ public class LevelGenerator : MonoBehaviour
         {
             currentState = States.Ground1;
         }
-        GameObject end = Instantiate(endFlag, new Vector3(xPos, (int)currentState, 0), ground.transform.rotation);
+        GameObject end = Instantiate(endFlag, new Vector3(xPos, transform.position.y + (int)currentState, 0), ground.transform.rotation, transform);
         platsformObjects.Add(end);
 
         //move player to start
-        GameObject start = Instantiate(ground, new Vector3(platsformObjects[0].transform.position.y - 1, platsformObjects[0].transform.position.y), ground.transform.rotation);
-        player.transform.position = start.transform.position + new Vector3(0, 1);
+        GameObject start = Instantiate(ground, new Vector3(platsformObjects[0].transform.position.x - 1, platsformObjects[0].transform.position.y), ground.transform.rotation, transform);
+        player.transform.position = new Vector3(platsformObjects[0].transform.position.x - 1, platsformObjects[0].transform.position.y + 1);
         platsformObjects.Add(start);
     }
 

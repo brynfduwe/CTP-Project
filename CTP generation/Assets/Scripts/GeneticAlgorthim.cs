@@ -5,23 +5,27 @@ using UnityEngine;
 public class GeneticAlgorthim : MonoBehaviour
 {
     public Transform player;
-    public int failedYpos;
+    private float failedYpos;
 
     public UIManager UImanager;
     private int generation = 1;
     private int candidate = 1;
     private float FitnessTimer;
 
-    public List<List<int[]>> CandidateList = new List<List<int[]>>();
-    public List<float> CandidateFitness = new List<float>();
+    private List<List<int[]>> CandidateList = new List<List<int[]>>();
+    private List<float> CandidateFitness = new List<float>();
 
-    public List<List<int[]>> CurrentOffspring = new List<List<int[]>>();
+    private List<List<int[]>> CurrentOffspring = new List<List<int[]>>();
 
     public int offspringIter;
+
+   // public LevelGenerator[] levelGMs;
 
     // Use this for initialization
     void Start ()
     {
+        failedYpos = transform.position.y - 1;
+
         UImanager.UpdateCandidate(candidate);
         UImanager.UpdateGeneration(generation);
     }
