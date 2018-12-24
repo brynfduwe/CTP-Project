@@ -38,7 +38,7 @@ public class GeneticAlgManager : MonoBehaviour
             LGM.GetComponent<LevelGenerator>().NewLevelCandidate();
         }
 
-        Time.timeScale = Time.timeScale * 2.5f;
+        Time.timeScale = Time.timeScale * 5;
     }
 
 

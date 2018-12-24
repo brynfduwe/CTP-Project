@@ -1,11 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LevelGenerator : MonoBehaviour
 {
     public GameObject ground;
     public GameObject endFlag;
+
+    public Text transitionMatrixVis;
 
     // public string level;
 
@@ -97,6 +100,62 @@ public class LevelGenerator : MonoBehaviour
         GameObject start = Instantiate(ground, new Vector3(platsformObjects[0].transform.position.x - 1, platsformObjects[0].transform.position.y), ground.transform.rotation, transform);
         player.transform.position = new Vector3(platsformObjects[0].transform.position.x - 1, platsformObjects[0].transform.position.y + 1);
         platsformObjects.Add(start);
+
+
+        //transition matrix visualisation
+        transitionMatrixVis.text = "";
+
+        for (int i = 0; i < G0Probs.Length; i++)
+            transitionMatrixVis.text += (G0Probs[i].ToString() + ", ");
+
+        transitionMatrixVis.text += "\n";
+
+        for (int i = 0; i < G1Probs.Length; i++)
+            transitionMatrixVis.text += (G1Probs[i].ToString() + ", ");
+
+        transitionMatrixVis.text += "\n";
+
+        for (int i = 0; i < G2Probs.Length; i++)
+            transitionMatrixVis.text += (G2Probs[i].ToString() + ", ");
+
+        transitionMatrixVis.text += "\n";
+
+        for (int i = 0; i < G3Probs.Length; i++)
+            transitionMatrixVis.text += (G3Probs[i].ToString() + ", ");
+
+        transitionMatrixVis.text += "\n";
+
+        for (int i = 0; i < G4Probs.Length; i++)
+            transitionMatrixVis.text += (G4Probs[i].ToString() + ", ");
+
+        transitionMatrixVis.text += "\n";
+
+        for (int i = 0; i < G5Probs.Length; i++)
+            transitionMatrixVis.text += (G5Probs[i].ToString() + ", ");
+
+        transitionMatrixVis.text += "\n";
+
+        for (int i = 0; i < G6Probs.Length; i++)
+            transitionMatrixVis.text += (G6Probs[i].ToString() + ", ");
+
+        transitionMatrixVis.text += "\n";
+    
+
+        for (int i = 0; i < G7Probs.Length; i++)
+            transitionMatrixVis.text += (G7Probs[i].ToString() + ", ");
+
+        transitionMatrixVis.text += "\n";
+
+        for (int i = 0; i < G8Probs.Length; i++)
+            transitionMatrixVis.text += (G8Probs[i].ToString() + ", ");
+
+        transitionMatrixVis.text += "\n";
+
+        for (int i = 0; i < G9Probs.Length; i++)
+            transitionMatrixVis.text += (G9Probs[i].ToString() + ", ");
+
+        transitionMatrixVis.text += "\n";
+
     }
 
 

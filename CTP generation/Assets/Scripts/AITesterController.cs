@@ -35,6 +35,8 @@ public class AITesterController : MonoBehaviour {
 
     private Vector2 startPos;
 
+    private bool waitJump;
+
 
     // Use this for initialization
     void Start()
@@ -62,7 +64,7 @@ public class AITesterController : MonoBehaviour {
                 hitGround = true;
             }
 
-            RaycastHit2D hitD = Physics2D.Raycast(transform.position + new Vector3(0.5f, 0, 0), -Vector2.up);
+            RaycastHit2D hitD = Physics2D.Raycast(transform.position + new Vector3(0.5f, 0, 0), -Vector2.up, 3f);
             if (hitD.collider == null)
             {
                 StartJump(0.3f);
@@ -89,6 +91,15 @@ public class AITesterController : MonoBehaviour {
         if (jumpStarted)
         {
             jumpInputTimer += Time.deltaTime;
+
+            RaycastHit2D hitCeiling = Physics2D.Raycast(transform.position + new Vector3(0, 0.5f, 0), Vector2.up, 0.25f);
+            if (hitCeiling.collider != null)
+            {
+                jumpStarted = false;
+               // jumpTargetHit = true;
+               // jumpHitIgnore = true;
+                //stopMoveRight = false;
+            }
 
             if (jumpInputTimer < jumpTime)
             {
@@ -134,10 +145,22 @@ public class AITesterController : MonoBehaviour {
             }
         }
 
+        if (waitJump)
+        {
+            if (jumpTargetPos.y - transform.position.y < 0.7f)
+            {
+                waitJump = false;
+            }
+        }
+
         if (jumpHitIgnore || !stopMoveRight)
         {
-            transform.Translate(Vector3.right * Time.deltaTime * speed);
+            if (!waitJump)
+            {
+                transform.Translate(Vector3.right * Time.deltaTime * speed);
+            }
         }
+
 
         if (GetComponent<Rigidbody2D>().velocity.x > maxVelocity.x)
             GetComponent<Rigidbody2D>().velocity = new Vector2(maxVelocity.x, GetComponent<Rigidbody2D>().velocity.y);
@@ -146,6 +169,16 @@ public class AITesterController : MonoBehaviour {
         if (GetComponent<Rigidbody2D>().velocity.y > maxVelocity.y)
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, maxVelocity.y);
 
+
+        RaycastHit2D hitFU = Physics2D.Raycast(transform.position + new Vector3(1f, 0f, 0), Vector2.up);
+        RaycastHit2D hitFR = Physics2D.Raycast(transform.position + new Vector3(1f, 0f, 0), Vector2.right);
+        if (hitFU.collider != null)
+        {
+            if (hitFR.collider != null)
+            {
+              //  StartJump(0.3f);
+            }
+        }
     }
 
 
@@ -154,7 +187,7 @@ public class AITesterController : MonoBehaviour {
         if (!jumpStarted)
         {
             //target platform picker.
-            Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 25);
+            Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 10);
 
             Transform nearestCol = cols[0].transform;
             float nearestDist = 100;
@@ -189,7 +222,7 @@ public class AITesterController : MonoBehaviour {
             jumpStarted = true;
             hitGround = false;
 
-            if (nearestDist < 100)
+            if (nearestDist < 20)
             {
                 jumpTargetHit = false;
                 jumpHitIgnore = false;
@@ -218,6 +251,12 @@ public class AITesterController : MonoBehaviour {
             }
 
             // jumpTime = time;
+        }
+
+        RaycastHit2D hitU = Physics2D.Raycast(transform.position + new Vector3(0.5f, 0.0f, 0), Vector2.up);
+        if (hitU.collider != null)
+        {
+            waitJump = true;
         }
     }
 
