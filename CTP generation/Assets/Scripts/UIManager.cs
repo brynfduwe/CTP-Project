@@ -8,9 +8,10 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] Text generation;
     [SerializeField] Text candidate;
+    [SerializeField] Text timeScale;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
@@ -27,5 +28,11 @@ public class UIManager : MonoBehaviour
     public void UpdateCandidate(int cand)
     {
         candidate.text = "Candidates found: " + cand.ToString();
+    }
+
+
+    public void UpdateTimeScale(int ts)
+    {
+        timeScale.text = "Time Scale: x" + ts.ToString();
     }
 }

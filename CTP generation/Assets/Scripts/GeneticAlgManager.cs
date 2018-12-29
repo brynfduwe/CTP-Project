@@ -20,6 +20,8 @@ public class GeneticAlgManager : MonoBehaviour
 
      public GameObject[] levelGMs;
 
+    int TimeScale = 1;
+
 
     // Use this for initialization
     void Start()
@@ -38,13 +40,34 @@ public class GeneticAlgManager : MonoBehaviour
             LGM.GetComponent<LevelGenerator>().NewLevelCandidate();
         }
 
-        Time.timeScale = Time.timeScale * 5;
+       // Time.timeScale = Time.timeScale * 5;
     }
 
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            if (TimeScale < 10)
+            {
+                TimeScale++;
+                Time.timeScale = TimeScale;
+                UImanager.UpdateTimeScale(TimeScale);
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            if (TimeScale > 1)
+            {
+                TimeScale--;
+                Time.timeScale = TimeScale;
+                UImanager.UpdateTimeScale(TimeScale);
+            }
+        }
+
+
         FitnessTimer += Time.deltaTime;
         for (int i = 0; i < levelGMs.Length; i++)
         {
