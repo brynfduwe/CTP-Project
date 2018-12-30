@@ -213,7 +213,7 @@ public class AITesterController : MonoBehaviour {
 
             nearestCol.gameObject.GetComponent<SpriteRenderer>().color = Color.green;
             jumpTargetPos = nearestCol.position;
-            Debug.Log(nearestDist.ToString());
+        //    Debug.Log(nearestDist.ToString());
 
             //jump set up
             startedJumpPos = transform.position.y;

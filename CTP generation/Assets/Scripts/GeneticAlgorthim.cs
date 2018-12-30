@@ -92,7 +92,7 @@ public class GeneticAlgorthim : MonoBehaviour
                 else
                 {
                     
-                    GetComponent<LevelGenerator>().SetNewChain(CurrentOffspring[offspringIter]);
+                  //  GetComponent<LevelGenerator>().SetNewChain(CurrentOffspring[offspringIter]);
                     GetComponent<LevelGenerator>().NewLevelCandidate();
                     offspringIter++;
                     if (offspringIter >= CurrentOffspring.Count)
@@ -107,7 +107,7 @@ public class GeneticAlgorthim : MonoBehaviour
         candidate++;
         UImanager.UpdateCandidate(candidate);
 
-        CandidateList.Add(GetComponent<LevelGenerator>().GetGeneratorChromosome());
+     //   CandidateList.Add(GetComponent<LevelGenerator>().GetGeneratorChromosome());
         CandidateFitness.Add(FitnessTimer);
 
         if (generation == 1)
@@ -150,7 +150,7 @@ public class GeneticAlgorthim : MonoBehaviour
 
         CandidateList.Clear();
 
-        GetComponent<LevelGenerator>().SetNewChain(CurrentOffspring[0]);
+     //   GetComponent<LevelGenerator>().SetNewChain(CurrentOffspring[0]);
         GetComponent<LevelGenerator>().NewLevelCandidate();
         offspringIter++;
 
