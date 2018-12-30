@@ -4,18 +4,16 @@ using UnityEngine;
 
 public class GeneticAlgManager : MonoBehaviour
 {
+    public int candidateGoal = 10;
+    public int offSpringPopulation = 25;
     private float failedYpos;
-
     public UIManager UImanager;
     private int generation = 1;
     private int candidate = 1;
     private float FitnessTimer;
-
     private List<List<int[]>> CandidateList = new List<List<int[]>>();
     private List<float> CandidateFitness = new List<float>();
-
     private List<List<int[]>> CurrentOffspring = new List<List<int[]>>();
-
     int offspringIter;
 
     public GameObject[] levelGMs;
@@ -96,20 +94,9 @@ public class GeneticAlgManager : MonoBehaviour
                 AddCandidate(i);
                 FitnessTimer = 0;
 
-                if (CandidateList.Count > 5)
+                if (CandidateList.Count >= candidateGoal)
                 {
                     newGen = true;
-                }
-                else
-                {
-                    if (generation != 1)
-                    {
-                        levelGMs[i].GetComponent<LevelGenerator>().SetNewChain(CurrentOffspring[offspringIter]);
-                        levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
-                        offspringIter++;
-                        if (offspringIter >= CurrentOffspring.Count)
-                            offspringIter = 0;
-                    }
                 }
             }
         }
@@ -121,13 +108,28 @@ public class GeneticAlgManager : MonoBehaviour
             candidate = 0;
             UImanager.UpdateCandidate(candidate);
 
+            offspringIter = 0;
 
-            for (int i = 0; i < levelGMs.Length; i++)
+            CandidateFitness.Clear();
+            CurrentOffspring.Clear();
+
+            for (int i = 0; i < offSpringPopulation; i++)
             {
-                Selection(i);
-            }
+                Selection();
+            }    
 
             CandidateList.Clear();
+
+            foreach (var lm in levelGMs)
+            {
+                lm.GetComponent<LevelGenerator>().SetNewChain(CurrentOffspring[offspringIter]);
+                lm.GetComponent<LevelGenerator>().NewLevelCandidate();
+
+                offspringIter++;
+                if (offspringIter >= CurrentOffspring.Count)
+                    offspringIter = 0;
+            }
+
             newGen = false;
 
         }
@@ -149,43 +151,35 @@ public class GeneticAlgManager : MonoBehaviour
         }
         else
         {
+            offspringIter++;
+            if (offspringIter >= CurrentOffspring.Count)
+                offspringIter = 0;
+
+            levelGMs[lm].GetComponent<LevelGenerator>().SetNewChain(CurrentOffspring[offspringIter]);
             levelGMs[lm].GetComponent<LevelGenerator>().NewLevelCandidate();
         }
     }
 
 
-    void Selection(int lm)
+    void Selection()
     {
         Debug.Log("SELECTION");
         //change to roulette wheel
 
-        CandidateFitness.Clear();
-        CurrentOffspring.Clear();
+        List<int[]> Offspring = new List<int[]>();
+        int p1 = Random.Range(0, CandidateList.Count);
 
-        for (int i = 0; i < 10; i++)
+        int p2 = Random.Range(0, CandidateList.Count);
+
+        //check to ensure parents arent the same 
+        while (p2 == p1)
         {
-            List<int[]> Offspring = new List<int[]>();
-            int p1 = Random.Range(0, CandidateList.Count);
-
-            int p2 = Random.Range(0, CandidateList.Count);
-
-            //check to ensure parents arent the same 
-            while (p2 == p1)
-            {
-                p2 = Random.Range(0, CandidateList.Count);
-            }
-
-            Offspring = Crossover(CandidateList[p1], CandidateList[p2]);
-
-            CurrentOffspring.Add(Offspring);
+            p2 = Random.Range(0, CandidateList.Count);
         }
 
-        // CandidateList.Clear();
+        Offspring = Crossover(CandidateList[p1], CandidateList[p2]);
 
-        levelGMs[lm].GetComponent<LevelGenerator>().SetNewChain(CurrentOffspring[0]);
-        levelGMs[lm].GetComponent<LevelGenerator>().NewLevelCandidate();
-        offspringIter++;
-
+        CurrentOffspring.Add(Offspring);
     }
 
 

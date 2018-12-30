@@ -375,7 +375,7 @@ MonoBehaviour:
   ground: {fileID: 1939395781354114, guid: 5be56f2bfd70ca544900af5d9287e5dd, type: 2}
   endFlag: {fileID: 1427389136965790, guid: 67492496a1fb09040bcebb6691a33d84, type: 2}
   transitionMatrixVis: {fileID: 1176496740}
-  probTransitionNum: 10
+  transitionNum: 10
   levelLength: 110
   player: {fileID: 548588465}
 --- !u!4 &164796406
@@ -1176,7 +1176,7 @@ MonoBehaviour:
   ground: {fileID: 1939395781354114, guid: 5be56f2bfd70ca544900af5d9287e5dd, type: 2}
   endFlag: {fileID: 1427389136965790, guid: 67492496a1fb09040bcebb6691a33d84, type: 2}
   transitionMatrixVis: {fileID: 1383306268}
-  probTransitionNum: 10
+  transitionNum: 10
   levelLength: 110
   player: {fileID: 334819933}
 --- !u!4 &723108237
@@ -1397,6 +1397,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d93be12672a6cae47beb9df8b6897164, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  candidateGoal: 10
+  offSpringPopulation: 50
   UImanager: {fileID: 1732767418}
   levelGMs:
   - {fileID: 1951750619}
@@ -2681,7 +2683,7 @@ MonoBehaviour:
   ground: {fileID: 1939395781354114, guid: 5be56f2bfd70ca544900af5d9287e5dd, type: 2}
   endFlag: {fileID: 1427389136965790, guid: 67492496a1fb09040bcebb6691a33d84, type: 2}
   transitionMatrixVis: {fileID: 57454658}
-  probTransitionNum: 10
+  transitionNum: 10
   levelLength: 110
   player: {fileID: 1943618260}
 --- !u!4 &1402781905
@@ -3418,7 +3420,7 @@ MonoBehaviour:
   ground: {fileID: 1939395781354114, guid: 5be56f2bfd70ca544900af5d9287e5dd, type: 2}
   endFlag: {fileID: 1427389136965790, guid: 67492496a1fb09040bcebb6691a33d84, type: 2}
   transitionMatrixVis: {fileID: 396099793}
-  probTransitionNum: 10
+  transitionNum: 10
   levelLength: 110
   player: {fileID: 62318585}
 --- !u!4 &1951750621
@@ -3577,7 +3579,7 @@ MonoBehaviour:
   ground: {fileID: 1939395781354114, guid: 5be56f2bfd70ca544900af5d9287e5dd, type: 2}
   endFlag: {fileID: 1427389136965790, guid: 67492496a1fb09040bcebb6691a33d84, type: 2}
   transitionMatrixVis: {fileID: 1553987215}
-  probTransitionNum: 10
+  transitionNum: 10
   levelLength: 110
   player: {fileID: 465306706}
 --- !u!4 &2126740885
