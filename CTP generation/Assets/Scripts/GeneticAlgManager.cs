@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 public class GeneticAlgManager : MonoBehaviour
 {
@@ -13,14 +11,14 @@ public class GeneticAlgManager : MonoBehaviour
     private int candidate = 1;
     private float FitnessTimer;
 
-    private List<List<List<int>>> CandidateList = new List<List<List<int>>>();
+    private List<List<int[]>> CandidateList = new List<List<int[]>>();
     private List<float> CandidateFitness = new List<float>();
 
-    private List<List<List<int>>> CurrentOffspring = new List<List<List<int>>>();
+    private List<List<int[]>> CurrentOffspring = new List<List<int[]>>();
 
     int offspringIter;
 
-     public GameObject[] levelGMs;
+    public GameObject[] levelGMs;
 
     int TimeScale = 1;
 
@@ -42,7 +40,7 @@ public class GeneticAlgManager : MonoBehaviour
             LGM.GetComponent<LevelGenerator>().NewLevelCandidate();
         }
 
-       // Time.timeScale = Time.timeScale * 5;
+        // Time.timeScale = Time.timeScale * 5;
     }
 
 
@@ -83,15 +81,7 @@ public class GeneticAlgManager : MonoBehaviour
                 }
                 else
                 {
-                    offspringIter++;
-
-                    if (offspringIter >= CurrentOffspring.Count)
-                        offspringIter = 0;
-
-                    levelGMs[i].GetComponent<LevelGenerator>().SetNewChain(CurrentOffspring[offspringIter]);
                     levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
-
-          //          Debug.Log("if this gets called at the right time its the thing breaking everything.");
                 }
             }
         }
@@ -106,15 +96,21 @@ public class GeneticAlgManager : MonoBehaviour
                 AddCandidate(i);
                 FitnessTimer = 0;
 
-                if (generation >= 1)
+                if (CandidateList.Count > 5)
                 {
-                    if (CandidateList.Count >= 5)
-                    {
-                        newGen = true;
-                    }
-
+                    newGen = true;
                 }
-
+                else
+                {
+                    if (generation != 1)
+                    {
+                        levelGMs[i].GetComponent<LevelGenerator>().SetNewChain(CurrentOffspring[offspringIter]);
+                        levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
+                        offspringIter++;
+                        if (offspringIter >= CurrentOffspring.Count)
+                            offspringIter = 0;
+                    }
+                }
             }
         }
 
@@ -124,20 +120,15 @@ public class GeneticAlgManager : MonoBehaviour
             UImanager.UpdateGeneration(generation);
             candidate = 0;
             UImanager.UpdateCandidate(candidate);
-            offspringIter = 0;
 
-            Selection();
 
             for (int i = 0; i < levelGMs.Length; i++)
             {
-                levelGMs[i].GetComponent<LevelGenerator>().SetNewChain(CurrentOffspring[offspringIter]);
-                levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
-                offspringIter++;
+                Selection(i);
             }
 
-            newGen = false;
-
             CandidateList.Clear();
+            newGen = false;
 
         }
     }
@@ -149,7 +140,7 @@ public class GeneticAlgManager : MonoBehaviour
         UImanager.UpdateCandidate(candidate);
 
         CandidateList.Add(levelGMs[lm].GetComponent<LevelGenerator>().GetGeneratorChromosome());
-      //  CandidateFitness.Add(FitnessTimer);
+        //  CandidateFitness.Add(FitnessTimer);
 
         if (generation == 1)
         {
@@ -163,9 +154,9 @@ public class GeneticAlgManager : MonoBehaviour
     }
 
 
-    void Selection()
+    void Selection(int lm)
     {
-      //  Debug.Log("SELECTION");
+        Debug.Log("SELECTION");
         //change to roulette wheel
 
         CandidateFitness.Clear();
@@ -173,32 +164,37 @@ public class GeneticAlgManager : MonoBehaviour
 
         for (int i = 0; i < 10; i++)
         {
-            CurrentOffspring.Add(new List<List<int>>(Crossover()));
+            List<int[]> Offspring = new List<int[]>();
+            int p1 = Random.Range(0, CandidateList.Count);
+
+            int p2 = Random.Range(0, CandidateList.Count);
+
+            //check to ensure parents arent the same 
+            while (p2 == p1)
+            {
+                p2 = Random.Range(0, CandidateList.Count);
+            }
+
+            Offspring = Crossover(CandidateList[p1], CandidateList[p2]);
+
+            CurrentOffspring.Add(Offspring);
         }
 
-       // CandidateList.Clear();
+        // CandidateList.Clear();
 
-        //levelGMs[lm].GetComponent<LevelGenerator>().SetNewChain(CurrentOffspring[0]);
-        //levelGMs[lm].GetComponent<LevelGenerator>().NewLevelCandidate();
-        //offspringIter++;
+        levelGMs[lm].GetComponent<LevelGenerator>().SetNewChain(CurrentOffspring[0]);
+        levelGMs[lm].GetComponent<LevelGenerator>().NewLevelCandidate();
+        offspringIter++;
 
     }
 
 
-    List<List<int>> Crossover()
+    List<int[]> Crossover(List<int[]> parent1, List<int[]> parent2)
     {
-        int p1 = Random.Range(0, CandidateList.Count - 1);
-        int p2 = Random.Range(0, CandidateList.Count - 1);
-        //check to ensure parents arent the same 
-        while (p2 == p1)
-        {
-            p2 = Random.Range(0, CandidateList.Count - 1);
-        }
-
-        List<List<int>> Offspring = new List<List<int>>();
+        List<int[]> Offspring = new List<int[]>();
 
         bool flipped = false;
-        int f = (Random.Range(0, 9));
+        int f = (Random.Range(0, 10));
 
         if (f >= 5)
         {
@@ -209,39 +205,34 @@ public class GeneticAlgManager : MonoBehaviour
 
         Offspring.Clear();
 
-        for (int i = 0; i < CandidateList[p1].Count; i++)
+        for (int i = 0; i < parent1.Count; i++)
         {
-          //  Debug.Log(i.ToString());
             if (!flipped)
             {
                 if (r < i)
                 {
-                    Offspring.Add(CandidateList[p1][i]);
+                    Offspring.Add(parent1[1]);
                 }
                 else
                 {
-                    Offspring.Add(CandidateList[p2][i]);
+                    Offspring.Add(parent2[i]);
                 }
             }
             else
             {
                 if (r < i)
                 {
-                    Offspring.Add(CandidateList[p2][i]);
+                    Offspring.Add(parent2[i]);
                 }
                 else
                 {
-                    Offspring.Add(CandidateList[p1][i]);
+                    Offspring.Add(parent1[i]);
                 }
             }
-
-           // Debug.Log(Offspring.Count.ToString() + " w/" + Offspring[i].Count.ToString());
         }
 
-        //   Debug.Log("Flipped = " + flipped.ToString());
-        //  Debug.Log("CrossoverPoint = " + r.ToString());
-
-
+        Debug.Log("Flipped = " + flipped.ToString());
+        Debug.Log("CrossoverPoint = " + r.ToString());
         return Offspring;
     }
 }

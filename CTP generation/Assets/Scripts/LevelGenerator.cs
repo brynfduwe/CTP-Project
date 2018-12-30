@@ -28,9 +28,16 @@ public class LevelGenerator : MonoBehaviour
         Ground9
     }
 
-
-    private List<List<int>> probablitiyLists = new List<List<int>>();
-    public int probTransitionNum = 10;
+    public int[] G0Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
+    public int[] G1Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
+    public int[] G2Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
+    public int[] G3Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
+    public int[] G4Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
+    public int[] G5Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
+    public int[] G6Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
+    public int[] G7Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
+    public int[] G8Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
+    public int[] G9Probs = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
 
     private States currentState;
     private int xPos = 0;
@@ -40,23 +47,9 @@ public class LevelGenerator : MonoBehaviour
     private Vector2 startPlayerPos;
 
     // Use this for initialization
-    void Awake()
+    void Start()
     {
         startPlayerPos = player.transform.position;
-
-        currentState = (States)Random.Range(1, 7);
-
-        //chain set up
-        for (int i = 0; i < probTransitionNum; i++)
-        {
-            List<int> probs = new List<int>();
-
-            for (int j = 0; j < probTransitionNum; j++)
-            {
-                probs.Add(100 / probTransitionNum);
-            }
-            probablitiyLists.Add(probs);
-        }
 
         RandomChain();
         GenerateLevel();
@@ -87,7 +80,7 @@ public class LevelGenerator : MonoBehaviour
 
             if (currentState != States.NoGround)
             {
-                GameObject plat = Instantiate(ground, new Vector3(xPos, transform.position.y + (int) currentState, 0),
+                GameObject plat = Instantiate(ground, new Vector3(xPos, transform.position.y + (int)currentState, 0),
                     ground.transform.rotation, transform);
                 platsformObjects.Add(plat);
             }
@@ -109,15 +102,60 @@ public class LevelGenerator : MonoBehaviour
         platsformObjects.Add(start);
 
 
+        //transition matrix visualisation
         transitionMatrixVis.text = "";
-        foreach (var probl in probablitiyLists)
-        {
-            foreach (var i in probl)
-            {
-                transitionMatrixVis.text += (i.ToString() + ", ");
-            }
-            transitionMatrixVis.text += "\n";
-        }
+
+        for (int i = 0; i < G0Probs.Length; i++)
+            transitionMatrixVis.text += (G0Probs[i].ToString() + ", ");
+
+        transitionMatrixVis.text += "\n";
+
+        for (int i = 0; i < G1Probs.Length; i++)
+            transitionMatrixVis.text += (G1Probs[i].ToString() + ", ");
+
+        transitionMatrixVis.text += "\n";
+
+        for (int i = 0; i < G2Probs.Length; i++)
+            transitionMatrixVis.text += (G2Probs[i].ToString() + ", ");
+
+        transitionMatrixVis.text += "\n";
+
+        for (int i = 0; i < G3Probs.Length; i++)
+            transitionMatrixVis.text += (G3Probs[i].ToString() + ", ");
+
+        transitionMatrixVis.text += "\n";
+
+        for (int i = 0; i < G4Probs.Length; i++)
+            transitionMatrixVis.text += (G4Probs[i].ToString() + ", ");
+
+        transitionMatrixVis.text += "\n";
+
+        for (int i = 0; i < G5Probs.Length; i++)
+            transitionMatrixVis.text += (G5Probs[i].ToString() + ", ");
+
+        transitionMatrixVis.text += "\n";
+
+        for (int i = 0; i < G6Probs.Length; i++)
+            transitionMatrixVis.text += (G6Probs[i].ToString() + ", ");
+
+        transitionMatrixVis.text += "\n";
+
+
+        for (int i = 0; i < G7Probs.Length; i++)
+            transitionMatrixVis.text += (G7Probs[i].ToString() + ", ");
+
+        transitionMatrixVis.text += "\n";
+
+        for (int i = 0; i < G8Probs.Length; i++)
+            transitionMatrixVis.text += (G8Probs[i].ToString() + ", ");
+
+        transitionMatrixVis.text += "\n";
+
+        for (int i = 0; i < G9Probs.Length; i++)
+            transitionMatrixVis.text += (G9Probs[i].ToString() + ", ");
+
+        transitionMatrixVis.text += "\n";
+
     }
 
 
@@ -127,32 +165,255 @@ public class LevelGenerator : MonoBehaviour
         int iter = 0;
         int selectedTransition = 0;
 
-        for (int i = 0; i < probablitiyLists.Count; i++)
+        switch (currentState)
         {
-            if (iter < r)
-            {
-                iter += probablitiyLists[(int) currentState][i];
-                selectedTransition = i;
-            }
-        }
+            case States.NoGround:
 
-        currentState = (States) selectedTransition;
+                for (int i = 0; i < G0Probs.Length; i++)
+                {
+                    if (iter < r)
+                    {
+                        iter += G0Probs[i];
+                        selectedTransition = i;
+                    }
+                }
+
+                currentState = (States)selectedTransition;
+
+                break;
+
+            case States.Ground1:
+
+                for (int i = 0; i < G1Probs.Length; i++)
+                {
+                    if (iter < r)
+                    {
+                        iter += G1Probs[i];
+                        selectedTransition = i;
+                    }
+                }
+
+                currentState = (States)selectedTransition;
+
+                break;
+
+            case States.Ground2:
+
+                for (int i = 0; i < G2Probs.Length; i++)
+                {
+                    if (iter < r)
+                    {
+                        iter += G2Probs[i];
+                        selectedTransition = i;
+                    }
+                }
+
+                currentState = (States)selectedTransition;
+
+                break;
+
+            case States.Ground3:
+
+                for (int i = 0; i < G3Probs.Length; i++)
+                {
+                    if (iter < r)
+                    {
+                        iter += G3Probs[i];
+                        selectedTransition = i;
+                    }
+                }
+
+                currentState = (States)selectedTransition;
+
+                break;
+
+            case States.Ground4:
+
+                for (int i = 0; i < G4Probs.Length; i++)
+                {
+                    if (iter < r)
+                    {
+                        iter += G4Probs[i];
+                        selectedTransition = i;
+                    }
+                }
+
+                currentState = (States)selectedTransition;
+
+                break;
+
+            case States.Ground5:
+
+                for (int i = 0; i < G5Probs.Length; i++)
+                {
+                    if (iter < r)
+                    {
+                        iter += G5Probs[i];
+                        selectedTransition = i;
+                    }
+                }
+
+                currentState = (States)selectedTransition;
+
+                break;
+
+            case States.Ground6:
+
+                for (int i = 0; i < G6Probs.Length; i++)
+                {
+                    if (iter < r)
+                    {
+                        iter += G6Probs[i];
+                        selectedTransition = i;
+                    }
+                }
+
+                currentState = (States)selectedTransition;
+
+                break;
+
+            case States.Ground7:
+
+                for (int i = 0; i < G7Probs.Length; i++)
+                {
+                    if (iter < r)
+                    {
+                        iter += G7Probs[i];
+                        selectedTransition = i;
+                    }
+                }
+
+                currentState = (States)selectedTransition;
+
+                break;
+
+
+            case States.Ground8:
+
+                for (int i = 0; i < G8Probs.Length; i++)
+                {
+                    if (iter < r)
+                    {
+                        iter += G8Probs[i];
+                        selectedTransition = i;
+                    }
+                }
+
+                currentState = (States)selectedTransition;
+
+                break;
+
+
+            case States.Ground9:
+
+                for (int i = 0; i < G9Probs.Length; i++)
+                {
+                    if (iter < r)
+                    {
+                        iter += G9Probs[i];
+                        selectedTransition = i;
+                    }
+                }
+
+                currentState = (States)selectedTransition;
+
+                break;
+        }
     }
+
 
     public void RandomChain()
     {
-        foreach (var pl in probablitiyLists)
+        int leftVal = 100;
+        for (int i = 0; i < G0Probs.Length - 1; i++)
         {
-            int leftVal = 100;
-
-            for (int i = 0; i < pl.Count - 1; i++)
-            {
-                int r = Random.Range(0, leftVal);
-                leftVal -= r;
-                pl[i] = r;
-            }
-            pl[pl.Count - 1] = leftVal;
+            int r = Random.Range(0, leftVal);
+            leftVal -= r;
+            G0Probs[i] = r;
         }
+        G0Probs[G0Probs.Length - 1] = leftVal;
+
+        leftVal = 100;
+        for (int i = 0; i < G1Probs.Length - 1; i++)
+        {
+            int r = Random.Range(0, leftVal);
+            leftVal -= r;
+            G1Probs[i] = r;
+        }
+        G1Probs[G1Probs.Length - 1] = leftVal;
+
+        leftVal = 100;
+        for (int i = 0; i < G2Probs.Length - 1; i++)
+        {
+            int r = Random.Range(0, leftVal);
+            leftVal -= r;
+            G2Probs[i] = r;
+        }
+
+        G2Probs[G2Probs.Length - 1] = leftVal;
+
+        leftVal = 100;
+        for (int i = 0; i < G3Probs.Length - 1; i++)
+        {
+            int r = Random.Range(0, leftVal);
+            leftVal -= r;
+            G3Probs[i] = r;
+        }
+        G3Probs[G3Probs.Length - 1] = leftVal;
+
+        leftVal = 100;
+        for (int i = 0; i < G4Probs.Length - 1; i++)
+        {
+            int r = Random.Range(0, leftVal);
+            leftVal -= r;
+            G4Probs[i] = r;
+        }
+        G4Probs[G4Probs.Length - 1] = leftVal;
+
+        leftVal = 100;
+        for (int i = 0; i < G5Probs.Length - 1; i++)
+        {
+            int r = Random.Range(0, leftVal);
+            leftVal -= r;
+            G5Probs[i] = r;
+        }
+        G5Probs[G5Probs.Length - 1] = leftVal;
+
+        leftVal = 100;
+        for (int i = 0; i < G6Probs.Length - 1; i++)
+        {
+            int r = Random.Range(0, leftVal);
+            leftVal -= r;
+            G6Probs[i] = r;
+        }
+        G6Probs[G6Probs.Length - 1] = leftVal;
+
+        leftVal = 100;
+        for (int i = 0; i < G7Probs.Length - 1; i++)
+        {
+            int r = Random.Range(0, leftVal);
+            leftVal -= r;
+            G7Probs[i] = r;
+        }
+        G7Probs[G7Probs.Length - 1] = leftVal;
+
+        leftVal = 100;
+        for (int i = 0; i < G8Probs.Length - 1; i++)
+        {
+            int r = Random.Range(0, leftVal);
+            leftVal -= r;
+            G8Probs[i] = r;
+        }
+        G8Probs[G8Probs.Length - 1] = leftVal;
+
+        leftVal = 100;
+        for (int i = 0; i < G9Probs.Length - 1; i++)
+        {
+            int r = Random.Range(0, leftVal);
+            leftVal -= r;
+            G9Probs[i] = r;
+        }
+        G9Probs[G9Probs.Length - 1] = leftVal;
     }
 
 
@@ -166,9 +427,22 @@ public class LevelGenerator : MonoBehaviour
     }
 
 
-    public List<List<int>> GetGeneratorChromosome()
+    public List<int[]> GetGeneratorChromosome()
     {
-        return probablitiyLists;
+        List<int[]> chromosone = new List<int[]>();
+
+        chromosone.Add(G0Probs);
+        chromosone.Add(G1Probs);
+        chromosone.Add(G2Probs);
+        chromosone.Add(G3Probs);
+        chromosone.Add(G4Probs);
+        chromosone.Add(G5Probs);
+        chromosone.Add(G6Probs);
+        chromosone.Add(G7Probs);
+        chromosone.Add(G8Probs);
+        chromosone.Add(G9Probs);
+
+        return chromosone;
     }
 
     public void NewLevelCandidate()
@@ -176,21 +450,17 @@ public class LevelGenerator : MonoBehaviour
         GenerateLevel();
     }
 
-    public void SetNewChain(List<List<int>> chain)
+    public void SetNewChain(List<int[]> chain)
     {
-        currentState = (States)Random.Range(1, 7);
-
-        probablitiyLists.Clear();
-        probablitiyLists = new List<List<int>>(chain);
-
-     //   Debug.Log("lgnth: " + probablitiyLists.Count.ToString());
-
-        for (int i = 0; i < probablitiyLists.Count; i++)
-        {
-            foreach (var c in probablitiyLists[i])
-            {
-              //  Debug.Log(i.ToString() + ": " + c.ToString());
-            }
-        }
+        G0Probs = chain[0];
+        G1Probs = chain[1];
+        G2Probs = chain[2];
+        G3Probs = chain[3];
+        G4Probs = chain[4];
+        G5Probs = chain[5];
+        G6Probs = chain[6];
+        G7Probs = chain[7];
+        G8Probs = chain[8];
+        G9Probs = chain[9];
     }
 }
