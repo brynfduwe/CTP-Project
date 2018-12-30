@@ -22,6 +22,9 @@ public class AITesterController : MonoBehaviour {
     public Transform groundPoint1;
     public Transform groundPoint2;
 
+    public Transform topPoint1;
+    public Transform topPoint2;
+
     public Vector2 maxVelocity;
 
     private float jumpInputTimer;
@@ -90,6 +93,11 @@ public class AITesterController : MonoBehaviour {
 
         if (jumpStarted)
         {
+            if (Physics2D.OverlapArea(topPoint1.position, topPoint2.position))
+            {
+                jumpStarted = false;
+            }
+
             jumpInputTimer += Time.deltaTime;
 
             RaycastHit2D hitCeiling = Physics2D.Raycast(transform.position + new Vector3(0, 0.5f, 0), Vector2.up, 0.25f);

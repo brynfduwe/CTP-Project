@@ -22,6 +22,9 @@ public class Controller : MonoBehaviour
     public Transform groundPoint1;
     public Transform groundPoint2;
 
+    public Transform topPoint1;
+    public Transform topPoint2;
+
     public Vector2 maxVelocity;
 
     private float inputTimer;
@@ -70,6 +73,11 @@ public class Controller : MonoBehaviour
 
         if (jumpStarted)
         {
+            if (Physics2D.OverlapArea(topPoint1.position, topPoint2.position))
+            {
+                jumpStarted = false;
+            }
+
             //player wants to jump heiger
             if (Input.GetKey(Jump))
             {

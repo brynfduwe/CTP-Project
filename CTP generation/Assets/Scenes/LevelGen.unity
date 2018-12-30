@@ -1397,7 +1397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d93be12672a6cae47beb9df8b6897164, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  candidateGoal: 10
+  candidateGoal: 5
   offSpringPopulation: 50
   UImanager: {fileID: 1732767418}
   levelGMs:

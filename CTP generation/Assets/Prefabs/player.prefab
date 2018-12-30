@@ -20,7 +20,22 @@ GameObject:
   m_Component:
   - component: {fileID: 4383387955939084}
   m_Layer: 0
-  m_Name: LGroundTrigger
+  m_Name: LTopTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1237197424680786
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4894657469710496}
+  m_Layer: 0
+  m_Name: RGroundTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62,6 +77,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1586187188245832
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4031532646600672}
+  m_Layer: 0
+  m_Name: LGroundTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1659709385819294
 GameObject:
   m_ObjectHideFlags: 0
@@ -71,12 +101,25 @@ GameObject:
   m_Component:
   - component: {fileID: 4606293770406926}
   m_Layer: 0
-  m_Name: RGroundTrigger
+  m_Name: RTopTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &4031532646600672
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1586187188245832}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.057, y: -0.089, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4137396436687642}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4137396436687642
 Transform:
   m_ObjectHideFlags: 1
@@ -84,10 +127,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1546133543106886}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 8, z: -0.27349538}
+  m_LocalPosition: {x: 0, y: 7.97, z: -0.27349538}
   m_LocalScale: {x: 7, y: 7, z: 1}
   m_Children:
   - {fileID: 4534291434232582}
+  - {fileID: 4031532646600672}
+  - {fileID: 4894657469710496}
   - {fileID: 4383387955939084}
   - {fileID: 4606293770406926}
   m_Father: {fileID: 0}
@@ -99,12 +144,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1164952987509676}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.057, y: -0.089, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.056999996, y: 0.0708, z: 0}
+  m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 1}
   m_Children: []
   m_Father: {fileID: 4137396436687642}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4534291434232582
 Transform:
@@ -125,6 +170,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1659709385819294}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.056999996, y: 0.07080009, z: 0}
+  m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4137396436687642}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4894657469710496
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1237197424680786}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.057, y: -0.08899999, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -242,8 +300,10 @@ MonoBehaviour:
   jumpMax: 2.3
   jumpPower: 5
   speed: 5
-  groundPoint1: {fileID: 4383387955939084}
-  groundPoint2: {fileID: 4606293770406926}
+  groundPoint1: {fileID: 4031532646600672}
+  groundPoint2: {fileID: 4894657469710496}
+  topPoint1: {fileID: 4383387955939084}
+  topPoint2: {fileID: 4606293770406926}
   maxVelocity: {x: 3, y: 10}
 --- !u!212 &212880153793565064
 SpriteRenderer:
