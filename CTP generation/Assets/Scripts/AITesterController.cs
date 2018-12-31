@@ -40,6 +40,8 @@ public class AITesterController : MonoBehaviour {
 
     private bool waitJump;
 
+    private List<Transform> failedPlatformMover;
+
 
     // Use this for initialization
     void Start()
