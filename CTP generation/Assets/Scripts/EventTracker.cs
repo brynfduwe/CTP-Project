@@ -11,6 +11,10 @@ public class EventTracker : MonoBehaviour
     private float lastX;
     float stucktimer;
 
+    private float attemptTimer;
+
+    private float fitness;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -22,6 +26,7 @@ public class EventTracker : MonoBehaviour
 	// Update is called once per frame
     void FixedUpdate()
     {
+        attemptTimer += Time.deltaTime;
         stucktimer += Time.deltaTime;
         if (stucktimer > 5)
         {
@@ -44,10 +49,20 @@ public class EventTracker : MonoBehaviour
     }
 
 
+    public float GetFitness()
+    {
+        return fitness;
+    }
+
+
     public bool SuccessCheck()
     {
         if (player.transform.position.x > successX)
         {
+            fitness = player.GetComponent<AITesterController>().GetAIMoveCount() + attemptTimer;
+            Debug.Log("Completed Level Diffuculty: " + fitness.ToString());
+
+            attemptTimer = 0;
             return true;
         }
 
@@ -58,6 +73,7 @@ public class EventTracker : MonoBehaviour
     {
         if (player.transform.position.y < failY)
         {
+            attemptTimer = 0;
             stucktimer = 0;
             return true;
         }

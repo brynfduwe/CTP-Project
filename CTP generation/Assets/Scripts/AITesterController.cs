@@ -42,6 +42,8 @@ public class AITesterController : MonoBehaviour {
 
     private List<Transform> failedPlatformMover;
 
+    private float MoverCounter;
+
 
     // Use this for initialization
     void Start()
@@ -142,6 +144,7 @@ public class AITesterController : MonoBehaviour {
         {
             if (transform.position.x >= jumpTargetPos.x)
             {
+              //  MoverCounter++;
                 stopMoveRight = true;
             }
         }
@@ -260,6 +263,8 @@ public class AITesterController : MonoBehaviour {
                 jumpTime = 0.35f;
             }
 
+            MoverCounter+=nearestDist;
+
             // jumpTime = time;
         }
 
@@ -273,10 +278,20 @@ public class AITesterController : MonoBehaviour {
 
     public void resetPlayer()
     {
+        MoverCounter = 0;
+
         jumpTargetHit = true;
         jumpHitIgnore = true;
         stopMoveRight = false;
 
         jumpTargetPos = startPos;
+    }
+
+
+    public float GetAIMoveCount()
+    {
+        return MoverCounter;
+
+        // Debug.Log("Completed Level Diffuculty: " + MoverCounter.ToString());
     }
 }

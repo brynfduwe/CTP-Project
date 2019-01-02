@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GeneticAlgManager : MonoBehaviour
@@ -12,7 +13,7 @@ public class GeneticAlgManager : MonoBehaviour
     private int candidate = 1;
     private float FitnessTimer;
     private List<List<int[]>> CandidateList = new List<List<int[]>>();
-    private List<float> CandidateFitness = new List<float>();
+    public List<float> CandidateFitness = new List<float>();
     private List<List<int[]>> CurrentOffspring = new List<List<int[]>>();
     int offspringIter;
 
@@ -79,6 +80,11 @@ public class GeneticAlgManager : MonoBehaviour
                 }
                 else
                 {
+                    offspringIter++;
+                    if (offspringIter >= CurrentOffspring.Count)
+                        offspringIter = 0;
+
+                    levelGMs[i].GetComponent<LevelGenerator>().SetNewChain(CurrentOffspring[offspringIter]);
                     levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
                 }
             }
@@ -91,12 +97,32 @@ public class GeneticAlgManager : MonoBehaviour
             //if success
             if (levelGMs[i].GetComponent<EventTracker>().SuccessCheck())
             {
-                AddCandidate(i);
-                FitnessTimer = 0;
-
-                if (CandidateList.Count >= candidateGoal)
+                if (levelGMs[i].GetComponent<EventTracker>().GetFitness() < 150)
                 {
-                    newGen = true;
+                    AddCandidate(i);
+                    FitnessTimer = 0;
+
+                    if (CandidateList.Count >= candidateGoal)
+                    {
+                        newGen = true;
+                    }
+                }
+                else
+                {
+                    if (generation == 1)
+                    {
+                        levelGMs[i].GetComponent<LevelGenerator>().RandomChain();
+                        levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
+                    }
+                    else
+                    {
+                        offspringIter++;
+                        if (offspringIter >= CurrentOffspring.Count)
+                            offspringIter = 0;
+
+                        levelGMs[i].GetComponent<LevelGenerator>().SetNewChain(CurrentOffspring[offspringIter]);
+                        levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
+                    }
                 }
             }
         }
@@ -119,6 +145,7 @@ public class GeneticAlgManager : MonoBehaviour
             }    
 
             CandidateList.Clear();
+            CandidateFitness.Clear();
 
             foreach (var lm in levelGMs)
             {
@@ -143,6 +170,7 @@ public class GeneticAlgManager : MonoBehaviour
 
         CandidateList.Add(levelGMs[lm].GetComponent<LevelGenerator>().GetGeneratorChromosome());
         //  CandidateFitness.Add(FitnessTimer);
+        CandidateFitness.Add(levelGMs[lm].GetComponent<EventTracker>().GetFitness());
 
         if (generation == 1)
         {
@@ -163,18 +191,43 @@ public class GeneticAlgManager : MonoBehaviour
 
     void Selection()
     {
-        Debug.Log("SELECTION");
-        //change to roulette wheel
 
+        //uses routlette wheel, TODO - order chain by ascending fitness, use this to determine diffucutly?
         List<int[]> Offspring = new List<int[]>();
-        int p1 = Random.Range(0, CandidateList.Count);
+    
+        int p1 = 0;
+        int p2 = 0;
 
-        int p2 = Random.Range(0, CandidateList.Count);
-
-        //check to ensure parents arent the same 
-        while (p2 == p1)
+        float totalFitness = 0;
+        foreach (var f in CandidateFitness)
         {
-            p2 = Random.Range(0, CandidateList.Count);
+            totalFitness += f;
+        }
+
+        float r = Random.Range(0, totalFitness);
+        float iter = 0;
+        int selected = 0;
+
+        for (int i = 0; i < CandidateFitness.Count; i++)
+        {
+            if (iter < r)
+            {
+                iter += CandidateFitness[i];
+                p1 = i;
+            }
+        }
+
+        r = Random.Range(0, totalFitness);
+        iter = 0;
+        selected = 0;
+
+        for (int i = 0; i < CandidateFitness.Count; i++)
+        {
+            if (iter < r)
+            {
+                iter += CandidateFitness[i];
+                p2 = i;
+            }
         }
 
         Offspring = Crossover(CandidateList[p1], CandidateList[p2]);
@@ -195,7 +248,7 @@ public class GeneticAlgManager : MonoBehaviour
             flipped = true;
         }
 
-        int r = Random.Range(0, 5);
+        int r = Random.Range(0, parent1.Count);
 
         Offspring.Clear();
 
@@ -205,7 +258,7 @@ public class GeneticAlgManager : MonoBehaviour
             {
                 if (r < i)
                 {
-                    Offspring.Add(parent1[1]);
+                    Offspring.Add(parent1[i]);
                 }
                 else
                 {
@@ -225,8 +278,8 @@ public class GeneticAlgManager : MonoBehaviour
             }
         }
 
-        Debug.Log("Flipped = " + flipped.ToString());
-        Debug.Log("CrossoverPoint = " + r.ToString());
+  //      Debug.Log("Flipped = " + flipped.ToString());
+  //      Debug.Log("CrossoverPoint = " + r.ToString());
         return Offspring;
     }
 }
