@@ -52,7 +52,7 @@ public class AITesterController : MonoBehaviour {
         GetComponent<Rigidbody2D>().angularVelocity = GetComponent<Rigidbody2D>().angularVelocity / 2;
 
         jumpTargetPos = transform.position;
-        startPos = transform.position;
+        startPos = transform.position + new Vector3(-1, -10);
     }
 
 

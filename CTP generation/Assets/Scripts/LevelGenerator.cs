@@ -58,7 +58,7 @@ public class LevelGenerator : MonoBehaviour
 
     void GenerateLevel()
     {
-        player.transform.position = startPlayerPos;
+        player.transform.position = startPlayerPos + new Vector2(0, 2);
 
         if (player.GetComponent<AITesterController>() != null)
         {
@@ -98,7 +98,7 @@ public class LevelGenerator : MonoBehaviour
 
         //move player to start
         GameObject start = Instantiate(ground, new Vector3(platsformObjects[0].transform.position.x - 1, platsformObjects[0].transform.position.y), ground.transform.rotation, transform);
-        player.transform.position = new Vector3(platsformObjects[0].transform.position.x - 1, platsformObjects[0].transform.position.y + 1.3f);
+        player.transform.position = new Vector3(platsformObjects[0].transform.position.x - 1, platsformObjects[0].transform.position.y + 2f);
         platsformObjects.Add(start);
 
 

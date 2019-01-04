@@ -38,8 +38,6 @@ public class GeneticAlgManager : MonoBehaviour
             LGM.GetComponent<LevelGenerator>().RandomChain();
             LGM.GetComponent<LevelGenerator>().NewLevelCandidate();
         }
-
-        // Time.timeScale = Time.timeScale * 5;
     }
 
 
@@ -48,7 +46,7 @@ public class GeneticAlgManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            if (TimeScale < 10)
+            if (TimeScale < 20)
             {
                 TimeScale++;
                 Time.timeScale = TimeScale;
@@ -97,7 +95,7 @@ public class GeneticAlgManager : MonoBehaviour
             //if success
             if (levelGMs[i].GetComponent<EventTracker>().SuccessCheck())
             {
-                if (levelGMs[i].GetComponent<EventTracker>().GetFitness() < 150)
+                if (levelGMs[i].GetComponent<EventTracker>().GetFitness() < 160)
                 {
                     AddCandidate(i);
                     FitnessTimer = 0;
@@ -136,13 +134,12 @@ public class GeneticAlgManager : MonoBehaviour
 
             offspringIter = 0;
 
-            CandidateFitness.Clear();
             CurrentOffspring.Clear();
 
             for (int i = 0; i < offSpringPopulation; i++)
             {
                 Selection();
-            }    
+            }
 
             CandidateList.Clear();
             CandidateFitness.Clear();
@@ -169,7 +166,6 @@ public class GeneticAlgManager : MonoBehaviour
         UImanager.UpdateCandidate(candidate);
 
         CandidateList.Add(levelGMs[lm].GetComponent<LevelGenerator>().GetGeneratorChromosome());
-        //  CandidateFitness.Add(FitnessTimer);
         CandidateFitness.Add(levelGMs[lm].GetComponent<EventTracker>().GetFitness());
 
         if (generation == 1)
@@ -191,7 +187,7 @@ public class GeneticAlgManager : MonoBehaviour
 
     void Selection()
     {
-
+        
         //uses routlette wheel, TODO - order chain by ascending fitness, use this to determine diffucutly?
         List<int[]> Offspring = new List<int[]>();
     
