@@ -19,6 +19,8 @@ public class GeneticAlgManager : MonoBehaviour
 
     public GameObject[] levelGMs;
 
+    public List<GameObject> failedJumpPlats = new List<GameObject>();
+
     int TimeScale = 1;
 
 
@@ -186,8 +188,7 @@ public class GeneticAlgManager : MonoBehaviour
 
 
     void Selection()
-    {
-        
+    {       
         //uses routlette wheel, TODO - order chain by ascending fitness, use this to determine diffucutly?
         List<int[]> Offspring = new List<int[]>();
     
