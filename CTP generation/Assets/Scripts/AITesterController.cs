@@ -33,6 +33,7 @@ public class AITesterController : MonoBehaviour {
     private bool jumpTargetHit = true;
     private Vector2 jumpTargetPos;
     private Transform jumpTargetTransform;
+    private Transform standingPlat;
     private bool stopMoveRight;
 
     private bool jumpHitIgnore = true;
@@ -50,6 +51,7 @@ public class AITesterController : MonoBehaviour {
     private bool dirLeft = false;
 
     List<Transform> failedPlats = new List<Transform>();
+    List<Transform> doNotRetryPlats = new List<Transform>();
 
 
     // Use this for initialization
@@ -198,6 +200,18 @@ public class AITesterController : MonoBehaviour {
                 stopMoveRight = false;
                 jumpTargetHit = true;
                 jumpHitIgnore = true;
+
+                standingPlat = jumpTargetTransform;
+
+                //RaycastHit2D hitD = Physics2D.Raycast(transform.position + new Vector3(0f, -0.5f, 0), -Vector2.up, 3f);
+                //if (hitD.collider != null)
+                //{
+                //    //    hitD = Physics2D.Raycast(hitD.ptoin + new Vector3(0f, -0.5f, 0), -Vector2.up, 3f);
+
+                //    doNotRetryPlats.Add(hitD.transform);
+                //    hitD.transform.GetComponent<SpriteRenderer>().color = Color.red;
+                //}
+
             }
         }
 
@@ -249,72 +263,11 @@ public class AITesterController : MonoBehaviour {
     {
     //    dirLeft = true;
 
-        //Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 10);
-        //Transform nearestCol = cols[0].transform;
-        //float nearestDist = 100;
-        //for (int i = 0; i < cols.Length; i++)
-        //{
-        //    if (cols[i].gameObject != this.gameObject)
-        //    {
-        //        //angle check
-        //        Vector3 playerDir = cols[i].transform.position - transform.position;
-        //        float angle = Vector3.Dot(playerDir, -cols[i].transform.up);
-        //        if (angle > 0.5f)
-        //        {
-        //            float dist = Vector2.Distance(transform.position, cols[i].transform.position);
-        //            if (dist < nearestDist)
-        //            {
-        //                nearestDist = Vector2.Distance(transform.position, cols[i].transform.position);
-        //                nearestCol = cols[i].transform;
-        //            }
-
-        //            cols[i].gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
-        //        }
-        //    }
-        //}
         failedPlats.Add(jumpTargetTransform);
 
-        //nearestCol.gameObject.GetComponent<SpriteRenderer>().color = Color.green;
-
-        //tryThing = true;
-
-        ////target platform picker.
-        //Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 10);
-
-        //Transform nearestCol = cols[0].transform;
-        //float nearestDist = 100;
-
-        //for (int i = 0; i < cols.Length; i++)
-        //{
-        //    if (cols[i].gameObject != this.gameObject)
-        //    {
-        //        //angle check
-        //        Vector3 playerDir = cols[i].transform.position - transform.position;
-        //        float angle = Vector3.Dot(playerDir, -cols[i].transform.right);
-        //        if (angle > 0.5f)
-        //        {
-        //            float dist = Vector2.Distance(transform.position, cols[i].transform.position);
-        //            if (dist < nearestDist)
-        //            {
-        //                nearestDist = Vector2.Distance(transform.position, cols[i].transform.position);
-        //                nearestCol = cols[i].transform;
-        //            }
-
-        //            cols[i].gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
-        //        }
-        //    }
-        //}
-
-        ////nearestCol.gameObject.GetComponent<SpriteRenderer>().color = Color.green;
-        ////jumpTargetPos = nearestCol.position;
-        //////    Debug.Log(nearestDist.ToString());
-
-        //////jump set up
-        ////startedJumpPos = transform.position.y;
-        //////  maxJumpPos = transform.position.y + jumpMax;
-        ////GetComponent<Rigidbody2D>().AddForce(Vector2.up * (jumpPower * 1), ForceMode2D.Impulse);
-        ////jumpStarted = true;
-        ////hitGround = false;
+        //TODO - DONT DO BELOW, ADD TO NEW LIST THAT DOESNT ALLOW IT TO BE TARGETED FOR X TRIES??? MAYBE
+       // doNotRetryPlats.Add(jumpTargetTransform);
+       // jumpTargetTransform.gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
 
     }
 
@@ -325,7 +278,7 @@ public class AITesterController : MonoBehaviour {
         {
             int possibleRoutes = 0;
             //target platform picker.
-            Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 10);
+            Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 7);
 
             Transform nearestCol = cols[0].transform;
             float nearestDist = 100;
@@ -345,7 +298,14 @@ public class AITesterController : MonoBehaviour {
 
                     }
 
-                    if (!inFailed)
+                    foreach (var c in doNotRetryPlats)
+                    {
+                        if (c == cols[i].transform)
+                            inFailed = true;
+                    }
+
+
+                    if (inFailed == false)
                     {
                         //angle check
                         Vector3 playerDir = cols[i].transform.position - transform.position;
@@ -355,7 +315,7 @@ public class AITesterController : MonoBehaviour {
                             angle = Vector3.Dot(playerDir, -cols[i].transform.right);
                         }
 
-                        if (angle > 0.5f)
+                        if (angle > 0.2f)
                         {
                             float dist = Vector2.Distance(transform.position, cols[i].transform.position);
                             if (dist < nearestDist)
@@ -382,47 +342,23 @@ public class AITesterController : MonoBehaviour {
             {
 
                    dirLeft = true;
-                failedPlats.Clear();
+                failedPlats.Clear();           
+             
 
-               cols = Physics2D.OverlapCircleAll(transform.position, 5);
-
-                 nearestCol = cols[0].transform;
-
-                for (int i = 0; i < cols.Length; i++)
+                if (standingPlat != null)
                 {
-                    if (cols[i].gameObject != this.gameObject)
-                    {
-                        bool inFailed = false;
-
-                        for (int c = 0; c < failedPlats.Count; c++)
-                        {
-                            if (failedPlats[c].transform == cols[i].transform)
-                            {
-                                inFailed = true;
-                            }
-
-                        }
-
-                        if (!inFailed)
-                        {
-                            //angle check
-                            Vector3 playerDir = cols[i].transform.position - transform.position;
-                            float angle = Vector3.Dot(playerDir, -cols[i].transform.up);
-
-                            if (angle > 0.5f)
-                            {
-                                float dist = Vector2.Distance(transform.position, cols[i].transform.position);
-                                if (dist < nearestDist)
-                                {
-                                    nearestDist = Vector2.Distance(transform.position, cols[i].transform.position);
-                                    nearestCol = cols[i].transform;
-                                }
-                            }
-                        }
-                    }
+                    doNotRetryPlats.Add(standingPlat);
+                    standingPlat.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
                 }
 
-                failedPlats.Add(nearestCol.transform);
+                RaycastHit2D hitD = Physics2D.Raycast(transform.position + new Vector3(0f, -0.5f, 0), -Vector2.up, 3f);
+                if (hitD.collider != null)
+                {
+                    //    hitD = Physics2D.Raycast(hitD.ptoin + new Vector3(0f, -0.5f, 0), -Vector2.up, 3f);
+
+                    doNotRetryPlats.Add(hitD.transform);
+                    hitD.transform.GetComponent<SpriteRenderer>().color = Color.red;
+                }
 
 
                 for (int i = 0; i < cols.Length; i++)
@@ -431,16 +367,13 @@ public class AITesterController : MonoBehaviour {
                     {
                         bool inFailed = false;
 
-                        for (int c = 0; c < failedPlats.Count; c++)
+                        foreach (var c in doNotRetryPlats)
                         {
-                            if (failedPlats[c].transform == cols[i].transform)
-                            {
+                            if (c == cols[i].transform)
                                 inFailed = true;
-                            }
-
                         }
 
-                        if (!inFailed)
+                        if (inFailed == false)
                         {
                             //angle check
                             Vector3 playerDir = cols[i].transform.position - transform.position;
@@ -448,7 +381,7 @@ public class AITesterController : MonoBehaviour {
                                 float angle = Vector3.Dot(playerDir, -cols[i].transform.right);
                            
 
-                            if (angle > 0.5f)
+                            if (angle > 2f)
                             {
                                 float dist = Vector2.Distance(transform.position, cols[i].transform.position);
                                 if (dist < nearestDist)
@@ -464,7 +397,7 @@ public class AITesterController : MonoBehaviour {
                 }
 
 
-                nearestCol.gameObject.GetComponent<SpriteRenderer>().color = Color.green;
+              //  nearestCol.gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
                 jumpTargetTransform = nearestCol.transform;
                 jumpTargetPos = nearestCol.position;
                 //    Debug.Log(nearestDist.ToString());
@@ -516,6 +449,8 @@ public class AITesterController : MonoBehaviour {
         {
             waitJump = true;
         }
+
+        GetComponent<SpriteRenderer>().color = Color.green;
     }
 
 
@@ -523,6 +458,7 @@ public class AITesterController : MonoBehaviour {
     {
         dirLeft = false;
         failedPlats.Clear();
+        doNotRetryPlats.Clear();
         MoverCounter = 0;
 
         jumpTargetHit = true;

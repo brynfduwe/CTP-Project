@@ -31,7 +31,7 @@ public class EventTracker : MonoBehaviour
         failTimer += Time.deltaTime;
         if (failTimer > 60)
         {
-            ResetCheck();
+          //  ResetCheck();
             failTimer = 0;
         }
         stucktimer += Time.deltaTime;
@@ -59,7 +59,7 @@ public class EventTracker : MonoBehaviour
     {
         if (player.transform.position.x > lastX - 0.1f && player.transform.position.x < lastX + 0.1f)
         {
-            player.transform.position = new Vector3(transform.position.x, failY - 1);
+        //    player.transform.position = new Vector3(transform.position.x, failY - 1);
             lastX = player.transform.position.x - 100;
         }
 
