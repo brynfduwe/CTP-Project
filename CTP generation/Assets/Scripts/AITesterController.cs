@@ -133,6 +133,11 @@ public class AITesterController : MonoBehaviour {
             if (Physics2D.OverlapArea(topPoint1.position, topPoint2.position))
             {
                 jumpStarted = false;
+                stopMoveRight = true;
+                jumpTargetHit = true;
+                jumpHitIgnore = true;
+
+                transform.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
             }
 
             jumpInputTimer += Time.deltaTime;
@@ -177,18 +182,22 @@ public class AITesterController : MonoBehaviour {
         {
             if (!dirLeft)
             {
-                if (transform.position.x >= jumpTargetPos.x)
+                if (transform.position.x + 0.5f >= jumpTargetPos.x)
                 {
                     //  MoverCounter++;
                     stopMoveRight = true;
+                    transform.position = new Vector3(jumpTargetPos.x, transform.position.y);
+                    GetComponent<Rigidbody2D>().velocity = Vector2.zero;
                 }
             }
             else
             {
-                if (transform.position.x <= jumpTargetPos.x)
+                if (transform.position.x + 0.5f <= jumpTargetPos.x)
                 {
                     //  MoverCounter++;
                     stopMoveRight = true;
+                    transform.position = new Vector3(jumpTargetPos.x, transform.position.y);
+                    GetComponent<Rigidbody2D>().velocity = Vector2.zero;
                 }
             }
         }
@@ -217,7 +226,7 @@ public class AITesterController : MonoBehaviour {
 
         if (waitJump)
         {
-            if (jumpTargetPos.y - transform.position.y < 0.7f)
+            if (jumpTargetPos.y - transform.position.y < 0f)
             {
                 waitJump = false;
             }
@@ -278,7 +287,7 @@ public class AITesterController : MonoBehaviour {
         {
             int possibleRoutes = 0;
             //target platform picker.
-            Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 7);
+            Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 10);
 
             Transform nearestCol = cols[0].transform;
             float nearestDist = 100;
@@ -303,6 +312,25 @@ public class AITesterController : MonoBehaviour {
                         if (c == cols[i].transform)
                             inFailed = true;
                     }
+
+                    if (Vector2.Distance(transform.position, cols[i].transform.position) > 8)
+                    {
+                        inFailed = true;
+                    }
+
+                    if (Vector2.Distance(new Vector2(transform.position.x, 0), new Vector2(cols[i].transform.position.x, 0)) > 4.5)
+                    {
+                     //   if(transform.position.y < cols[i].transform.position.y)
+                        inFailed = true;
+                    }
+
+                    if (Vector2.Distance(new Vector2(0, transform.position.y),
+                            new Vector2(0, cols[i].transform.position.y)) > 4 &&
+                        transform.position.y < cols[i].transform.position.y)
+                    {
+                        inFailed = true;
+                    }
+
 
 
                     if (inFailed == false)
@@ -348,7 +376,7 @@ public class AITesterController : MonoBehaviour {
                 if (standingPlat != null)
                 {
                     doNotRetryPlats.Add(standingPlat);
-                    standingPlat.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+                    standingPlat.gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
                 }
 
                 RaycastHit2D hitD = Physics2D.Raycast(transform.position + new Vector3(0f, -0.5f, 0), -Vector2.up, 3f);
@@ -406,6 +434,7 @@ public class AITesterController : MonoBehaviour {
 
             //jump set up
             startedJumpPos = transform.position.y;
+
             //  maxJumpPos = transform.position.y + jumpMax;
             GetComponent<Rigidbody2D>().AddForce(Vector2.up * (jumpPower * 1), ForceMode2D.Impulse);
             jumpStarted = true;

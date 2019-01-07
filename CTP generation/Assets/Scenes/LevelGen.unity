@@ -476,25 +476,6 @@ Prefab:
       propertyPath: m_Name
       value: AITester (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 1615671512683426, guid: 953626e60cc6c9d4481f2faa267f7cc5, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 61246963566094502, guid: 953626e60cc6c9d4481f2faa267f7cc5,
-        type: 2}
-      propertyPath: m_Size.y
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 61246963566094502, guid: 953626e60cc6c9d4481f2faa267f7cc5,
-        type: 2}
-      propertyPath: m_Offset.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 61246963566094502, guid: 953626e60cc6c9d4481f2faa267f7cc5,
-        type: 2}
-      propertyPath: m_Offset.x
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 953626e60cc6c9d4481f2faa267f7cc5, type: 2}
   m_IsPrefabAsset: 0
@@ -801,21 +782,6 @@ Prefab:
       propertyPath: m_Name
       value: AITester (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 61246963566094502, guid: 953626e60cc6c9d4481f2faa267f7cc5,
-        type: 2}
-      propertyPath: m_Size.y
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 61246963566094502, guid: 953626e60cc6c9d4481f2faa267f7cc5,
-        type: 2}
-      propertyPath: m_Offset.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 61246963566094502, guid: 953626e60cc6c9d4481f2faa267f7cc5,
-        type: 2}
-      propertyPath: m_Offset.x
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 953626e60cc6c9d4481f2faa267f7cc5, type: 2}
   m_IsPrefabAsset: 0
@@ -1121,25 +1087,6 @@ Prefab:
       propertyPath: m_Name
       value: AITester (2)
       objectReference: {fileID: 0}
-    - target: {fileID: 1615671512683426, guid: 953626e60cc6c9d4481f2faa267f7cc5, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 61246963566094502, guid: 953626e60cc6c9d4481f2faa267f7cc5,
-        type: 2}
-      propertyPath: m_Size.y
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 61246963566094502, guid: 953626e60cc6c9d4481f2faa267f7cc5,
-        type: 2}
-      propertyPath: m_Offset.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 61246963566094502, guid: 953626e60cc6c9d4481f2faa267f7cc5,
-        type: 2}
-      propertyPath: m_Offset.x
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 953626e60cc6c9d4481f2faa267f7cc5, type: 2}
   m_IsPrefabAsset: 0
@@ -1275,6 +1222,7 @@ MonoBehaviour:
   - {fileID: 2126740882}
   - {fileID: 723108234}
   - {fileID: 164796403}
+  failedJumpPlats: []
 --- !u!4 &904623991
 Transform:
   m_ObjectHideFlags: 0
@@ -2398,25 +2346,6 @@ Prefab:
     - target: {fileID: 1784032528301430, guid: 953626e60cc6c9d4481f2faa267f7cc5, type: 2}
       propertyPath: m_Name
       value: AITester (2)
-      objectReference: {fileID: 0}
-    - target: {fileID: 1615671512683426, guid: 953626e60cc6c9d4481f2faa267f7cc5, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 61246963566094502, guid: 953626e60cc6c9d4481f2faa267f7cc5,
-        type: 2}
-      propertyPath: m_Size.y
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 61246963566094502, guid: 953626e60cc6c9d4481f2faa267f7cc5,
-        type: 2}
-      propertyPath: m_Offset.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 61246963566094502, guid: 953626e60cc6c9d4481f2faa267f7cc5,
-        type: 2}
-      propertyPath: m_Offset.x
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 953626e60cc6c9d4481f2faa267f7cc5, type: 2}
