@@ -94,9 +94,9 @@ public class AITesterController : MonoBehaviour {
                 }
                 else
                 {
-                    foreach (var c in doNotRetryPlats)
+                    for (int i = 0; i < doNotRetryPlats.Count; i++)
                     {
-                        if (hitD.transform == c.transform)
+                        if (hitD.transform == doNotRetryPlats[i].transform)
                         {
                             StartJump(0.3f);
                         }
@@ -622,7 +622,7 @@ public class AITesterController : MonoBehaviour {
     }
 }
 
-public class PlatformCheckClass : MonoBehaviour
+public class PlatformCheckClass
 {
     public Transform referenceTransform;
     List<Transform> failedJumpToPlats = new List<Transform>();
