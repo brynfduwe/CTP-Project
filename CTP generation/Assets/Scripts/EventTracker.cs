@@ -82,7 +82,7 @@ public class EventTracker : MonoBehaviour
 
     public bool SuccessCheck()
     {
-        if (player.transform.position.x > successX - 0.5f)
+        if (player.transform.position.x > successX)
         {
             fitness = player.GetComponent<AITesterController>().GetAIMoveCount();
             Debug.Log("Completed Level Diffuculty: " + fitness.ToString());

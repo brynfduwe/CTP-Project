@@ -149,13 +149,13 @@ public class AITesterController : MonoBehaviour {
             if (Physics2D.OverlapArea(topPoint1.position, topPoint2.position))
             {
                 jumpStarted = false;
-                stopMoveRight = true;
+             //   stopMoveRight = true;
               //  jumpTargetHit = true;
              //   jumpHitIgnore = true;
 
-                transform.position = transform.position - new Vector3(0.2f, 0.2f);
+           ///     transform.position = transform.position - new Vector3(0.2f, 0.2f);
 
-                transform.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+           //     transform.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
 
                 Debug.Log("TOP HIT");
             }
@@ -392,19 +392,37 @@ public class AITesterController : MonoBehaviour {
                     }
 
                     if (Vector2.Distance(new Vector2(transform.position.x, 0),
-                            new Vector2(cols[i].transform.position.x, 0)) > 4.5)
+                            new Vector2(cols[i].transform.position.x, 0)) > 5)
                     {
                         //   if(transform.position.y < cols[i].transform.position.y)
-                        inFailed = true;
+                    //    inFailed = true;
                     }
 
                     if (Vector2.Distance(new Vector2(0, transform.position.y),
-                            new Vector2(0, cols[i].transform.position.y)) > 4 &&
+                            new Vector2(0, cols[i].transform.position.y)) > 5 &&
                         transform.position.y < cols[i].transform.position.y)
+                    {
+                     //   inFailed = true;
+                    }
+
+
+                    float xDist = Vector2.Distance(new Vector2(transform.position.x, 0), new Vector2(cols[i].transform.position.x, 0));
+                    float yDist = Vector2.Distance(new Vector2(0, transform.position.y), new Vector2(0, cols[i].transform.position.y));
+                    float tDist = xDist;
+
+                    if (cols[i].transform.position.y > transform.position.y - 1)
+                    {
+                        tDist += yDist;
+                    }
+                    else
+                    {
+                        tDist -= yDist;
+                    }
+
+                    if (tDist > 6)
                     {
                         inFailed = true;
                     }
-
 
 
                     if (inFailed == false)
@@ -584,6 +602,9 @@ public class AITesterController : MonoBehaviour {
 
         failedPlatfromList.Clear();
         doNotRetryPlats.Clear();
+
+        lastJumpedOffPlat = null;
+        jumpTargetTransform = null;
 
         jumpTargetHit = true;
         jumpHitIgnore = true;

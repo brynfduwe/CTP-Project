@@ -94,7 +94,10 @@ public class LevelGenerator : MonoBehaviour
             currentState = States.Ground1;
         }
         GameObject end = Instantiate(endFlag, new Vector3(xPos, transform.position.y + (int)currentState, 0), ground.transform.rotation, transform);
+        GameObject endPlus = Instantiate(ground, end.transform.position + new Vector3(1,0, 0), ground.transform.rotation, transform);
         platsformObjects.Add(end);
+        platsformObjects.Add(endPlus);
+
 
         //move player to start
         GameObject start = Instantiate(ground, new Vector3(platsformObjects[0].transform.position.x - 1, platsformObjects[0].transform.position.y), ground.transform.rotation, transform);
