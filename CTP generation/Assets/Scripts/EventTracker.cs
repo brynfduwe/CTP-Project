@@ -9,6 +9,7 @@ public class EventTracker : MonoBehaviour
     public Transform player;
 
     private float lastX;
+    private float startX;
     float stucktimer;
 
     private float attemptTimer;
@@ -21,7 +22,8 @@ public class EventTracker : MonoBehaviour
 	    successX = GetComponent<LevelGenerator>().levelLength - 1;
 	    failY = transform.position.y - 2;
 	    lastX = player.transform.position.x - 100;
-    }
+	    startX = lastX;
+	}
 	
 	// Update is called once per frame
     void FixedUpdate()
@@ -31,7 +33,7 @@ public class EventTracker : MonoBehaviour
         failTimer += Time.deltaTime;
         if (failTimer > 60)
         {
-          //  ResetCheck();
+            ResetCheck();
             failTimer = 0;
         }
         stucktimer += Time.deltaTime;
@@ -47,7 +49,10 @@ public class EventTracker : MonoBehaviour
     {
         if (player.transform.position.x > lastX - 0.1f && player.transform.position.x < lastX + 0.1f)
         {
-            player.GetComponent<AITesterController>().StuckTryThing();
+            // player.GetComponent<AITesterController>().StuckTryThing();
+            player.transform.position = new Vector3(transform.position.x, failY - 1);
+
+            lastX = startX;
         }
 
          lastX = player.transform.position.x;
@@ -57,10 +62,12 @@ public class EventTracker : MonoBehaviour
 
     void ResetCheck()
     {
-        if (player.transform.position.x > lastX - 0.1f && player.transform.position.x < lastX + 0.1f)
+        if (player.transform.position.x <= lastX + 0.001)
         {
-        //    player.transform.position = new Vector3(transform.position.x, failY - 1);
-            lastX = player.transform.position.x - 100;
+            player.transform.position = new Vector3(transform.position.x, failY - 1);
+
+            lastX = startX;
+
         }
 
         lastX = player.transform.position.x;
@@ -75,7 +82,7 @@ public class EventTracker : MonoBehaviour
 
     public bool SuccessCheck()
     {
-        if (player.transform.position.x > successX)
+        if (player.transform.position.x > successX - 0.5f)
         {
             fitness = player.GetComponent<AITesterController>().GetAIMoveCount();
             Debug.Log("Completed Level Diffuculty: " + fitness.ToString());
