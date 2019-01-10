@@ -26,6 +26,8 @@ public class GeneticAlgManager : MonoBehaviour
 
     List<int[]> finalCandidate = new List<int[]>();
 
+    private int finalGen = 0;
+
     public Text transitionMatrixVis;
 
 
@@ -216,22 +218,32 @@ public class GeneticAlgManager : MonoBehaviour
 
             if (sucessCount >= levelGMs.Length - 1)
             {
-                finalCandidate = clm.GetComponent<LevelGenerator>().GetGeneratorChromosome();
-
-                transitionMatrixVis.text = "";
-
-                foreach (var ptl in finalCandidate)
+                if (generation >= finalGen && finalGen > 0)
                 {
-                    foreach (var i in ptl)
-                    {
-                        transitionMatrixVis.text += (i.ToString() + ", ");
-                    }
-                    transitionMatrixVis.text += "\n";
-                }
+                    finalCandidate = clm.GetComponent<LevelGenerator>().GetGeneratorChromosome();
 
-                Debug.Log("END FOUND!");
-              //  gameObject.SetActive(false);
-                UImanager.ShowEndSlate();
+                    transitionMatrixVis.text = "";
+
+                    foreach (var ptl in finalCandidate)
+                    {
+                        foreach (var i in ptl)
+                        {
+                            transitionMatrixVis.text += (i.ToString() + ", ");
+                        }
+
+                        transitionMatrixVis.text += "\n";
+                    }
+
+                    Debug.Log("END FOUND!");
+                    UImanager.ShowEndSlate();
+                    gameObject.SetActive(false);
+                }
+                else
+                {
+
+                    Debug.Log("end flagged, addition genertion pass");
+                    finalGen = generation + 1;
+                }
             }
         }
     }
