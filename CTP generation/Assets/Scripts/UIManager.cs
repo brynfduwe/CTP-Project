@@ -10,6 +10,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] Text candidate;
     [SerializeField] Text timeScale;
 
+    [SerializeField] GameObject EndSlate;
+
     // Use this for initialization
     void Start () {
 		
@@ -34,5 +36,11 @@ public class UIManager : MonoBehaviour
     public void UpdateTimeScale(int ts)
     {
         timeScale.text = "Time Scale: x" + ts.ToString();
+    }
+
+
+    public void ShowEndSlate()
+    {
+        EndSlate.gameObject.SetActive(true);
     }
 }

@@ -157,7 +157,7 @@ public class AITesterController : MonoBehaviour {
 
            //     transform.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
 
-                Debug.Log("TOP HIT");
+          //      Debug.Log("TOP HIT");
             }
             else
             {

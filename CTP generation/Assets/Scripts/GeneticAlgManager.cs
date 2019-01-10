@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GeneticAlgManager : MonoBehaviour
 {
@@ -22,6 +23,10 @@ public class GeneticAlgManager : MonoBehaviour
     public List<GameObject> failedJumpPlats = new List<GameObject>();
 
     int TimeScale = 1;
+
+    List<int[]> finalCandidate = new List<int[]>();
+
+    public Text transitionMatrixVis;
 
 
     // Use this for initialization
@@ -48,22 +53,12 @@ public class GeneticAlgManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            if (TimeScale < 20)
-            {
-                TimeScale++;
-                Time.timeScale = TimeScale;
-                UImanager.UpdateTimeScale(TimeScale);
-            }
+           IncreaseTimeScale();
         }
 
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            if (TimeScale > 1)
-            {
-                TimeScale--;
-                Time.timeScale = TimeScale;
-                UImanager.UpdateTimeScale(TimeScale);
-            }
+            DecreaseTimeScale();
         }
 
 
@@ -165,7 +160,7 @@ public class GeneticAlgManager : MonoBehaviour
     void AddCandidate(int lm)
     {
         candidate++;
-        UImanager.UpdateCandidate(candidate);
+        UImanager.UpdateCandidate(candidate);      
 
         CandidateList.Add(levelGMs[lm].GetComponent<LevelGenerator>().GetGeneratorChromosome());
         CandidateFitness.Add(levelGMs[lm].GetComponent<EventTracker>().GetFitness());
@@ -184,8 +179,62 @@ public class GeneticAlgManager : MonoBehaviour
             levelGMs[lm].GetComponent<LevelGenerator>().SetNewChain(CurrentOffspring[offspringIter]);
             levelGMs[lm].GetComponent<LevelGenerator>().NewLevelCandidate();
         }
+
+
+        CheckForEnd();
     }
 
+
+    void CheckForEnd()
+    {
+        foreach (var clm in levelGMs)
+        {
+            bool fail = false;
+            int sucessCount = 0;
+
+            foreach (var lm in levelGMs)
+            {
+                List<int[]> checkChromo = lm.GetComponent<LevelGenerator>().GetGeneratorChromosome();
+                fail = false;
+
+                for (int j = 0; j < checkChromo.Count; j++)
+                {
+                    for (int i = 0; i < checkChromo[j].Length; i++)
+                    {
+                        if (checkChromo[j][i] != clm.GetComponent<LevelGenerator>().GetGeneratorChromosome()[j][i])
+                        {
+                            fail = true;
+                        }
+                    }
+                }
+
+                if (!fail)
+                {
+                    sucessCount++;
+                }
+            }
+
+            if (sucessCount >= levelGMs.Length - 1)
+            {
+                finalCandidate = clm.GetComponent<LevelGenerator>().GetGeneratorChromosome();
+
+                transitionMatrixVis.text = "";
+
+                foreach (var ptl in finalCandidate)
+                {
+                    foreach (var i in ptl)
+                    {
+                        transitionMatrixVis.text += (i.ToString() + ", ");
+                    }
+                    transitionMatrixVis.text += "\n";
+                }
+
+                Debug.Log("END FOUND!");
+              //  gameObject.SetActive(false);
+                UImanager.ShowEndSlate();
+            }
+        }
+    }
 
     void Selection()
     {       
@@ -278,5 +327,27 @@ public class GeneticAlgManager : MonoBehaviour
   //      Debug.Log("Flipped = " + flipped.ToString());
   //      Debug.Log("CrossoverPoint = " + r.ToString());
         return Offspring;
+    }
+
+
+    public void IncreaseTimeScale()
+    {
+        if (TimeScale < 10)
+        {
+            TimeScale++;
+            Time.timeScale = TimeScale;
+            UImanager.UpdateTimeScale(TimeScale);
+        }
+    }
+
+
+    public void DecreaseTimeScale()
+    {
+        if (TimeScale > 1)
+        {
+            TimeScale--;
+            Time.timeScale = TimeScale;
+            UImanager.UpdateTimeScale(TimeScale);
+        }
     }
 }
