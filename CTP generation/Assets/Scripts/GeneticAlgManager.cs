@@ -46,7 +46,7 @@ public class GeneticAlgManager : MonoBehaviour
 
         foreach (var LGM in levelGMs)
         {
-            LGM.GetComponent<LevelGenerator>().SetRests(setUp.GetRestFreq(), setUp.GetRestLength());
+            LGM.GetComponent<LevelGenerator>().SetRests(setUp.GetRestCov());
             LGM.GetComponent<LevelGenerator>().RandomChain();
             LGM.GetComponent<LevelGenerator>().NewLevelCandidate();
         }

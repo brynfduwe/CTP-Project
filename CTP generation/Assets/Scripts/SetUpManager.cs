@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class SetUpManager : MonoBehaviour
 {
-    public Slider restFreq;
-    public Slider restLength;
+    public Slider restCov;
+
 
     // Use this for initialization
     void Start()
@@ -15,13 +15,9 @@ public class SetUpManager : MonoBehaviour
     }
 
 
-    public float GetRestFreq()
+    public float GetRestCov()
     {
-        return restFreq.value;
+        return restCov.value;
     }
 
-    public float GetRestLength()
-    {
-        return restLength.value;
-    }
 }

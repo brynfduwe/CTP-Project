@@ -13,6 +13,10 @@ public class DifficultyTracker : MonoBehaviour
     private float fitness = 0;
     public Text DifficultyUI;
 
+    ///-
+    private float restsNumOf;
+    private float restLengthAvg;
+
     // Use this for initialization
     void Start () {
 		
@@ -96,45 +100,37 @@ public class DifficultyTracker : MonoBehaviour
 
      //   Debug.Log("Diff Rests: " + rests.ToString() + " - " + s + " /// Diff Rhg: " + rhythmGroups + " - " + r);
 
-        bool tooEasy = false;
-        bool tooHard = false;
         int rlScore = 0;
         int rglScore = 0;
 
         foreach (var rl in restLengths)
         {
             rlScore += rl;
-            if (rl > 30)
-            {
-                tooEasy = true;
-            }
         }
+
+        restsNumOf = restLengths.Count;
+
+        restLengthAvg = rlScore / restLengths.Count;
 
         foreach (var rgl in rhythmGroupLengths)
         {
             rglScore += rgl;
-            if (rgl > 30)
-            {
-                tooHard = true;
-            }
         }
 
-        if (tooHard || tooEasy)
-        {
-            fitness = -1;
-        }
-        else
-        {
-            fitness = (rlScore / restLengths.Count) + (rglScore / rhythmGroupLengths.Count);
-        }
-
-        Debug.Log("FITNESS DIFFUCICULTY: " + fitness.ToString());
-        DifficultyUI.text = fitness.ToString();
+     //   Debug.Log("FITNESS DIFFUCICULTY: " + fitness.ToString());
+        DifficultyUI.text = restsNumOf.ToString();
     }
 
 
-    public float GetFitness()
+    public float GetRestNumOf()
     {
-        return fitness;
+        return restsNumOf;
     }
+
+
+    public float GetRestAvgLength()
+    {
+        return restLengthAvg;
+    }
+
 }

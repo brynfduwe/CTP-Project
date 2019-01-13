@@ -31,8 +31,8 @@ public class LevelGenerator : MonoBehaviour
     public Transform player;
     private Vector2 startPlayerPos;
 
-    private float restFrequency = 0;
-    private float restAmount = 0;
+    private float restFreqLevel = 0;
+    private float restAmountLevel = 0;
 
     // Use this for initialization
     void Awake()
@@ -108,17 +108,17 @@ public class LevelGenerator : MonoBehaviour
         platsformObjects.Add(start);
 
 
-        //transition matrix visualisation
-        transitionMatrixVis.text = "";
+        ////transition matrix visualisation
+        //transitionMatrixVis.text = "";
 
-        foreach (var ptl in probabilityTransList)
-        {
-            foreach (var i in ptl)
-            {
-                transitionMatrixVis.text += (i.ToString() + ", ");
-            }
-            transitionMatrixVis.text += "\n";
-        }
+        //foreach (var ptl in probabilityTransList)
+        //{
+        //    foreach (var i in ptl)
+        //    {
+        //        transitionMatrixVis.text += (i.ToString() + ", ");
+        //    }
+        //    transitionMatrixVis.text += "\n";
+        //}
     }
 
 
@@ -195,7 +195,16 @@ public class LevelGenerator : MonoBehaviour
         GenerateLevel();
 
         this.GetComponent<DifficultyTracker>().CheckLevelDifficulty(platsformObjects.ToArray());
-        if (GetComponent<DifficultyTracker>().GetFitness() < 3 || GetComponent<DifficultyTracker>().GetFitness() > 20)
+
+        bool fail = false;
+
+        float restsNumGoal = (levelLength / 5) * restFreqLevel;
+        float boundrySplit = ((levelLength / 5));
+
+        float candidateRest = ((this.GetComponent<DifficultyTracker>().GetRestAvgLength() *
+                                this.GetComponent<DifficultyTracker>().GetRestNumOf())); // / levelLength) * 100;???
+
+        if (candidateRest < restsNumGoal - boundrySplit || candidateRest > restsNumGoal + boundrySplit)
         {
             player.transform.position = -new Vector2(0, 20);
         }
@@ -210,10 +219,9 @@ public class LevelGenerator : MonoBehaviour
     }
 
 
-    public void SetRests(float _restFreq, float _restAmount)
+    public void SetRests(float _restFreq)
     {
         ////IDK
-        restFrequency = restAmount * (levelLength / 10);
-        this.restAmount =_restAmount * (levelLength / 10);
+        restFreqLevel = _restFreq;
     }
 }
