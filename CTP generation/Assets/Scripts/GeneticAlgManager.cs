@@ -30,6 +30,8 @@ public class GeneticAlgManager : MonoBehaviour
 
     public Text transitionMatrixVis;
 
+    public SetUpManager setUp;
+
 
     // Use this for initialization
     void Start()
@@ -44,6 +46,7 @@ public class GeneticAlgManager : MonoBehaviour
 
         foreach (var LGM in levelGMs)
         {
+            LGM.GetComponent<LevelGenerator>().SetRests(setUp.GetRestFreq(), setUp.GetRestLength());
             LGM.GetComponent<LevelGenerator>().RandomChain();
             LGM.GetComponent<LevelGenerator>().NewLevelCandidate();
         }

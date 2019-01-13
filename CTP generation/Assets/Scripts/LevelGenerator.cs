@@ -31,6 +31,9 @@ public class LevelGenerator : MonoBehaviour
     public Transform player;
     private Vector2 startPlayerPos;
 
+    private float restFrequency = 0;
+    private float restAmount = 0;
+
     // Use this for initialization
     void Awake()
     {
@@ -116,12 +119,6 @@ public class LevelGenerator : MonoBehaviour
             }
             transitionMatrixVis.text += "\n";
         }
-
-        this.GetComponent<DifficultyTracker>().CheckLevelDifficulty(platsformObjects.ToArray());
-        if (GetComponent<DifficultyTracker>().GetFitness() < 4)
-        {
-            player.transform.position =- new Vector2(0, 20);
-        }
     }
 
 
@@ -196,6 +193,12 @@ public class LevelGenerator : MonoBehaviour
     public void NewLevelCandidate()
     {
         GenerateLevel();
+
+        this.GetComponent<DifficultyTracker>().CheckLevelDifficulty(platsformObjects.ToArray());
+        if (GetComponent<DifficultyTracker>().GetFitness() < 3 || GetComponent<DifficultyTracker>().GetFitness() > 20)
+        {
+            player.transform.position = -new Vector2(0, 20);
+        }
     }
 
     public void SetNewChain(List<int[]> chain)
@@ -204,6 +207,13 @@ public class LevelGenerator : MonoBehaviour
         {
             probabilityTransList[i] = chain[i];
         }
+    }
 
+
+    public void SetRests(float _restFreq, float _restAmount)
+    {
+        ////IDK
+        restFrequency = restAmount * (levelLength / 10);
+        this.restAmount =_restAmount * (levelLength / 10);
     }
 }
