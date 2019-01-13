@@ -116,6 +116,12 @@ public class LevelGenerator : MonoBehaviour
             }
             transitionMatrixVis.text += "\n";
         }
+
+        this.GetComponent<DifficultyTracker>().CheckLevelDifficulty(platsformObjects.ToArray());
+        if (GetComponent<DifficultyTracker>().GetFitness() < 4)
+        {
+            player.transform.position =- new Vector2(0, 20);
+        }
     }
 
 

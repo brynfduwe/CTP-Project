@@ -84,8 +84,9 @@ public class EventTracker : MonoBehaviour
     {
         if (player.transform.position.x > successX)
         {
-            fitness = player.GetComponent<AITesterController>().GetAIMoveCount();
-            Debug.Log("Completed Level Diffuculty: " + fitness.ToString());
+            fitness = 
+                //player.GetComponent<AITesterController>().GetAIMoveCount();
+        //    Debug.Log("Completed Level Diffuculty: " + fitness.ToString());
 
             attemptTimer = 0;
             return true;
