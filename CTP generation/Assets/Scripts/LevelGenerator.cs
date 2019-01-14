@@ -34,6 +34,8 @@ public class LevelGenerator : MonoBehaviour
     private float restFreqLevel = 0;
     private float restAmountLevel = 0;
 
+    public bool PlayerTesting;
+
     // Use this for initialization
     void Awake()
     {
@@ -55,6 +57,9 @@ public class LevelGenerator : MonoBehaviour
         }
 
         RandomChain();
+
+        SetNewChain(GameObject.Find("SceneManager").GetComponent<SceneManager>().GetChromo());
+
         GenerateLevel();
     }
 
@@ -194,6 +199,28 @@ public class LevelGenerator : MonoBehaviour
     {
         GenerateLevel();
 
+        if (!PlayerTesting)
+        {
+            StartCoroutine(WaitAndDiffCheck());
+        }
+    }
+
+
+    IEnumerator WaitAndDiffCheck()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(5 * Time.timeScale);
+
+            if (GameObject.FindGameObjectWithTag("GAManager").GetComponent<GeneticAlgManager>().generation == 1)
+            {
+                CheckDiffucultySuccess();
+            }
+        }
+    }
+
+    public bool CheckDiffucultySuccess()
+    {
         this.GetComponent<DifficultyTracker>().CheckLevelDifficulty(platsformObjects.ToArray());
 
         bool fail = false;
@@ -207,7 +234,10 @@ public class LevelGenerator : MonoBehaviour
         if (candidateRest < restsNumGoal - boundrySplit || candidateRest > restsNumGoal + boundrySplit)
         {
             player.transform.position = -new Vector2(0, 20);
+            return false;
         }
+
+        return true;
     }
 
     public void SetNewChain(List<int[]> chain)

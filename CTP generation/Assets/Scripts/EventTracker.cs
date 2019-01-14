@@ -37,7 +37,7 @@ public class EventTracker : MonoBehaviour
             failTimer = 0;
         }
         stucktimer += Time.deltaTime;
-        if (stucktimer > 5)
+        if (stucktimer > 10)
         {
             StuckCheck();
             stucktimer = 0;

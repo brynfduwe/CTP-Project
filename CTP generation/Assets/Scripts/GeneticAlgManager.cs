@@ -10,7 +10,7 @@ public class GeneticAlgManager : MonoBehaviour
     public int offSpringPopulation = 25;
     private float failedYpos;
     public UIManager UImanager;
-    private int generation = 1;
+    public int generation = 1;
     private int candidate = 1;
     private float FitnessTimer;
     private List<List<int[]>> CandidateList = new List<List<int[]>>();
@@ -239,7 +239,8 @@ public class GeneticAlgManager : MonoBehaviour
 
                     Debug.Log("END FOUND!");
                     UImanager.ShowEndSlate();
-                    gameObject.SetActive(false);
+                 //   gameObject.SetActive(false);
+                    GameObject.Find("SceneManager").GetComponent<SceneManager>().SetChrmo(finalCandidate);
                 }
                 else
                 {
