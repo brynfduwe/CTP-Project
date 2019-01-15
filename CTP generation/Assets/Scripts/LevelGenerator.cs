@@ -36,29 +36,49 @@ public class LevelGenerator : MonoBehaviour
 
     public bool PlayerTesting;
 
+    
+
     // Use this for initialization
-    void Awake()
+    void Start()
     {
+        if (PlayerTesting)
+        {
+            probabilityTransList = GameObject.Find("SceneManager").GetComponent<SceneManager>().GetChromo();
+            SetNewChain(GameObject.Find("SceneManager").GetComponent<SceneManager>().GetChromo());
+            MyStart(GameObject.Find("SceneManager").GetComponent<SceneManager>().height, GameObject.Find("SceneManager").GetComponent<SceneManager>().length);
+        }
+    }
+
+
+    public void MyStart(int height, int length)
+    {
+
+        levelLength = length;
+        transitionNum = height;
+
         startPlayerPos = player.transform.position;
 
         List<int> x = new List<int>();
- 
-            for (int j = 0; j < transitionNum; j++)
-            {
-                x.Add(100 / transitionNum);
-            }
+
+        for (int j = 0; j < transitionNum; j++)
+        {
+            x.Add(100 / transitionNum);
+        }
 
         probabilityTransList = new List<int[]>();
         for (int i = 0; i < transitionNum; i++)
         {
-          // probabilityTransList.Add(new int[] { 1, 2, 3 });
+            // probabilityTransList.Add(new int[] { 1, 2, 3 });
 
-           probabilityTransList.Add(x.ToArray());
+            probabilityTransList.Add(x.ToArray());
         }
 
         RandomChain();
 
-        SetNewChain(GameObject.Find("SceneManager").GetComponent<SceneManager>().GetChromo());
+        if (PlayerTesting)
+        {
+            SetNewChain(GameObject.Find("SceneManager").GetComponent<SceneManager>().GetChromo());
+        }
 
         GenerateLevel();
     }
@@ -111,6 +131,8 @@ public class LevelGenerator : MonoBehaviour
         GameObject start = Instantiate(ground, new Vector3(platsformObjects[0].transform.position.x - 1, platsformObjects[0].transform.position.y), ground.transform.rotation, transform);
         player.transform.position = new Vector3(platsformObjects[0].transform.position.x - 1, platsformObjects[0].transform.position.y + 2f);
         platsformObjects.Add(start);
+
+        player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 
 
         ////transition matrix visualisation
@@ -212,7 +234,7 @@ public class LevelGenerator : MonoBehaviour
         {
             yield return new WaitForSeconds(5 * Time.timeScale);
 
-            if (GameObject.FindGameObjectWithTag("GAManager").GetComponent<GeneticAlgManager>().generation == 1)
+            if (GameObject.FindGameObjectWithTag("GAManager").GetComponent<GeneticAlgManager>().generation >= 1)
             {
                 CheckDiffucultySuccess();
             }

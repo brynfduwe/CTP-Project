@@ -96,9 +96,12 @@ public class AITesterController : MonoBehaviour {
                 {
                     for (int i = 0; i < doNotRetryPlats.Count; i++)
                     {
-                        if (hitD.transform == doNotRetryPlats[i].transform)
+                        if (doNotRetryPlats[i].transform != null)
                         {
-                            StartJump(0.3f);
+                            if (hitD.transform == doNotRetryPlats[i].transform)
+                            {
+                                StartJump(0.3f);
+                            }
                         }
                     }
                 }
@@ -416,7 +419,7 @@ public class AITesterController : MonoBehaviour {
                     }
                     else
                     {
-                        tDist -= yDist;
+                        tDist -= yDist * 1.5f;
                     }
 
                     if (tDist > 6)

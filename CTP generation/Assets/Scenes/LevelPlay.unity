@@ -598,7 +598,7 @@ MonoBehaviour:
   transitionNum: 10
   levelLength: 185
   player: {fileID: 722159223}
-  PlayerTesting: 0
+  PlayerTesting: 1
 --- !u!4 &1951750621
 Transform:
   m_ObjectHideFlags: 0

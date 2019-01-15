@@ -7,6 +7,8 @@ using UnityEngine.SocialPlatforms.GameCenter;
 public class SceneManager : MonoBehaviour
 {
     public List<int[]> markovChromo = new List<int[]>();
+    public int height;
+    public int length;
 
 	// Use this for initialization
 	void Start ()
@@ -25,6 +27,13 @@ public class SceneManager : MonoBehaviour
     {
         Time.timeScale = 1;
         UnityEngine.SceneManagement.SceneManager.LoadScene(indx);
+    }
+
+
+    public void SetHeightAndLength(int h, int l)
+    {
+        height = h;
+        length = l;
     }
 
 
