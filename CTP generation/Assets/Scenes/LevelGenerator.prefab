@@ -502,6 +502,7 @@ MonoBehaviour:
   topPoint1: {fileID: 4560701909889614}
   topPoint2: {fileID: 4982551139173888}
   maxVelocity: {x: 3, y: 10}
+  doNotColor: 0
 --- !u!114 &114637339087211666
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -843,6 +844,6 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 191.9, y: 0}
+  m_AnchoredPosition: {x: 300, y: 0}
   m_SizeDelta: {x: 523, y: 294}
   m_Pivot: {x: 0.5, y: 0.5}

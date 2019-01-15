@@ -80,7 +80,8 @@ public class LevelGenerator : MonoBehaviour
             SetNewChain(GameObject.Find("SceneManager").GetComponent<SceneManager>().GetChromo());
         }
 
-        GenerateLevel();
+       // GenerateLevel();
+        NewLevelCandidate();
     }
 
 
@@ -225,6 +226,12 @@ public class LevelGenerator : MonoBehaviour
         {
             StartCoroutine(WaitAndDiffCheck());
         }
+        else
+        {
+            GetComponent<LevelDetailAnalyser>().CheckLevelDifficulty(platsformObjects.ToArray());
+        }
+
+
     }
 
 

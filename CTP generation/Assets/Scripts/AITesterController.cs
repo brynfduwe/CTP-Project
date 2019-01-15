@@ -58,6 +58,8 @@ public class AITesterController : MonoBehaviour {
 
     List<PlatformCheckClass> failedPlatfromList = new List<PlatformCheckClass>();
 
+    public bool doNotColor;
+
 
     // Use this for initialization
     void Start()
@@ -73,6 +75,16 @@ public class AITesterController : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (doNotColor)
+        {
+
+            RaycastHit2D hitU = Physics2D.Raycast(transform.position - new Vector3(0f, 0.6f, 0), -Vector2.up, 0.3f);
+            if (hitU.collider != null)
+            {
+                hitU.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.cyan;
+            }
+        }
+
         grounded = Physics2D.OverlapArea(groundPoint1.position, groundPoint2.position);
 
         if (grounded)
@@ -96,7 +108,7 @@ public class AITesterController : MonoBehaviour {
                 {
                     for (int i = 0; i < doNotRetryPlats.Count; i++)
                     {
-                        if (doNotRetryPlats[i].transform != null)
+                        if (doNotRetryPlats[i].gameObject != null)
                         {
                             if (hitD.transform == doNotRetryPlats[i].transform)
                             {
@@ -348,7 +360,10 @@ public class AITesterController : MonoBehaviour {
                 //    hitD = Physics2D.Raycast(hitD.ptoin + new Vector3(0f, -0.5f, 0), -Vector2.up, 3f);
 
                 failedPlatfromList.Add(new PlatformCheckClass(hitD.transform));
-                hitD.transform.GetComponent<SpriteRenderer>().color = Color.yellow;
+
+                if(!doNotColor)
+                    hitD.transform.GetComponent<SpriteRenderer>().color = Color.yellow;
+                
             }
 
 
@@ -464,7 +479,11 @@ public class AITesterController : MonoBehaviour {
                     }
                 }
 
-                nearestCol.gameObject.GetComponent<SpriteRenderer>().color = Color.green;
+                if (!doNotColor)
+                    nearestCol.gameObject.GetComponent<SpriteRenderer>().color = Color.green;
+    
+
+
                 jumpTargetTransform = nearestCol.transform;
                 jumpTargetPos = nearestCol.position;
                 //    Debug.Log(nearestDist.ToString());
@@ -481,7 +500,10 @@ public class AITesterController : MonoBehaviour {
                 if (hit.collider != null)
                 {
                     doNotRetryPlats.Add(hit.transform);
-                    hit.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+
+                    if (!doNotColor)
+                        hit.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+                    
                 }
 
                 dirLeft = true;
@@ -594,7 +616,8 @@ public class AITesterController : MonoBehaviour {
             waitJump = true;
         }
 
-        GetComponent<SpriteRenderer>().color = Color.green;
+        if (!doNotColor)
+            GetComponent<SpriteRenderer>().color = Color.green;
     }
 
 
