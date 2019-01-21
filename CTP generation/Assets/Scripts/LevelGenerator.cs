@@ -136,17 +136,17 @@ public class LevelGenerator : MonoBehaviour
         player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 
 
-        ////transition matrix visualisation
-        //transitionMatrixVis.text = "";
+        //transition matrix visualisation
+        transitionMatrixVis.text = "";
 
-        //foreach (var ptl in probabilityTransList)
-        //{
-        //    foreach (var i in ptl)
-        //    {
-        //        transitionMatrixVis.text += (i.ToString() + ", ");
-        //    }
-        //    transitionMatrixVis.text += "\n";
-        //}
+        foreach (var ptl in probabilityTransList)
+        {
+            foreach (var i in ptl)
+            {
+                transitionMatrixVis.text += (i.ToString() + ", ");
+            }
+            transitionMatrixVis.text += "\n";
+        }
     }
 
 

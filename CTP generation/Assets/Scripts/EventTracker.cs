@@ -31,11 +31,12 @@ public class EventTracker : MonoBehaviour
         attemptTimer += Time.deltaTime;
 
         failTimer += Time.deltaTime;
-        if (failTimer > 60)
+        if (failTimer > 120)
         {
             ResetCheck();
             failTimer = 0;
         }
+
         stucktimer += Time.deltaTime;
         if (stucktimer > 10)
         {
@@ -62,12 +63,11 @@ public class EventTracker : MonoBehaviour
 
     void ResetCheck()
     {
-        if (player.transform.position.x <= lastX + 0.001)
+         if (player.transform.position.x > lastX - 2.5f && player.transform.position.x < lastX + 0)
         {
             player.transform.position = new Vector3(transform.position.x, failY - 1);
 
             lastX = startX;
-
         }
 
         lastX = player.transform.position.x;

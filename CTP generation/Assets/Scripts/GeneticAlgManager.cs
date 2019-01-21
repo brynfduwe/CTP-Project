@@ -84,7 +84,6 @@ public class GeneticAlgManager : MonoBehaviour
         }
 
 
-        FitnessTimer += Time.deltaTime;
         for (int i = 0; i < levelGMs.Count; i++)
         {
             //if fail
@@ -279,36 +278,44 @@ public class GeneticAlgManager : MonoBehaviour
         int p1 = 0;
         int p2 = 0;
 
-        float totalFitness = 0;
-        foreach (var f in CandidateFitness)
+        //float totalFitness = 0;
+        //foreach (var f in CandidateFitness)
+        //{
+        //    totalFitness += f;
+        //}
+
+        //float r = Random.Range(0, totalFitness);
+        //float iter = 0;
+        //int selected = 0;
+
+        //for (int i = 0; i < CandidateFitness.Count; i++)
+        //{
+        //    if (iter < r)
+        //    {
+        //        iter += CandidateFitness[i];
+        //        p1 = i;
+        //    }
+        //}
+
+        //r = Random.Range(0, totalFitness);
+        //iter = 0;
+        //selected = 0;
+
+        //for (int i = 0; i < CandidateFitness.Count; i++)
+        //{
+        //    if (iter < r)
+        //    {
+        //        iter += CandidateFitness[i];
+        //        p2 = i;
+        //    }
+        //}
+
+        p1 = Random.Range(0, CandidateList.Count);
+        p2 = Random.Range(0, CandidateList.Count);
+
+        while (p2 == p1)
         {
-            totalFitness += f;
-        }
-
-        float r = Random.Range(0, totalFitness);
-        float iter = 0;
-        int selected = 0;
-
-        for (int i = 0; i < CandidateFitness.Count; i++)
-        {
-            if (iter < r)
-            {
-                iter += CandidateFitness[i];
-                p1 = i;
-            }
-        }
-
-        r = Random.Range(0, totalFitness);
-        iter = 0;
-        selected = 0;
-
-        for (int i = 0; i < CandidateFitness.Count; i++)
-        {
-            if (iter < r)
-            {
-                iter += CandidateFitness[i];
-                p2 = i;
-            }
+            p2 = Random.Range(0, CandidateList.Count);
         }
 
         Offspring = Crossover(CandidateList[p1], CandidateList[p2]);
