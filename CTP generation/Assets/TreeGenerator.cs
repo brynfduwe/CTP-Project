@@ -8,6 +8,7 @@ public class TreeGenerator : MonoBehaviour
     public GameObject ground;
     public List<int> treeSequence = new List<int>();
     public List<int> branchChosen = new List<int>();
+    public List<Brancher> brancherList = new List<Brancher>();
     public List<List<GameObject>> platformSequence = new List<List<GameObject>>();
 
     private Vector2 currentPos;
@@ -30,11 +31,11 @@ public class TreeGenerator : MonoBehaviour
 	    int rMax = 0;
 	    bool rStart = false;
 
-	    for (int i = 0; i < 500; i++)
+	    for (int i = 0; i < 250; i++)
 	    {
 	        if (treeSequence.Count > 0)
 	        {
-	            if (Random.Range(0, 10) > 5)
+	            if (Random.Range(0, 10) > 2)
 	            {
 	                rCount++;
 
@@ -67,6 +68,7 @@ public class TreeGenerator : MonoBehaviour
 	        }
 
             branchChosen.Add(0);
+            brancherList.Add(new Brancher());
 	    }
 
 	    bool branch = false;
@@ -79,8 +81,7 @@ public class TreeGenerator : MonoBehaviour
 	            int selected = 0;
 
                 if (rCount > 0)
-	            {
-	                branch = true;	                
+	            {	                           
                     //rCount--;
 	                for (int j = i - 1; j > 0; j--)
 	                {
@@ -96,7 +97,8 @@ public class TreeGenerator : MonoBehaviour
 
 	                }
 
-	                branchChosen[selected]++;
+	                branch = true;
+                    branchChosen[selected]++;
 
 	                //currentPos = platformSequence[(i - rCount) - 1][platformSequence[(i - rCount) - 1].Count - 1].transform.position;
 	                //currentPos += new Vector2(0, 1);
@@ -104,7 +106,15 @@ public class TreeGenerator : MonoBehaviour
 
 	            if (branch)
 	            {
-	                LoadSegement(true, branchChosen[selected]);
+	                if (brancherList[selected].GetAvailibleDirection() != Vector2.zero)
+	                {
+	                    LoadSegement(true, selected);                    	                  
+                    }
+	                else
+	                {
+	                    platformSequence.Add(new List<GameObject>());
+	                    rCount++;
+                    }
 	            }
 	            else
 	            {
@@ -137,49 +147,29 @@ public class TreeGenerator : MonoBehaviour
     void LoadSegement(bool branch, int branchNum)
     {
         List<GameObject> plats = new List<GameObject>();
+        Vector2 addVec = brancherList[branchNum].GetAvailibleDirection();
 
-        Vector2 addVec = new Vector2(0,0);
-
-        if (branchNum == 1)
-        {
-            addVec = new Vector2(1, 1);
-        }
-
-        if (branchNum >= 2)
-        {
-            addVec = new Vector2(1, -1);
-        }
-
-        //if (branchNum == 3)
-        //{
-        //    addVec = new Vector2(-1, 1);
-        //}
-
-        //if (branchNum >= 4)
-        //{
-        //    addVec = new Vector2(-1, -1);
-        //}
+     //   int levelLength = Random.Range(1, 4);
 
         for (int i = 0; i < 50; i++)
         {
-            GameObject gobj = Instantiate(ground, currentPos + new Vector2(0, Random.Range(0, 0)),
-                transform.rotation);
+            GameObject gobj = Instantiate(ground, currentPos + new Vector2(0, Random.Range(0, 0)), transform.rotation);
 
             if (branch)
             {
-                gobj.GetComponent<SpriteRenderer>().color = Color.yellow;
+               // gobj.GetComponent<SpriteRenderer>().color = Color.yellow;
                 currentPos += addVec;
             }
             else
             {
-                gobj.GetComponent<SpriteRenderer>().color = colorList[colorIter];
                 currentPos += new Vector2(1, 0);
             }
 
             plats.Add(gobj);
 
-            
+            gobj.GetComponent<SpriteRenderer>().color = colorList[colorIter];
         }
+
 
         colorIter++;
         if (colorIter >= colorList.Count)
@@ -192,16 +182,37 @@ public class TreeGenerator : MonoBehaviour
 
 public class Brancher
 {
-    private bool rightUp;
-    private bool rightDown;
-
-    public Brancher(Transform reference)
-    {
-      
-    }
+    private bool rightUp = false;
+    private bool rightDown = false;
 
     public Vector2 GetAvailibleDirection()
     {
-       return Vector2.zero;
+        if (!rightUp && !rightDown)
+        {
+            if (Random.Range(0, 10) > 4)
+            {
+                rightUp = false;
+                return new Vector2(1, 1);
+            }
+            else
+            {
+                rightDown = false;
+                return new Vector2(1, -1);
+            }
+        }
+
+        if (rightDown)
+        {
+            rightUp = false;
+            return new Vector2(1, -1);
+        }
+
+        if (rightUp)
+        {
+            rightDown = false;
+            return new Vector2(1, 1);
+        }
+
+        return Vector2.zero;
     }
 }
