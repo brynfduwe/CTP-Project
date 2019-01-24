@@ -16,6 +16,12 @@ public class TreeGenerator : MonoBehaviour
     private List<Color> colorList = new List<Color>();
     private int colorIter = 0;
 
+    public int treeLength = 10;
+
+    public List<Vector2> treePointsPos = new List<Vector2>();
+
+    List<GameObject> disablePlats = new List<GameObject> ();
+
     // Use this for initialization
     void Start ()
 	{
@@ -31,11 +37,11 @@ public class TreeGenerator : MonoBehaviour
 	    int rMax = 0;
 	    bool rStart = false;
 
-	    for (int i = 0; i < 250; i++)
+	    for (int i = 0; i < treeLength; i++)
 	    {
 	        if (treeSequence.Count > 0)
 	        {
-	            if (Random.Range(0, 10) > 2)
+	            if (Random.Range(0, 100) > 25)
 	            {
 	                rCount++;
 
@@ -106,6 +112,7 @@ public class TreeGenerator : MonoBehaviour
 
 	            if (branch)
 	            {
+                    //check avalible directions, else skip
 	                if (brancherList[selected].GetAvailibleDirection() != Vector2.zero)
 	                {
 	                    LoadSegement(true, selected);                    	                  
@@ -114,7 +121,9 @@ public class TreeGenerator : MonoBehaviour
 	                {
 	                    platformSequence.Add(new List<GameObject>());
 	                    rCount++;
-                    }
+	                    treeLength++;
+
+	                }
 	            }
 	            else
 	            {
@@ -135,6 +144,13 @@ public class TreeGenerator : MonoBehaviour
 	    }
 
 	    Debug.Log(tree.ToString());
+
+	    foreach (var disPlat in disablePlats)
+	    {
+	        disPlat.SetActive(false);
+	    }
+
+        GetComponent<TreeGeneticGenAlg>().InitTreeGen(treePointsPos, 10, 50, 80);
     }
 	
 	// Update is called once per frame
@@ -153,7 +169,13 @@ public class TreeGenerator : MonoBehaviour
 
         for (int i = 0; i < 50; i++)
         {
+
             GameObject gobj = Instantiate(ground, currentPos + new Vector2(0, Random.Range(0, 0)), transform.rotation);
+
+            if (i == 0 && !branch)
+            {
+                treePointsPos.Add(currentPos);
+            }
 
             if (branch)
             {
@@ -163,11 +185,13 @@ public class TreeGenerator : MonoBehaviour
             else
             {
                 currentPos += new Vector2(1, 0);
+                disablePlats.Add(gobj); //uncomment to for full tree
             }
 
             plats.Add(gobj);
 
             gobj.GetComponent<SpriteRenderer>().color = colorList[colorIter];
+
         }
 
 

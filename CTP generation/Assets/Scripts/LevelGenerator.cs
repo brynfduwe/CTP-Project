@@ -36,11 +36,13 @@ public class LevelGenerator : MonoBehaviour
 
     public bool PlayerTesting;
 
+    private int startX = 0;
     
 
     // Use this for initialization
     void Start()
     {
+        startX = (int)transform.position.x;
         if (PlayerTesting)
         {
             probabilityTransList = GameObject.Find("SceneManager").GetComponent<SceneManager>().GetChromo();
@@ -94,7 +96,7 @@ public class LevelGenerator : MonoBehaviour
             player.GetComponent<AITesterController>().resetPlayer();
         }
 
-        int xPos = 0;
+        int xPos = (int)transform.position.x;
 
         foreach (var plat in platsformObjects)
         {

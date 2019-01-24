@@ -203,6 +203,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1798546093}
   - component: {fileID: 1798546092}
+  - component: {fileID: 1798546094}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -223,6 +224,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ground: {fileID: 1939395781354114, guid: 5be56f2bfd70ca544900af5d9287e5dd, type: 2}
   treeSequence: 
+  branchChosen: 
+  treeLength: 100
 --- !u!4 &1798546093
 Transform:
   m_ObjectHideFlags: 0
@@ -236,3 +239,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1798546094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1798546091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cef50539d435b374f97da2e5c3a3ead4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelGeneratorPrefab: {fileID: 1435348092900312, guid: d336498f94979fa488d08fbfd4a4a8b8,
+    type: 2}
+  levelGenList: []
