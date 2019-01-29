@@ -23,6 +23,8 @@ public class LevelDetailAnalyser : MonoBehaviour
     public List<GameObject> AITesters = new List<GameObject>();
     public List<bool> AIsuccesses = new List<bool>();
 
+    int average_height = 0;
+
 
 
     // Use this for initialization
@@ -74,7 +76,8 @@ public class LevelDetailAnalyser : MonoBehaviour
 	                {
 	                    if (t.gameObject.GetComponent<SpriteRenderer>().color != Color.cyan)
 	                    {
-	                        t.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+	                      //  t.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+                            Destroy(t.gameObject);
 
 	                    }
 	                }

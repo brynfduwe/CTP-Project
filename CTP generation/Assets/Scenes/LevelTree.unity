@@ -225,7 +225,7 @@ MonoBehaviour:
   ground: {fileID: 1939395781354114, guid: 5be56f2bfd70ca544900af5d9287e5dd, type: 2}
   treeSequence: 
   branchChosen: 
-  treeLength: 100
+  treeLength: 30
 --- !u!4 &1798546093
 Transform:
   m_ObjectHideFlags: 0

@@ -2,6 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public class TreeSegment
+{
+    public Vector2 position;
+    public bool branch;
+    public Vector2 branchDirection;
+
+    public TreeSegment(Vector2 pos, bool isBranch, Vector2 branchDir)
+    {
+        position = pos;
+        branch = isBranch;
+        branchDirection = branchDir;
+    }
+}
+
 public class TreeGenerator : MonoBehaviour
 {
 
@@ -18,7 +32,7 @@ public class TreeGenerator : MonoBehaviour
 
     public int treeLength = 10;
 
-    public List<Vector2> treePointsPos = new List<Vector2>();
+    public List<TreeSegment> treePoints = new List<TreeSegment>();
 
     List<GameObject> disablePlats = new List<GameObject> ();
 
@@ -150,7 +164,7 @@ public class TreeGenerator : MonoBehaviour
 	        disPlat.SetActive(false);
 	    }
 
-        GetComponent<TreeGeneticGenAlg>().InitTreeGen(treePointsPos, 10, 50, 80);
+        GetComponent<TreeGeneticGenAlg>().InitTreeGen(treePoints, 10, 50, 80);
     }
 	
 	// Update is called once per frame
@@ -172,20 +186,28 @@ public class TreeGenerator : MonoBehaviour
 
             GameObject gobj = Instantiate(ground, currentPos + new Vector2(0, Random.Range(0, 0)), transform.rotation);
 
-            if (i == 0 && !branch)
-            {
-                treePointsPos.Add(currentPos);
-            }
-
             if (branch)
             {
-               // gobj.GetComponent<SpriteRenderer>().color = Color.yellow;
+                // gobj.GetComponent<SpriteRenderer>().color = Color.yellow;
+
+                if (i == 0)
+                {
+                    treePoints.Add(new TreeSegment(currentPos, true, addVec));
+                }
+
                 currentPos += addVec;
+                disablePlats.Add(gobj); //comment to for full tree
             }
             else
             {
+
+                if (i == 0)
+                {
+                    treePoints.Add(new TreeSegment(currentPos, false, Vector2.zero));
+                }
+
                 currentPos += new Vector2(1, 0);
-                disablePlats.Add(gobj); //uncomment to for full tree
+                disablePlats.Add(gobj); //comment to for full tree
             }
 
             plats.Add(gobj);

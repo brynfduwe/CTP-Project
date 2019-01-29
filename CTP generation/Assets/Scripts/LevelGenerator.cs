@@ -37,7 +37,9 @@ public class LevelGenerator : MonoBehaviour
     public bool PlayerTesting;
 
     private int startX = 0;
-    
+
+    Vector2 enforceBranchDirection = Vector2.zero;
+
 
     // Use this for initialization
     void Start()
@@ -97,6 +99,7 @@ public class LevelGenerator : MonoBehaviour
         }
 
         int xPos = (int)transform.position.x;
+        int yPos = (int) transform.position.y;
 
         foreach (var plat in platsformObjects)
         {
@@ -111,12 +114,22 @@ public class LevelGenerator : MonoBehaviour
 
             if (currentState != States.NoGround)
             {
-                GameObject plat = Instantiate(ground, new Vector3(xPos, transform.position.y + (int)currentState, 0),
+                GameObject plat = Instantiate(ground, new Vector3(xPos, yPos + (int)currentState, 0),
                     ground.transform.rotation, transform);
                 platsformObjects.Add(plat);
             }
 
-            xPos++;
+            if (enforceBranchDirection.y == 1)
+            {
+                yPos++;
+            }
+
+            if (enforceBranchDirection.y == -1)
+            {
+                yPos--;
+            }
+
+                xPos++;
         }
 
         //end space
@@ -232,8 +245,6 @@ public class LevelGenerator : MonoBehaviour
         {
             GetComponent<LevelDetailAnalyser>().CheckLevelDifficulty(platsformObjects.ToArray());
         }
-
-
     }
 
 
@@ -284,5 +295,11 @@ public class LevelGenerator : MonoBehaviour
     {
         ////IDK
         restFreqLevel = _restFreq;
+    }
+
+
+    public void SetBranchDirection(Vector2 dir)
+    {
+        enforceBranchDirection = dir;
     }
 }

@@ -38,8 +38,8 @@ public class GeneticAlgManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        candidateGoal = int.Parse(setUp.candidateReq.text);
-        offSpringPopulation = int.Parse(setUp.populationOffspring.text);
+        candidateGoal = setUp.candidateReq;
+        offSpringPopulation = setUp.populationOffspring;
 
         failedYpos = transform.position.y - 1;
 
@@ -53,7 +53,7 @@ public class GeneticAlgManager : MonoBehaviour
         int y = 0;
         for (int i = 0; i < setUp.GetTesterNum(); i++)
         {
-            y += (int.Parse(setUp.height.text));
+            y += setUp.height;
             Vector2 pos = transform.position - new Vector3(0, y);
             GameObject gobj = Instantiate(LevelGenerator, pos, transform.rotation);
             levelGMs.Add(gobj);
@@ -62,7 +62,7 @@ public class GeneticAlgManager : MonoBehaviour
 
         foreach (var LGM in levelGMs)
         {
-            LGM.GetComponent<LevelGenerator>().MyStart(int.Parse(setUp.height.text), int.Parse(setUp.length.text));
+            LGM.GetComponent<LevelGenerator>().MyStart(setUp.height, setUp.length);
            LGM.GetComponent<LevelGenerator>().SetRests(setUp.GetRestCov());
             LGM.GetComponent<LevelGenerator>().RandomChain();
             LGM.GetComponent<LevelGenerator>().NewLevelCandidate();
@@ -257,7 +257,7 @@ public class GeneticAlgManager : MonoBehaviour
                     UImanager.ShowEndSlate();
                  //   gameObject.SetActive(false);
                     GameObject.Find("SceneManager").GetComponent<SceneManager>().SetChrmo(finalCandidate);
-                    GameObject.Find("SceneManager").GetComponent<SceneManager>().SetHeightAndLength((int.Parse(setUp.height.text)), int.Parse(setUp.length.text));
+                    GameObject.Find("SceneManager").GetComponent<SceneManager>().SetHeightAndLength(setUp.height, setUp.length);
 
                 }
                 else

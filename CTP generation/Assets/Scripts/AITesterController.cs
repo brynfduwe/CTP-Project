@@ -60,6 +60,8 @@ public class AITesterController : MonoBehaviour {
 
     public bool doNotColor;
 
+    private Transform lastTriedPlat;
+
 
     // Use this for initialization
     void Start()
@@ -370,7 +372,7 @@ public class AITesterController : MonoBehaviour {
 
             int possibleRoutes = 0;
             //target platform picker.
-            Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 10);
+            Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 20);
 
             Transform nearestCol = cols[0].transform;
             float nearestDist = 100;
@@ -404,10 +406,12 @@ public class AITesterController : MonoBehaviour {
                             inFailed = true;
                     }
 
-                    if (Vector2.Distance(transform.position, cols[i].transform.position) > 8)
+                    if (Vector2.Distance(transform.position, cols[i].transform.position) > 15)
                     {
                         inFailed = true;
                     }
+
+                    
 
                     if (Vector2.Distance(new Vector2(transform.position.x, 0),
                             new Vector2(cols[i].transform.position.x, 0)) > 5)
@@ -437,7 +441,7 @@ public class AITesterController : MonoBehaviour {
                         tDist -= yDist * 1.5f;
                     }
 
-                    if (tDist > 6)
+                    if (tDist > 5)
                     {
                         inFailed = true;
                     }
@@ -455,19 +459,38 @@ public class AITesterController : MonoBehaviour {
 
                         if (angle > 0.2f)
                         {
-                            float dist = Vector2.Distance(transform.position, cols[i].transform.position);
-                            if (dist < nearestDist)
+                            bool failNear = false;
+                            if (lastTriedPlat != null)
                             {
-                                nearestDist = Vector2.Distance(transform.position, cols[i].transform.position);
-                                nearestCol = cols[i].transform;
+                                if (nearestCol == lastTriedPlat)
+                                {
+                                    failNear = true;
+                                }
                             }
 
-                            possibleRoutes++;
+                            if (!failNear)
+                            {
+
+                                float dist = Vector2.Distance(transform.position, cols[i].transform.position);
+                                if (dist < nearestDist)
+                                {
+
+
+                                    nearestDist = Vector2.Distance(transform.position, cols[i].transform.position);
+                                    nearestCol = cols[i].transform;
+                                    lastTriedPlat = nearestCol;
+
+                                }
+
+                                possibleRoutes++;
+                            }
+
                         }
                     }
                 }
 
             }
+
 
             if (possibleRoutes > 0)
             {
@@ -476,7 +499,7 @@ public class AITesterController : MonoBehaviour {
                     if (fp.referenceTransform == nearestCol.transform)
                     {
                         fp.AddFailedPlat(nearestCol.transform);
-                    }
+                    }             
                 }
 
                 if (!doNotColor)
@@ -547,14 +570,27 @@ public class AITesterController : MonoBehaviour {
 
                             if (angle > 2f)
                             {
-                                float dist = Vector2.Distance(transform.position, cols[i].transform.position);
-                                if (dist < nearestDist)
+                                bool failNear = false;
+                                if (lastTriedPlat != null)
                                 {
-                                    nearestDist = Vector2.Distance(transform.position, cols[i].transform.position);
-                                    nearestCol = cols[i].transform;
+                                    if (nearestCol == lastTriedPlat)
+                                    {
+                                        failNear = true;
+                                    }
                                 }
 
-                                possibleRoutes++;
+                                if (!failNear)
+                                {
+                                    float dist = Vector2.Distance(transform.position, cols[i].transform.position);
+                                    if (dist < nearestDist)
+                                    {
+                                        nearestDist = Vector2.Distance(transform.position, cols[i].transform.position);
+                                        nearestCol = cols[i].transform;
+                                        lastTriedPlat = nearestCol;
+                                    }
+
+                                    possibleRoutes++;
+                                }
                             }
                         }
                     }
@@ -563,9 +599,22 @@ public class AITesterController : MonoBehaviour {
 
               //  nearestCol.gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
                 jumpTargetTransform = nearestCol.transform;
+               
                 jumpTargetPos = nearestCol.position;
                 //    Debug.Log(nearestDist.ToString());
 
+            }
+
+            if (lastTriedPlat != null)
+            {
+                foreach (var fp in failedPlatfromList)
+                {
+                    if (fp.referenceTransform == hitD.transform)
+                    {
+                        fp.AddFailedPlat(lastTriedPlat);
+                        lastTriedPlat = null;
+                    }
+                }
             }
 
             //jump set up

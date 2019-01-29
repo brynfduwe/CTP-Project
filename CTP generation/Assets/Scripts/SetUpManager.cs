@@ -5,13 +5,13 @@ using UnityEngine.UI;
 
 public class SetUpManager : MonoBehaviour
 {
-    public Slider restCov;
-    public Slider testers;
-    public Button start;
-    public InputField height;
-    public InputField length;
-    public InputField populationOffspring;
-    public InputField candidateReq;
+    public int restCov;
+    public int testers;
+  //  public Button start;
+    public int height;
+    public int length;
+    public int populationOffspring;
+    public int candidateReq;
 
     // Use this for initialization
     void Start()
@@ -21,24 +21,24 @@ public class SetUpManager : MonoBehaviour
 
     public float GetRestCov()
     {
-        return restCov.value;
+        return restCov;
     }
 
 
     public float GetTesterNum()
     {
-        return testers.value;
+        return testers;
     }
 
 
     public void DisableStartUI()
     {
-        restCov.interactable = false;
-        start.interactable = false;
-        testers.interactable = false;
-        height.interactable = false;
-        length.interactable = false;
-        candidateReq.interactable = false;
-        populationOffspring.interactable = false;
+        //restCov.interactable = false;
+        //start.interactable = false;
+        //testers.interactable = false;
+        //height.interactable = false;
+        //length.interactable = false;
+        //candidateReq.interactable = false;
+        //populationOffspring.interactable = false;
     }
 }

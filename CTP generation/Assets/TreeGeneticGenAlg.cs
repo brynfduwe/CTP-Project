@@ -9,11 +9,17 @@ public class TreeGeneticGenAlg : MonoBehaviour
     public List<GameObject> levelGenList = new List<GameObject>();
 
     // Use this for initialization
-    public void InitTreeGen (List<Vector2> posList, int heightTrans, int levelLength, int restCov) 
+    public void InitTreeGen (List<TreeSegment> posList, int heightTrans, int levelLength, int restCov) 
     {
         for (int i = 0; i < posList.Count; i++)
         {
-            GameObject gobj = Instantiate(levelGeneratorPrefab, posList[i], transform.rotation);
+            GameObject gobj = Instantiate(levelGeneratorPrefab, posList[i].position, transform.rotation);
+
+            if (posList[i].branch = true)
+            {
+                gobj.GetComponent<LevelGenerator>().SetBranchDirection(posList[i].branchDirection);
+            }
+
             levelGenList.Add(gobj);
         }
 
