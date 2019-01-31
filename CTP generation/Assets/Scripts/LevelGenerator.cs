@@ -91,6 +91,8 @@ public class LevelGenerator : MonoBehaviour
 
     void GenerateLevel()
     {
+        player.gameObject.SetActive(true);
+
         player.transform.position = startPlayerPos + new Vector2(0, 2);
 
         if (player.GetComponent<AITesterController>() != null)
@@ -256,7 +258,7 @@ public class LevelGenerator : MonoBehaviour
 
             if (GameObject.FindGameObjectWithTag("GAManager").GetComponent<GeneticAlgManager>().generation >= 1)
             {
-                CheckDiffucultySuccess();
+            //    CheckDiffucultySuccess();
             }
         }
     }
@@ -301,5 +303,22 @@ public class LevelGenerator : MonoBehaviour
     public void SetBranchDirection(Vector2 dir)
     {
         enforceBranchDirection = dir;
+    }
+
+
+    public void LockPlayer()
+    {
+        player.gameObject.SetActive(false);
+    }
+
+
+    public bool CheckPlayerLocked()
+    {
+        if (player.gameObject.activeSelf == false)
+        {
+            return true;
+        }
+
+        return false;
     }
 }

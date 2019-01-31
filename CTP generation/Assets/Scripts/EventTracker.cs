@@ -82,13 +82,8 @@ public class EventTracker : MonoBehaviour
 
     public bool SuccessCheck()
     {
-        if (player.transform.position.x > successX)
+        if (player.transform.position.x > successX && player.transform.position.y >= failY)
         {
-            fitness = 
-                //player.GetComponent<AITesterController>().GetAIMoveCount();
-        //    Debug.Log("Completed Level Diffuculty: " + fitness.ToString());
-
-            attemptTimer = 0;
             return true;
         }
 
@@ -99,8 +94,6 @@ public class EventTracker : MonoBehaviour
     {
         if (player.transform.position.y < failY)
         {
-            attemptTimer = 0;
-            stucktimer = 0;
             return true;
         }
 

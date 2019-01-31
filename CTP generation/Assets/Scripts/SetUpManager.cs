@@ -7,7 +7,8 @@ public class SetUpManager : MonoBehaviour
 {
     public int restCov;
     public int testers;
-  //  public Button start;
+    public int testersOnScreen;
+    //  public Button start;
     public int height;
     public int length;
     public int populationOffspring;

@@ -2063,6 +2063,7 @@ GameObject:
   - component: {fileID: 904623991}
   - component: {fileID: 904623990}
   - component: {fileID: 904623992}
+  - component: {fileID: 904623993}
   m_Layer: 0
   m_Name: GeneticManager
   m_TagString: GAManager
@@ -2076,7 +2077,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 904623989}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d93be12672a6cae47beb9df8b6897164, type: 3}
   m_Name: 
@@ -2117,11 +2118,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   restCov: 3
-  testers: 7
-  height: 15
-  length: 100
+  testers: 100
+  testersOnScreen: 10
+  height: 10
+  length: 50
   populationOffspring: 100
   candidateReq: 10
+--- !u!114 &904623993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 904623989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e574b3b31cd6e34469687a0a137d088b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LevelGenerator: {fileID: 1435348092900312, guid: d336498f94979fa488d08fbfd4a4a8b8,
+    type: 2}
+  candidateGoal: 10
+  offSpringPopulation: 25
+  UImanager: {fileID: 1732767418}
+  generation: 1
+  CandidateFitness: []
+  levelGMs: []
+  failedJumpPlats: []
+  transitionMatrixVis: {fileID: 1014989345}
+  setUp: {fileID: 904623992}
+  candidateScore: 0
+  testersDone: 0
 --- !u!1 &909959604
 GameObject:
   m_ObjectHideFlags: 0
@@ -3451,6 +3477,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   restCov: 0
   testers: 0
+  testersOnScreen: 0
   height: 0
   length: 4
   populationOffspring: 8
