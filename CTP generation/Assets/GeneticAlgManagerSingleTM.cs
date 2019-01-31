@@ -38,6 +38,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
     public int candidateScore = 0;
     public int testersDone = 0;
+    public int testersDoneOverall = 0;
 
 
     // Use this for initialization
@@ -53,7 +54,6 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
         UImanager.UpdateCandidate(candidate);
         UImanager.UpdateGeneration(generation);
-
 
 
         List<int> x = new List<int>();
@@ -161,12 +161,6 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
         {
             if (!levelGMs[i].GetComponent<LevelGenerator>().CheckPlayerLocked())
             {
-                //if fail
-                if (levelGMs[i].GetComponent<EventTracker>().FailCheck())
-                {
-                    levelGMs[i].GetComponent<LevelGenerator>().LockPlayer();
-                    testersDone++;
-                }
 
                 //if success
                 if (levelGMs[i].GetComponent<EventTracker>().SuccessCheck())
@@ -175,20 +169,41 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                     candidateScore++;
                     testersDone++;
                 }
+
+                //if fail
+                if (levelGMs[i].GetComponent<EventTracker>().FailCheck())
+                {
+                    levelGMs[i].GetComponent<LevelGenerator>().LockPlayer();
+                    testersDone++;
+                }
             }
         }
 
-
         if (testersDone >= levelGMs.Count - 1)
         {
-            float fitness = ((float)candidateScore / levelGMs.Count);
+            testersDoneOverall += testersDone;
+            foreach (var LGM in levelGMs)
+            {
+                LGM.GetComponent<LevelGenerator>().NewLevelCandidate();
+            }
+
+            testersDone = 0;
+        }
+
+        if (testersDoneOverall >= setUp.testers)
+        {
+            float fitness = ((float) candidateScore / testersDoneOverall);
             if (fitness > 0.25)
             {
                 CandidateList.Add(currentProbabilityTransMatrix);
                 CandidateFitness.Add(fitness);
+
+                candidate++;
+                UImanager.UpdateCandidate(candidate);
             }
 
-            testersDone = 0;
+            testersDoneOverall = 0;
+           // testersDone = 0;
             candidateScore = 0;
 
             if (generation == 1)
@@ -209,19 +224,6 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
                 currentProbabilityTransMatrix = CurrentOffspring[Random.Range(0, CurrentOffspring.Count)];
 
-                string tpm = "";
-
-                foreach (var ptl in currentProbabilityTransMatrix)
-                {
-                    foreach (var i in ptl)
-                    {
-                        tpm += (i.ToString() + ", ");
-                    }
-                }
-
-
-                Debug.Log(tpm);
-
                 foreach (var LGM in levelGMs)
                 {
                     LGM.GetComponent<LevelGenerator>().SetNewChain(currentProbabilityTransMatrix);
@@ -232,8 +234,12 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
             //new Generation
             if (CandidateList.Count >= setUp.candidateReq)
             {
-
                 generation++;
+                UImanager.UpdateGeneration(generation);
+                candidate = 0;
+                UImanager.UpdateCandidate(candidate);
+
+
                 CurrentOffspring.Clear();
 
                 for (int i = 0; i < offSpringPopulation; i++)
@@ -255,7 +261,6 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                     LGM.GetComponent<LevelGenerator>().SetNewChain(currentProbabilityTransMatrix);
                     LGM.GetComponent<LevelGenerator>().NewLevelCandidate();
                 }
-
             }
         }
     }
@@ -322,28 +327,6 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
     List<int[]> Crossover(List<int[]> parent1, List<int[]> parent2)
     {
-        string st = "";
-        foreach (var p in parent1)
-        {
-            foreach (var a in p)
-            {
-                st += a + ", ";
-            }
-        }
-
-        Debug.Log(st);
-
-        st = "";
-        foreach (var p in parent2)
-        {
-            foreach (var a in p)
-            {
-                st += a + ", ";
-            }
-        }
-
-        Debug.Log(st);
-
         List<int[]> Offspring = new List<int[]>();
 
         bool flipped = false;
