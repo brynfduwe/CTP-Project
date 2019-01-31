@@ -92,6 +92,16 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
             LGM.GetComponent<LevelGenerator>().SetNewChain(currentProbabilityTransMatrix);
             LGM.GetComponent<LevelGenerator>().NewLevelCandidate();
         }
+
+        transitionMatrixVis.text = "";
+        foreach (var ptl in currentProbabilityTransMatrix)
+        {
+            foreach (var i in ptl)
+            {
+                transitionMatrixVis.text += (i.ToString() + ", ");
+            }
+            transitionMatrixVis.text += "\n";
+        }
     }
 
     public void RandomChain()
@@ -215,6 +225,16 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                     LGM.GetComponent<LevelGenerator>().SetNewChain(currentProbabilityTransMatrix);
                     LGM.GetComponent<LevelGenerator>().NewLevelCandidate();
                 }
+
+                transitionMatrixVis.text = "";
+                foreach (var ptl in currentProbabilityTransMatrix)
+                {
+                    foreach (var i in ptl)
+                    {
+                        transitionMatrixVis.text += (i.ToString() + ", ");
+                    }
+                    transitionMatrixVis.text += "\n";
+                }
             }
             else
             {
@@ -228,6 +248,16 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                 {
                     LGM.GetComponent<LevelGenerator>().SetNewChain(currentProbabilityTransMatrix);
                     LGM.GetComponent<LevelGenerator>().NewLevelCandidate();
+                }
+
+                transitionMatrixVis.text = "";
+                foreach (var ptl in currentProbabilityTransMatrix)
+                {
+                    foreach (var i in ptl)
+                    {
+                        transitionMatrixVis.text += (i.ToString() + ", ");
+                    }
+                    transitionMatrixVis.text += "\n";
                 }
             }
 
@@ -261,6 +291,16 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                     LGM.GetComponent<LevelGenerator>().SetNewChain(currentProbabilityTransMatrix);
                     LGM.GetComponent<LevelGenerator>().NewLevelCandidate();
                 }
+
+                transitionMatrixVis.text = "";
+                foreach (var ptl in currentProbabilityTransMatrix)
+                {
+                    foreach (var i in ptl)
+                    {
+                        transitionMatrixVis.text += (i.ToString() + ", ");
+                    }
+                    transitionMatrixVis.text += "\n";
+                }
             }
         }
     }
@@ -274,42 +314,42 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
         int p1 = 0;
         int p2 = 0;
 
-        //float totalFitness = 0;
-        //foreach (var f in CandidateFitness)
-        //{
-        //    totalFitness += f;
-        //}
+        float totalFitness = 0;
+        foreach (var f in CandidateFitness)
+        {
+            totalFitness += f;
+        }
 
-        //float r = Random.Range(0, totalFitness);
-        //float iter = 0;
-        //int selected = 0;
+        float r = Random.Range(0, totalFitness);
+        float iter = 0;
+        int selected = 0;
 
-        //for (int i = 0; i < CandidateFitness.Count; i++)
-        //{
-        //    if (iter < r)
-        //    {
-        //        iter += CandidateFitness[i];
-        //        p1 = i;
-        //    }
-        //}
+        for (int i = 0; i < CandidateFitness.Count; i++)
+        {
+            if (iter < r)
+            {
+                iter += CandidateFitness[i];
+                p1 = i;
+            }
+        }
 
-        //r = Random.Range(0, totalFitness);
-        //iter = 0;
-        //selected = 0;
+        r = Random.Range(0, totalFitness);
+        iter = 0;
+        selected = 0;
 
-        //for (int i = 0; i < CandidateFitness.Count; i++)
-        //{
-        //    if (iter < r)
-        //    {
-        //        iter += CandidateFitness[i];
-        //        p2 = i;
-        //    }
-        //}
+        for (int i = 0; i < CandidateFitness.Count; i++)
+        {
+            if (iter < r)
+            {
+                iter += CandidateFitness[i];
+                p2 = i;
+            }
+        }
 
-        Random.seed = System.DateTime.Now.Millisecond;
-        p1 = Random.Range(0, CandidateList.Count);
-        Random.seed = System.DateTime.Now.Millisecond;
-        p2 = Random.Range(0, CandidateList.Count);
+        //Random.seed = System.DateTime.Now.Millisecond;
+        //p1 = Random.Range(0, CandidateList.Count);
+        //Random.seed = System.DateTime.Now.Millisecond;
+        //p2 = Random.Range(0, CandidateList.Count);
 
         while (p1 == p2)
         {
