@@ -14,7 +14,6 @@ public class EventTracker : MonoBehaviour
 
     private float attemptTimer;
     private float failTimer;
-    private float fitness;
 
 	// Use this for initialization
 	void Start ()
@@ -28,14 +27,6 @@ public class EventTracker : MonoBehaviour
 	// Update is called once per frame
     void FixedUpdate()
     {
-        attemptTimer += Time.deltaTime;
-
-        failTimer += Time.deltaTime;
-        if (failTimer > 120)
-        {
-            ResetCheck();
-            failTimer = 0;
-        }
 
         stucktimer += Time.deltaTime;
         if (stucktimer > 10)
@@ -72,13 +63,6 @@ public class EventTracker : MonoBehaviour
 
         lastX = player.transform.position.x;
     }
-
-
-    public float GetFitness()
-    {
-        return fitness;
-    }
-
 
     public bool SuccessCheck()
     {

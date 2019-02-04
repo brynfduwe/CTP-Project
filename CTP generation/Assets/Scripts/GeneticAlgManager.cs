@@ -113,33 +113,15 @@ public class GeneticAlgManager : MonoBehaviour
             //if success
             if (levelGMs[i].GetComponent<EventTracker>().SuccessCheck())
             {
-                if (levelGMs[i].GetComponent<EventTracker>().GetFitness() < 160)
-                {
-                    AddCandidate(i);
-                    FitnessTimer = 0;
 
-                    if (CandidateList.Count >= candidateGoal)
-                    {
-                        newGen = true;
-                    }
-                }
-                else
-                {
-                    if (generation == 1)
-                    {
-                        levelGMs[i].GetComponent<LevelGenerator>().RandomChain();
-                        levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
-                    }
-                    else
-                    {
-                        offspringIter++;
-                        if (offspringIter >= CurrentOffspring.Count)
-                            offspringIter = 0;
+                AddCandidate(i);
+                FitnessTimer = 0;
 
-                        levelGMs[i].GetComponent<LevelGenerator>().SetNewChain(CurrentOffspring[offspringIter]);
-                        levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
-                    }
+                if (CandidateList.Count >= candidateGoal)
+                {
+                    newGen = true;
                 }
+
             }
         }
 
@@ -184,7 +166,6 @@ public class GeneticAlgManager : MonoBehaviour
         UImanager.UpdateCandidate(candidate);      
 
         CandidateList.Add(levelGMs[lm].GetComponent<LevelGenerator>().GetGeneratorChromosome());
-        CandidateFitness.Add(levelGMs[lm].GetComponent<EventTracker>().GetFitness());
 
         if (generation == 1)
         {

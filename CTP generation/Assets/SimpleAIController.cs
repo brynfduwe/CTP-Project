@@ -94,7 +94,7 @@ public class SimpleAIController : MonoBehaviour {
                 }
                 else
                 {
-                    StartJump(0.15f);
+                    StartJump(0.1f);
                 }
             }
             else
@@ -114,7 +114,7 @@ public class SimpleAIController : MonoBehaviour {
             RaycastHit2D hitR = Physics2D.Raycast(transform.position + new Vector3(1, 0, 0), Vector2.right, 0.05f);
             if (hitR.collider != null)
             {
-                StartJump(0.15f);
+                StartJump(0.1f);
             }
 
             RaycastHit2D hitR2 = Physics2D.Raycast(transform.position + new Vector3(1, 1, 0), Vector2.right, 1f);
@@ -453,7 +453,7 @@ public class SimpleAIController : MonoBehaviour {
     }
 
 
-    public void resetPlayer()
+    public void ResetPlayer()
     {
         dirLeft = false;
         MoverCounter = 0;

@@ -95,9 +95,9 @@ public class LevelGenerator : MonoBehaviour
 
         player.transform.position = startPlayerPos + new Vector2(0, 2);
 
-        if (player.GetComponent<AITesterController>() != null)
+        if (player.GetComponent<SimpleAIController>() != null)
         {
-            player.GetComponent<AITesterController>().resetPlayer();
+            player.GetComponent<SimpleAIController>().ResetPlayer();
         }
 
         int xPos = (int)transform.position.x;
