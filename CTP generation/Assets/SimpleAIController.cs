@@ -1,13 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-public class AITesterController : MonoBehaviour {
-
-    public KeyCode Jump;
-    public KeyCode Left;
-    public KeyCode Right;
+public class SimpleAIController : MonoBehaviour {
 
     public float jumpMin;
     public float jumpMax;
@@ -53,7 +48,7 @@ public class AITesterController : MonoBehaviour {
 
     private Transform lastJumpedOffPlat;
 
-  //  List<Transform> failedPlats = new List<Transform>();
+    //  List<Transform> failedPlats = new List<Transform>();
     List<Transform> doNotRetryPlats = new List<Transform>();
 
     List<PlatformCheckClass> failedPlatfromList = new List<PlatformCheckClass>();
@@ -77,84 +72,56 @@ public class AITesterController : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (doNotColor)
-        {
-
-            RaycastHit2D hitU = Physics2D.Raycast(transform.position - new Vector3(0f, 0.6f, 0), -Vector2.up, 0.3f);
-            if (hitU.collider != null)
-            {
-                hitU.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.cyan;
-            }
-        }
-
         grounded = Physics2D.OverlapArea(groundPoint1.position, groundPoint2.position);
 
         if (grounded)
         {
             if (!hitGround)
             {
-                GetComponent<Rigidbody2D>().velocity = GetComponent<Rigidbody2D>().velocity / 2;
-                GetComponent<Rigidbody2D>().angularVelocity = GetComponent<Rigidbody2D>().angularVelocity / 2;
+                GetComponent<Rigidbody2D>().velocity = GetComponent<Rigidbody2D>().velocity / 3;
+                GetComponent<Rigidbody2D>().angularVelocity = GetComponent<Rigidbody2D>().angularVelocity / 3;
 
                 hitGround = true;
             }
 
-            if (!dirLeft)
+            RaycastHit2D hitD = Physics2D.Raycast(transform.position + new Vector3(0.7f, 0, 0), -Vector2.up, 3f);
+            if (hitD.collider == null)
             {
-                RaycastHit2D hitD = Physics2D.Raycast(transform.position + new Vector3(0.7f, 0, 0), -Vector2.up, 3f);
-                if (hitD.collider == null)
+                RaycastHit2D hitD2 = Physics2D.Raycast(transform.position + new Vector3(1.7f, 0, 0), -Vector2.up, 3f);
+                if (hitD2.collider == null)
                 {
                     StartJump(0.3f);
                 }
                 else
                 {
-                    for (int i = 0; i < doNotRetryPlats.Count; i++)
-                    {
-                        if (doNotRetryPlats[i].gameObject != null)
-                        {
-                            if (hitD.transform == doNotRetryPlats[i].transform)
-                            {
-                                StartJump(0.3f);
-                            }
-                        }
-                    }
-                }
-
-                RaycastHit2D hitR = Physics2D.Raycast(transform.position + new Vector3(1, 0, 0), Vector2.right, 0.05f);
-                if (hitR.collider != null)
-                {
                     StartJump(0.15f);
-                }
-
-                RaycastHit2D hitR2 = Physics2D.Raycast(transform.position + new Vector3(1, 1, 0), Vector2.right, 1f);
-                if (hitR2.collider != null)
-                {
-                    StartJump(0.3f);
                 }
             }
             else
             {
-                RaycastHit2D hitD = Physics2D.Raycast(transform.position + new Vector3(-0.5f, 0, 0), -Vector2.up, 3f);
-                if (hitD.collider == null)
+                for (int i = 0; i < doNotRetryPlats.Count; i++)
                 {
-                    StartJump(0.3f);
+                    if (doNotRetryPlats[i].gameObject != null)
+                    {
+                        if (hitD.transform == doNotRetryPlats[i].transform)
+                        {
+                            StartJump(0.3f);
+                        }
+                    }
                 }
-
-                RaycastHit2D hitR =
-                    Physics2D.Raycast(transform.position + new Vector3(-1, 0, 0), -Vector2.right, 0.05f);
-                if (hitR.collider != null)
-                {
-                    StartJump(0.15f);
-                }
-
-                RaycastHit2D hitR2 = Physics2D.Raycast(transform.position + new Vector3(-1, 1, 0), -Vector2.right, 1f);
-                if (hitR2.collider != null)
-                {
-                    StartJump(0.3f);
-                }
-
             }
 
+            RaycastHit2D hitR = Physics2D.Raycast(transform.position + new Vector3(1, 0, 0), Vector2.right, 0.05f);
+            if (hitR.collider != null)
+            {
+                StartJump(0.15f);
+            }
+
+            RaycastHit2D hitR2 = Physics2D.Raycast(transform.position + new Vector3(1, 1, 0), Vector2.right, 1f);
+            if (hitR2.collider != null)
+            {
+                StartJump(0.3f);
+            }
         }
         else
         {
@@ -166,15 +133,6 @@ public class AITesterController : MonoBehaviour {
             if (Physics2D.OverlapArea(topPoint1.position, topPoint2.position))
             {
                 jumpStarted = false;
-             //   stopMoveRight = true;
-              //  jumpTargetHit = true;
-             //   jumpHitIgnore = true;
-
-           ///     transform.position = transform.position - new Vector3(0.2f, 0.2f);
-
-           //     transform.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
-
-          //      Debug.Log("TOP HIT");
             }
             else
             {
@@ -197,15 +155,6 @@ public class AITesterController : MonoBehaviour {
             }
 
             jumpInputTimer += Time.deltaTime;
-
-          //  RaycastHit2D hitCeiling = Physics2D.Raycast(transform.position + new Vector3(0, 0.5f, 0), Vector2.up, 0.25f);
-          //  if (hitCeiling.collider != null)
-       //     {
-       //         jumpStarted = false;
-               // jumpTargetHit = true;
-               // jumpHitIgnore = true;
-                //stopMoveRight = false;
-       //     }
 
             if (jumpInputTimer < jumpTime)
             {
@@ -232,10 +181,6 @@ public class AITesterController : MonoBehaviour {
                     GetComponent<Rigidbody2D>().AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
                 }
             }
-
-
-
-
         }
 
         if (!stopMoveRight && !jumpHitIgnore)
@@ -252,16 +197,6 @@ public class AITesterController : MonoBehaviour {
 
                 }
             }
-            else
-            {
-                if (transform.position.x + 0.5f <= jumpTargetPos.x)
-                {
-                    //  MoverCounter++;
-                    stopMoveRight = true;
-                    transform.position = new Vector3(jumpTargetPos.x, transform.position.y);
-                    GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-                }
-            }
         }
         else
         {
@@ -273,16 +208,6 @@ public class AITesterController : MonoBehaviour {
                 jumpHitIgnore = true;
 
                 standingPlat = jumpTargetTransform;
-
-                //RaycastHit2D hitD = Physics2D.Raycast(transform.position + new Vector3(0f, -0.5f, 0), -Vector2.up, 3f);
-                //if (hitD.collider != null)
-                //{
-                //    //    hitD = Physics2D.Raycast(hitD.ptoin + new Vector3(0f, -0.5f, 0), -Vector2.up, 3f);
-
-                //    doNotRetryPlats.Add(hitD.transform);
-                //    hitD.transform.GetComponent<SpriteRenderer>().color = Color.red;
-                //}
-
             }
         }
 
@@ -302,13 +227,8 @@ public class AITesterController : MonoBehaviour {
                 {
                     transform.Translate(Vector3.right * Time.deltaTime * speed);
                 }
-                else
-                {
-                    transform.Translate(-Vector3.right * Time.deltaTime * speed);
-                }
             }
         }
-
 
         if (GetComponent<Rigidbody2D>().velocity.x > maxVelocity.x)
             GetComponent<Rigidbody2D>().velocity = new Vector2(maxVelocity.x, GetComponent<Rigidbody2D>().velocity.y);
@@ -316,29 +236,6 @@ public class AITesterController : MonoBehaviour {
 
         if (GetComponent<Rigidbody2D>().velocity.y > maxVelocity.y)
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, maxVelocity.y);
-
-
-        RaycastHit2D hitFU = Physics2D.Raycast(transform.position + new Vector3(1f, 0f, 0), Vector2.up);
-        RaycastHit2D hitFR = Physics2D.Raycast(transform.position + new Vector3(1f, 0f, 0), Vector2.right);
-        if (hitFU.collider != null)
-        {
-            if (hitFR.collider != null)
-            {
-              //  StartJump(0.3f);
-            }
-        }
-    }
-
-
-    public void StuckTryThing()
-    {
-    //    dirLeft = true;
-
-      //--//  failedPlats.Add(jumpTargetTransform);
-
-        //TODO - DONT DO BELOW, ADD TO NEW LIST THAT DOESNT ALLOW IT TO BE TARGETED FOR X TRIES??? MAYBE
-       // doNotRetryPlats.Add(jumpTargetTransform);
-       // jumpTargetTransform.gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
 
     }
 
@@ -350,7 +247,7 @@ public class AITesterController : MonoBehaviour {
             bool fail = false;
             RaycastHit2D hitD = Physics2D.Raycast(transform.position + new Vector3(-0.2f, -0.5f, 0), -Vector2.up, 3f);
             foreach (var fp in failedPlatfromList)
-            {     
+            {
                 if (fp.referenceTransform == hitD.transform)
                 {
                     fail = true;
@@ -359,16 +256,12 @@ public class AITesterController : MonoBehaviour {
 
             if (hitD.collider != null && fail == false)
             {
-                //    hitD = Physics2D.Raycast(hitD.ptoin + new Vector3(0f, -0.5f, 0), -Vector2.up, 3f);
-
                 failedPlatfromList.Add(new PlatformCheckClass(hitD.transform));
 
-                if(!doNotColor)
+                if (!doNotColor)
                     hitD.transform.GetComponent<SpriteRenderer>().color = Color.yellow;
-                
+
             }
-
-
 
             int possibleRoutes = 0;
             //target platform picker.
@@ -393,10 +286,7 @@ public class AITesterController : MonoBehaviour {
                                 {
                                     inFailed = true;
                                 }
-
                             }
-
-                            //                 break;
                         }
                     }
 
@@ -409,22 +299,6 @@ public class AITesterController : MonoBehaviour {
                     if (Vector2.Distance(transform.position, cols[i].transform.position) > 15)
                     {
                         inFailed = true;
-                    }
-
-                    
-
-                    if (Vector2.Distance(new Vector2(transform.position.x, 0),
-                            new Vector2(cols[i].transform.position.x, 0)) > 5)
-                    {
-                        //   if(transform.position.y < cols[i].transform.position.y)
-                    //    inFailed = true;
-                    }
-
-                    if (Vector2.Distance(new Vector2(0, transform.position.y),
-                            new Vector2(0, cols[i].transform.position.y)) > 5 &&
-                        transform.position.y < cols[i].transform.position.y)
-                    {
-                     //   inFailed = true;
                     }
 
 
@@ -499,12 +373,12 @@ public class AITesterController : MonoBehaviour {
                     if (fp.referenceTransform == nearestCol.transform)
                     {
                         fp.AddFailedPlat(nearestCol.transform);
-                    }             
+                    }
                 }
 
                 if (!doNotColor)
                     nearestCol.gameObject.GetComponent<SpriteRenderer>().color = Color.green;
-    
+
 
 
                 jumpTargetTransform = nearestCol.transform;
@@ -516,93 +390,6 @@ public class AITesterController : MonoBehaviour {
                 {
                     lastJumpedOffPlat = hit.transform;
                 }
-            }
-            else
-            {
-            //    RaycastHit2D hit = Physics2D.Raycast(transform.position + new Vector3(-0.2f, -0.5f, 0), -Vector2.up, 3f);
-            //    if (hit.collider != null)
-            //    {
-            //        doNotRetryPlats.Add(hit.transform);
-
-            //        if (!doNotColor)
-            //            hit.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
-                    
-            //    }
-
-            //    dirLeft = true;
-            //   // failedPlats.Clear();           
-             
-
-            //    if (standingPlat != null)
-            //    {
-            //      //  doNotRetryPlats.Add(standingPlat);
-            //      //  standingPlat.gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
-            //    }
-
-             
-
-            //    if (lastJumpedOffPlat != null)
-            //    {
-            //   //     doNotRetryPlats.Add(lastJumpedOffPlat);
-            //   //     lastJumpedOffPlat.transform.GetComponent<SpriteRenderer>().color = Color.red;
-            //    }
-
-
-            //    for (int i = 0; i < cols.Length; i++)
-            //    {
-            //        if (cols[i].gameObject != this.gameObject)
-            //        {
-            //            bool inFailed = false;
-
-            //            foreach (var c in doNotRetryPlats)
-            //            {
-            //                if (c == cols[i].transform)
-            //                    inFailed = true;
-            //            }
-
-            //            if (inFailed == false)
-            //            {
-            //                //angle check
-            //                Vector3 playerDir = cols[i].transform.position - transform.position;
-                   
-            //                    float angle = Vector3.Dot(playerDir, -cols[i].transform.right);
-                           
-
-            //                if (angle > 2f)
-            //                {
-            //                    bool failNear = false;
-            //                    if (lastTriedPlat != null)
-            //                    {
-            //                        if (nearestCol == lastTriedPlat)
-            //                        {
-            //                            failNear = true;
-            //                        }
-            //                    }
-
-            //                    if (!failNear)
-            //                    {
-            //                        float dist = Vector2.Distance(transform.position, cols[i].transform.position);
-            //                        if (dist < nearestDist)
-            //                        {
-            //                            nearestDist = Vector2.Distance(transform.position, cols[i].transform.position);
-            //                            nearestCol = cols[i].transform;
-            //                            lastTriedPlat = nearestCol;
-            //                        }
-
-            //                        possibleRoutes++;
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-
-
-            //  //  nearestCol.gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
-            //    jumpTargetTransform = nearestCol.transform;
-               
-            //    jumpTargetPos = nearestCol.position;
-            //    //    Debug.Log(nearestDist.ToString());
-
             }
 
             if (lastTriedPlat != null)
@@ -638,24 +425,20 @@ public class AITesterController : MonoBehaviour {
                 stopMoveRight = false;
             }
 
-            if (nearestDist < 1)
+            if (nearestDist < 2)
             {
                 //short jump
                 jumpTime = 0.1f;
             }
-            else if(nearestDist < 2.5f)
-            {
-                jumpTime = 0.2f;
-            }
             else
             {
                 //highjump
-                jumpTime = 0.35f;
+                jumpTime = 0.3f;
             }
 
-            MoverCounter+=nearestDist;
+            MoverCounter += nearestDist;
 
-            // jumpTime = time;
+             jumpTime = time;
         }
 
 
@@ -686,35 +469,7 @@ public class AITesterController : MonoBehaviour {
         stopMoveRight = false;
 
         jumpTargetPos = startPos;
-    }
 
-
-    public float GetAIMoveCount()
-    {
-        return MoverCounter;
-
-        // Debug.Log("Completed Level Diffuculty: " + MoverCounter.ToString());
-    }
-}
-
-public class PlatformCheckClass
-{
-    public Transform referenceTransform;
-    List<Transform> failedJumpToPlats = new List<Transform>();
-
-    public PlatformCheckClass(Transform reference)
-    {
-        referenceTransform = reference;
-    }
-
-    public void AddFailedPlat(Transform fail)
-    {
-        failedJumpToPlats.Add(fail);
-    }
-
-
-    public List<Transform> GetFailedPlats()
-    {
-        return failedJumpToPlats;
+        waitJump = false;
     }
 }

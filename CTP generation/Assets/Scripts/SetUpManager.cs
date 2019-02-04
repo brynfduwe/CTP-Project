@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class SetUpManager : MonoBehaviour
 {
-    public int restCov;
     public int testers;
     public int testersOnScreen;
     //  public Button start;
@@ -18,11 +17,6 @@ public class SetUpManager : MonoBehaviour
     void Start()
     {
 
-    }
-
-    public float GetRestCov()
-    {
-        return restCov;
     }
 
 

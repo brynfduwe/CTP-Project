@@ -40,6 +40,7 @@ GameObject:
   - component: {fileID: 61124929737292578}
   - component: {fileID: 50323266473606632}
   - component: {fileID: 114379230975759792}
+  - component: {fileID: 114354217152884062}
   m_Layer: 0
   m_Name: AITester
   m_TagString: Untagged
@@ -219,7 +220,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1435348092900312}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -5, z: 0}
+  m_LocalPosition: {x: 165.81526, y: 119.31556, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224900354915006196}
@@ -479,6 +480,27 @@ MonoBehaviour:
   player: {fileID: 4574030040511764}
   UImanager: {fileID: 0}
   offspringIter: 0
+--- !u!114 &114354217152884062
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1125097107976720}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79331ae539e10a448871e4f1bd0da56c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jumpMin: 0.5
+  jumpMax: 2.3
+  jumpPower: 5
+  speed: 5
+  groundPoint1: {fileID: 4799101608344928}
+  groundPoint2: {fileID: 4430455151179504}
+  topPoint1: {fileID: 4560701909889614}
+  topPoint2: {fileID: 4982551139173888}
+  maxVelocity: {x: 3, y: 10}
+  doNotColor: 0
 --- !u!114 &114379230975759792
 MonoBehaviour:
   m_ObjectHideFlags: 1

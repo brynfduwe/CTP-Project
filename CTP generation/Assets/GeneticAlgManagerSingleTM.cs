@@ -38,7 +38,6 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
     public int candidateScore = 0;
     public int testersDone = 0;
-    public int testersDoneOverall = 0;
 
 
     // Use this for initialization
@@ -87,7 +86,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
         foreach (var LGM in levelGMs)
         {
             LGM.GetComponent<LevelGenerator>().MyStart(setUp.height, setUp.length);
-            LGM.GetComponent<LevelGenerator>().SetRests(setUp.GetRestCov());
+          //  LGM.GetComponent<LevelGenerator>().SetRests(setUp.GetRestCov());
 
             LGM.GetComponent<LevelGenerator>().SetNewChain(currentProbabilityTransMatrix);
             LGM.GetComponent<LevelGenerator>().NewLevelCandidate();
@@ -178,6 +177,9 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                     levelGMs[i].GetComponent<LevelGenerator>().LockPlayer();
                     candidateScore++;
                     testersDone++;
+
+
+                    levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
                 }
 
                 //if fail
@@ -185,35 +187,26 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                 {
                     levelGMs[i].GetComponent<LevelGenerator>().LockPlayer();
                     testersDone++;
+
+
+                    levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
                 }
             }
         }
 
-        if (testersDone >= levelGMs.Count - 1)
+        if (testersDone >= setUp.testers)
         {
-            testersDoneOverall += testersDone;
-            foreach (var LGM in levelGMs)
-            {
-                LGM.GetComponent<LevelGenerator>().NewLevelCandidate();
-            }
+            float fitness = ((float) candidateScore / testersDone);
+
+            CandidateList.Add(currentProbabilityTransMatrix);
+            CandidateFitness.Add(fitness);
+
+            candidate++;
+            UImanager.UpdateCandidate(candidate);
+
 
             testersDone = 0;
-        }
-
-        if (testersDoneOverall >= setUp.testers)
-        {
-            float fitness = ((float) candidateScore / testersDoneOverall);
-            if (fitness > 0.25)
-            {
-                CandidateList.Add(currentProbabilityTransMatrix);
-                CandidateFitness.Add(fitness);
-
-                candidate++;
-                UImanager.UpdateCandidate(candidate);
-            }
-
-            testersDoneOverall = 0;
-           // testersDone = 0;
+            // testersDone = 0;
             candidateScore = 0;
 
             if (generation == 1)
@@ -233,6 +226,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                     {
                         transitionMatrixVis.text += (i.ToString() + ", ");
                     }
+
                     transitionMatrixVis.text += "\n";
                 }
             }
@@ -257,6 +251,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                     {
                         transitionMatrixVis.text += (i.ToString() + ", ");
                     }
+
                     transitionMatrixVis.text += "\n";
                 }
             }
@@ -299,6 +294,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                     {
                         transitionMatrixVis.text += (i.ToString() + ", ");
                     }
+
                     transitionMatrixVis.text += "\n";
                 }
             }
