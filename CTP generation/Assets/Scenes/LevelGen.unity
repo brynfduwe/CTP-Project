@@ -2120,7 +2120,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   testers: 100
   testersOnScreen: 10
-  height: 5
+  height: 10
   length: 50
   populationOffspring: 100
   candidateReq: 10

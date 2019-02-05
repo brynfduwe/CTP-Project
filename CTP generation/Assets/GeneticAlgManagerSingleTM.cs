@@ -101,6 +101,9 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
             }
             transitionMatrixVis.text += "\n";
         }
+
+        GetComponent<CSVWriter>().WriteTestInfo(setUp.height, setUp.length);
+        GetComponent<CSVWriter>().WriteCandidate(currentProbabilityTransMatrix, candidate, generation);
     }
 
     public void RandomChain()
@@ -178,8 +181,9 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                     candidateScore++;
                     testersDone++;
 
+
+                    GetComponent<CSVWriter>().Write(generation, candidate, levelGMs[i].GetComponent<LevelGenerator>().player.gameObject.GetComponent<SimpleAIController>().GetAllActions());
                     levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
-                    GetComponent<CSVWriter>().Write(generation, candidate, i, 0);
                 }
 
                 //if fail
@@ -188,8 +192,8 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                     levelGMs[i].GetComponent<LevelGenerator>().LockPlayer();
                     testersDone++;
 
-                    levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
-                    GetComponent<CSVWriter>().Write(generation, candidate, i, 0);
+                    GetComponent<CSVWriter>().Write(generation, candidate, levelGMs[i].GetComponent<LevelGenerator>().player.gameObject.GetComponent<SimpleAIController>().GetAllActions());
+                    levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();                  
                 }
             }
         }
@@ -298,6 +302,8 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                     transitionMatrixVis.text += "\n";
                 }
             }
+
+            GetComponent<CSVWriter>().WriteCandidate(currentProbabilityTransMatrix, candidate, generation);
         }
     }
 

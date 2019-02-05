@@ -58,6 +58,8 @@ public class SimpleAIController : MonoBehaviour {
     private Transform lastTriedPlat;
 
 
+    private List<int> actions = new List<int>();
+
     // Use this for initialization
     void Start()
     {
@@ -66,12 +68,37 @@ public class SimpleAIController : MonoBehaviour {
 
         jumpTargetPos = transform.position;
         startPos = transform.position + new Vector3(-1, -10);
+
+        InvokeRepeating("AddActions", 0.0f, 0.1f);
+    }
+
+
+    void AddActions()
+    {
+        if (jumpStarted)
+        {
+            if (jumpTime == 0.3f)
+            {
+                actions.Add(1);
+            }
+
+            if (jumpTime == 0.1f)
+            {
+                actions.Add(2);
+            }
+        }
+        else
+        {
+            actions.Add(0);
+        }
     }
 
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        // actions.Add(Random.Range(0,3));
+
         grounded = Physics2D.OverlapArea(groundPoint1.position, groundPoint2.position);
 
         if (grounded)
@@ -471,5 +498,12 @@ public class SimpleAIController : MonoBehaviour {
         jumpTargetPos = startPos;
 
         waitJump = false;
+
+        actions.Clear();
+    }
+
+    public List<int> GetAllActions()
+    {
+        return actions;
     }
 }
