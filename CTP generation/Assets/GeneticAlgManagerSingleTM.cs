@@ -178,8 +178,8 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                     candidateScore++;
                     testersDone++;
 
-
                     levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
+                    GetComponent<CSVWriter>().Write(generation, candidate, i, 0);
                 }
 
                 //if fail
@@ -188,8 +188,8 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                     levelGMs[i].GetComponent<LevelGenerator>().LockPlayer();
                     testersDone++;
 
-
                     levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
+                    GetComponent<CSVWriter>().Write(generation, candidate, i, 0);
                 }
             }
         }
