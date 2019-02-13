@@ -46,6 +46,16 @@ public class CSVWriter : MonoBehaviour
         writer.Close();
     }
 
+
+    public void WriteFitness(float fitness)
+    {
+        FileStream fs = new FileStream(csvFilePath, FileMode.Append, FileAccess.Write, FileShare.Write);
+        fs.Close();
+        StreamWriter writer = new StreamWriter(csvFilePath, append: true);
+        writer.Write("\nFitness," + fitness.ToString() + "\n\n");
+        writer.Close();
+    }
+
     public void WriteCandidate(List<int[]> transitionMatrix, int candidate, int gen)
     {
         string ptm = "\n";

@@ -171,29 +171,39 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
         for (int i = 0; i < levelGMs.Count; i++)
         {
-            if (!levelGMs[i].GetComponent<LevelGenerator>().CheckPlayerLocked())
+            if (testersDone < setUp.testers)
             {
-
-                //if success
-                if (levelGMs[i].GetComponent<EventTracker>().SuccessCheck())
+                if (!levelGMs[i].GetComponent<LevelGenerator>().CheckPlayerLocked())
                 {
-                    levelGMs[i].GetComponent<LevelGenerator>().LockPlayer();
-                    candidateScore++;
-                    testersDone++;
 
+                    //if success
+                    if (levelGMs[i].GetComponent<EventTracker>().SuccessCheck())
+                    {
+                        levelGMs[i].GetComponent<LevelGenerator>().LockPlayer();
+                        candidateScore++;
+                        testersDone++;
 
-                    GetComponent<CSVWriter>().Write(generation, candidate, levelGMs[i].GetComponent<LevelGenerator>().player.gameObject.GetComponent<SimpleAIController>().GetAllActions());
-                    levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
-                }
+                        GetComponent<ScreenCaptureHandler>().ScreenGrab(levelGMs[i].transform.position, candidate, generation, testersDone);
 
-                //if fail
-                if (levelGMs[i].GetComponent<EventTracker>().FailCheck())
-                {
-                    levelGMs[i].GetComponent<LevelGenerator>().LockPlayer();
-                    testersDone++;
+                        GetComponent<CSVWriter>().Write(generation, candidate,
+                            levelGMs[i].GetComponent<LevelGenerator>().player.gameObject
+                                .GetComponent<SimpleAIController>().GetAllActions());
+                        levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
+                    }
 
-                    GetComponent<CSVWriter>().Write(generation, candidate, levelGMs[i].GetComponent<LevelGenerator>().player.gameObject.GetComponent<SimpleAIController>().GetAllActions());
-                    levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();                  
+                    //if fail
+                    if (levelGMs[i].GetComponent<EventTracker>().FailCheck())
+                    {
+                        levelGMs[i].GetComponent<LevelGenerator>().LockPlayer();
+                        testersDone++;
+
+                        GetComponent<ScreenCaptureHandler>().ScreenGrab(levelGMs[i].transform.position, generation, candidate, testersDone);
+
+                        GetComponent<CSVWriter>().Write(generation, candidate,
+                            levelGMs[i].GetComponent<LevelGenerator>().player.gameObject
+                                .GetComponent<SimpleAIController>().GetAllActions());
+                        levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
+                    }
                 }
             }
         }
@@ -204,8 +214,9 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
             CandidateList.Add(currentProbabilityTransMatrix);
             CandidateFitness.Add(fitness);
+            GetComponent<CSVWriter>().WriteFitness(fitness);
 
-            candidate++;
+           candidate++;
             UImanager.UpdateCandidate(candidate);
 
 
