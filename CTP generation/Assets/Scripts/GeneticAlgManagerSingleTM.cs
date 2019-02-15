@@ -104,6 +104,8 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
         GetComponent<CSVWriter>().WriteTestInfo(setUp.height, setUp.length);
         GetComponent<CSVWriter>().WriteCandidate(currentProbabilityTransMatrix, candidate, generation);
+
+        GetComponent<ScreenCaptureHandler>().ClearFolder();
     }
 
     public void RandomChain()

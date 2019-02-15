@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class ScreenCaptureHandler : MonoBehaviour
 {
@@ -22,5 +23,15 @@ public class ScreenCaptureHandler : MonoBehaviour
     public void MoveUIHighlight(Vector3 pos)
     {
 
+    }
+
+
+    public void ClearFolder()
+    {
+        var hi = Directory.GetFiles(folderPath);
+        for (int i = 0; i < hi.Length; i++)
+        {
+            File.Delete(hi[i]);
+        }
     }
 }
