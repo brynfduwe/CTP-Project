@@ -13,6 +13,8 @@ public class SetUpManager : MonoBehaviour
     public int populationOffspring;
     public int candidateReq;
 
+    public bool spikes;
+
     // Use this for initialization
     void Start()
     {

@@ -7,6 +7,7 @@ public class LevelGenerator : MonoBehaviour
 {
     public GameObject ground;
     public GameObject endFlag;
+    public GameObject spikePlat;
 
     public Text transitionMatrixVis;
 
@@ -22,7 +23,7 @@ public class LevelGenerator : MonoBehaviour
 
     public List<int[]> probabilityTransList = new List<int[]>();
 
-    public int transitionNum = 10; 
+    public int levelHeight = 10; 
 
     private States currentState;
     private int xPos = 0;
@@ -49,28 +50,30 @@ public class LevelGenerator : MonoBehaviour
         {
             probabilityTransList = GameObject.Find("SceneManager").GetComponent<SceneManager>().GetChromo();
             SetNewChain(GameObject.Find("SceneManager").GetComponent<SceneManager>().GetChromo());
-            MyStart(GameObject.Find("SceneManager").GetComponent<SceneManager>().height, GameObject.Find("SceneManager").GetComponent<SceneManager>().length);
+            //MyStart(GameObject.Find("SceneManager").GetComponent<SceneManager>().height, GameObject.Find("SceneManager").GetComponent<SceneManager>().length);
         }
     }
 
 
-    public void MyStart(int height, int length)
+    public void MyStart(int height, int length, int transitions)
     {
 
         levelLength = length;
-        transitionNum = height;
+        levelHeight = height;
 
         startPlayerPos = player.transform.position;
 
         List<int> x = new List<int>();
 
-        for (int j = 0; j < transitionNum; j++)
+        Debug.Log(transitions.ToString());
+
+        for (int j = 0; j < transitions; j++)
         {
-            x.Add(100 / transitionNum);
+            x.Add(100 / transitions);
         }
 
         probabilityTransList = new List<int[]>();
-        for (int i = 0; i < transitionNum; i++)
+        for (int i = 0; i < transitions; i++)
         {
             // probabilityTransList.Add(new int[] { 1, 2, 3 });
 
@@ -116,8 +119,17 @@ public class LevelGenerator : MonoBehaviour
 
             if (currentState != States.NoGround)
             {
-                GameObject plat = Instantiate(ground, new Vector3(xPos, yPos + (int)currentState, 0),
-                    ground.transform.rotation, transform);
+                GameObject toSpawn = ground;
+                int spawnY = yPos + (int) currentState;
+
+                if ((int) currentState > levelHeight)
+                {
+                    toSpawn = spikePlat;
+                    spawnY -= levelHeight;
+                }
+
+                GameObject plat = Instantiate(toSpawn, new Vector3(xPos, spawnY, 0),
+                toSpawn.transform.rotation, transform);
                 platsformObjects.Add(plat);
             }
 
@@ -182,7 +194,8 @@ public class LevelGenerator : MonoBehaviour
             }
         }
 
-        currentState = (States)selectedTransition;               
+        currentState = (States) selectedTransition;
+
     }
 
 
@@ -226,6 +239,11 @@ public class LevelGenerator : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
             NewLevelCandidate();
+        }
+
+        if (player.GetComponent<SimpleAIController>().SpikeCheck())
+        {
+            player.transform.position -= new Vector3(0, 50, 0);
         }
     }
 

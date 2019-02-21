@@ -25,7 +25,7 @@ public class TreeGeneticGenAlg : MonoBehaviour
 
         foreach (var LG in levelGenList)
         {
-            LG.GetComponent<LevelGenerator>().MyStart(heightTrans, levelLength);
+            LG.GetComponent<LevelGenerator>().MyStart(heightTrans, levelLength, levelLength);
             LG.GetComponent<LevelGenerator>().SetRests(restCov);
             LG.GetComponent<LevelGenerator>().RandomChain();
             LG.GetComponent<LevelGenerator>().NewLevelCandidate();

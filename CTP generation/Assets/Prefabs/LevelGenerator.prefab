@@ -461,8 +461,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ground: {fileID: 1939395781354114, guid: 5be56f2bfd70ca544900af5d9287e5dd, type: 2}
   endFlag: {fileID: 1427389136965790, guid: 67492496a1fb09040bcebb6691a33d84, type: 2}
+  spikePlat: {fileID: 1278220323920274, guid: eb87fb508a9e412478735eee0c9b3a00, type: 2}
   transitionMatrixVis: {fileID: 114713477748287840}
-  transitionNum: 10
+  levelHeight: 10
   levelLength: 185
   player: {fileID: 4574030040511764}
   PlayerTesting: 0

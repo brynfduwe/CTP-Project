@@ -39,6 +39,8 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
     public int candidateScore = 0;
     public int testersDone = 0;
 
+    private int transitions = 0;
+
 
     // Use this for initialization
     void Start()
@@ -57,13 +59,19 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
         List<int> x = new List<int>();
 
-        for (int j = 0; j < setUp.height; j++)
+        transitions = setUp.height;
+        if (setUp.spikes == true)
         {
-            x.Add(100 / setUp.height);
+            transitions = transitions + setUp.height;
+        }
+
+        for (int j = 0; j < transitions; j++)
+        {
+            x.Add(100 / transitions);
         }
 
         currentProbabilityTransMatrix = new List<int[]>();
-        for (int i = 0; i < setUp.height; i++)
+        for (int i = 0; i < transitions; i++)
         {
             currentProbabilityTransMatrix.Add(x.ToArray());
         }
@@ -85,7 +93,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
         foreach (var LGM in levelGMs)
         {
-            LGM.GetComponent<LevelGenerator>().MyStart(setUp.height, setUp.length);
+            LGM.GetComponent<LevelGenerator>().MyStart(setUp.height, setUp.length, transitions);
           //  LGM.GetComponent<LevelGenerator>().SetRests(setUp.GetRestCov());
 
             LGM.GetComponent<LevelGenerator>().SetNewChain(currentProbabilityTransMatrix);
@@ -112,14 +120,14 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
     {
         List<int> x = new List<int>();
 
-        for (int j = 0; j < setUp.height; j++)
+        for (int j = 0; j < transitions; j++)
         {
-            x.Add(100 / setUp.height);
+            x.Add(100 / transitions);
         }
 
         currentProbabilityTransMatrix = new List<int[]>();
 
-        for (int i = 0; i < setUp.height; i++)
+        for (int i = 0; i < transitions; i++)
         {
             currentProbabilityTransMatrix.Add(x.ToArray());
         }

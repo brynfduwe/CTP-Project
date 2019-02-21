@@ -62,7 +62,6 @@ public class AITesterController : MonoBehaviour {
 
     private Transform lastTriedPlat;
 
-
     // Use this for initialization
     void Start()
     {
@@ -232,9 +231,6 @@ public class AITesterController : MonoBehaviour {
                     GetComponent<Rigidbody2D>().AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
                 }
             }
-
-
-
 
         }
 

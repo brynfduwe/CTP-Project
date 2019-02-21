@@ -2125,6 +2125,7 @@ MonoBehaviour:
   length: 50
   populationOffspring: 100
   candidateReq: 10
+  spikes: 1
 --- !u!114 &904623993
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3263,48 +3264,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1533050723}
   m_CullTransparentMesh: 0
---- !u!1001 &1581816449
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4167241726786054, guid: d336498f94979fa488d08fbfd4a4a8b8, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4167241726786054, guid: d336498f94979fa488d08fbfd4a4a8b8, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4167241726786054, guid: d336498f94979fa488d08fbfd4a4a8b8, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4167241726786054, guid: d336498f94979fa488d08fbfd4a4a8b8, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4167241726786054, guid: d336498f94979fa488d08fbfd4a4a8b8, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4167241726786054, guid: d336498f94979fa488d08fbfd4a4a8b8, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4167241726786054, guid: d336498f94979fa488d08fbfd4a4a8b8, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4167241726786054, guid: d336498f94979fa488d08fbfd4a4a8b8, type: 2}
-      propertyPath: m_RootOrder
-      value: 5
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: d336498f94979fa488d08fbfd4a4a8b8, type: 2}
-  m_IsPrefabAsset: 0
 --- !u!1 &1592121374
 GameObject:
   m_ObjectHideFlags: 0
@@ -3616,12 +3575,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5203407679eab44f8bc006bdb8320c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testers: 0
-  testersOnScreen: 0
-  height: 0
+  testers: 100
+  testersOnScreen: 10
+  height: 10
   length: 4
   populationOffspring: 8
-  candidateReq: 0
+  candidateReq: 10
+  spikes: 0
 --- !u!1 &1777287032
 GameObject:
   m_ObjectHideFlags: 0

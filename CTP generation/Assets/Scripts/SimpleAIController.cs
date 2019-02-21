@@ -480,6 +480,18 @@ public class SimpleAIController : MonoBehaviour {
     }
 
 
+    public bool SpikeCheck()
+    {
+        RaycastHit2D hitD = Physics2D.Raycast(transform.position + new Vector3(0.0f, -0.5f, 0), -Vector2.up, 0.5f);
+        if (hitD.collider != null)
+        {
+            if (hitD.transform.gameObject.GetComponent<Spike>() != null)
+                return true;
+        }
+        return false;
+    }
+
+
     public void ResetPlayer()
     {
         dirLeft = false;
