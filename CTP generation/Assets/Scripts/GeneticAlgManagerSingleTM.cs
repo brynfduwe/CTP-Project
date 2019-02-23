@@ -41,8 +41,6 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
     private int transitions = 0;
 
-    public bool saveImgs;
-
 
     // Use this for initialization
     void Start()
@@ -112,7 +110,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
             transitionMatrixVis.text += "\n";
         }
 
-        GetComponent<CSVWriter>().WriteTestInfo(setUp.height, setUp.length);
+        GetComponent<CSVWriter>().WriteTestInfo(setUp.height, setUp.length, setUp.minimumFitnessReq);
         GetComponent<CSVWriter>().WriteCandidate(currentProbabilityTransMatrix, candidate, generation);
 
         GetComponent<ScreenCaptureHandler>().ClearFolder();
@@ -226,12 +224,15 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
         {
             float fitness = ((float) candidateScore / testersDone);
 
-            CandidateList.Add(currentProbabilityTransMatrix);
-            CandidateFitness.Add(fitness);
-            GetComponent<CSVWriter>().WriteFitness(fitness);
+            if (fitness >= setUp.minimumFitnessReq)
+            {
+                CandidateList.Add(currentProbabilityTransMatrix);
+                CandidateFitness.Add(fitness);
+                GetComponent<CSVWriter>().WriteFitness(fitness);
 
-           candidate++;
-            UImanager.UpdateCandidate(candidate);
+                candidate++;
+                UImanager.UpdateCandidate(candidate);
+            }
 
 
             testersDone = 0;

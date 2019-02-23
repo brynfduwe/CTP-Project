@@ -18,12 +18,13 @@ public class CSVWriter : MonoBehaviour
     }
 
 
-    public void WriteTestInfo(int height, int levelLength)
+    public void WriteTestInfo(int height, int levelLength, float fitnessReq)
     {
         FileStream fs = new FileStream(csvFilePath, FileMode.Append, FileAccess.Write, FileShare.Write);
         fs.Close();
         StreamWriter writer = new StreamWriter(csvFilePath, append: true);
         writer.Write("Timestamp rate, 0.1s" + "\n" 
+                     + "Fitness Required," + fitnessReq.ToString() + "\n"
                      + "Level Height" + "," + height.ToString() + "\n" 
                      + "Level Length" + "," + levelLength.ToString() + "\n"
                       +"Actions Key, 0 = move right, 1 = small jump, 2 = high jump \n");

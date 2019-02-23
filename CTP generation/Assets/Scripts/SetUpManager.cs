@@ -13,6 +13,7 @@ public class SetUpManager : MonoBehaviour
     public int length;
     public int populationOffspring;
     public int candidateReq;
+    public float minimumFitnessReq;
 
     public bool spikes;
 

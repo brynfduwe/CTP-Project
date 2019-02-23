@@ -2103,6 +2103,7 @@ MonoBehaviour:
   length: 50
   populationOffspring: 100
   candidateReq: 10
+  minimumFitnessReq: 0.1
   spikes: 1
 --- !u!114 &904623993
 MonoBehaviour:
@@ -2128,7 +2129,6 @@ MonoBehaviour:
   setUp: {fileID: 904623992}
   candidateScore: 0
   testersDone: 0
-  saveImgs: 0
 --- !u!114 &904623994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3561,6 +3561,7 @@ MonoBehaviour:
   length: 4
   populationOffspring: 8
   candidateReq: 10
+  minimumFitnessReq: 0
   spikes: 0
 --- !u!1 &1777287032
 GameObject:
