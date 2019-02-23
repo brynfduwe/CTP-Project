@@ -126,13 +126,35 @@ public class SimpleAIController : MonoBehaviour {
             }
             else
             {
-                for (int i = 0; i < doNotRetryPlats.Count; i++)
+                if (hitD.transform.gameObject.GetComponent<Spike>() != null)
                 {
-                    if (doNotRetryPlats[i].gameObject != null)
+                    RaycastHit2D hitD2 = Physics2D.Raycast(transform.position + new Vector3(1.7f, 0, 0), -Vector2.up, 3f);
+                    if (hitD2.collider == null)
                     {
-                        if (hitD.transform == doNotRetryPlats[i].transform)
+                        StartJump(0.3f);
+                    }
+                    else
+                    {
+                        if (hitD2.transform.gameObject.GetComponent<Spike>() != null)
+                        {
+                            StartJump(0.1f);
+                        }
+                        else
                         {
                             StartJump(0.3f);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < doNotRetryPlats.Count; i++)
+                    {
+                        if (doNotRetryPlats[i].gameObject != null)
+                        {
+                            if (hitD.transform == doNotRetryPlats[i].transform)
+                            {
+                                StartJump(0.3f);
+                            }
                         }
                     }
                 }
@@ -255,6 +277,30 @@ public class SimpleAIController : MonoBehaviour {
                     transform.Translate(Vector3.right * Time.deltaTime * speed);
                 }
             }
+            else
+            {
+                RaycastHit2D hitD = Physics2D.Raycast(transform.position + new Vector3(-0, -0.5f, 0), -Vector2.up, 4f);
+                if (hitD.collider != null)
+                {
+                    if (hitD.transform.gameObject.GetComponent<Spike>() != null)
+                    {
+                        transform.Translate(Vector3.right * Time.deltaTime * speed);
+                        waitJump = false;
+                    }
+                }
+            }
+        }
+        else
+        {
+            RaycastHit2D hitD = Physics2D.Raycast(transform.position + new Vector3(-0, -0.5f, 0), -Vector2.up, 4f);
+            if (hitD.collider != null)
+            {
+                if (hitD.transform.gameObject.GetComponent<Spike>() != null)
+                {
+                    transform.Translate(Vector3.right * Time.deltaTime * speed);
+                    waitJump = false;
+                }
+            }
         }
 
         if (GetComponent<Rigidbody2D>().velocity.x > maxVelocity.x)
@@ -303,93 +349,101 @@ public class SimpleAIController : MonoBehaviour {
                 {
                     bool inFailed = false;
 
-                    foreach (var fp in failedPlatfromList)
+                    if (cols[i].gameObject.GetComponent<Spike>() == null)
                     {
-                        if (fp.referenceTransform == hitD.transform)
+
+
+
+                        foreach (var fp in failedPlatfromList)
                         {
-                            for (int c = 0; c < fp.GetFailedPlats().Count; c++)
+                            if (fp.referenceTransform == hitD.transform)
                             {
-                                if (fp.GetFailedPlats()[c] == cols[i].transform)
+                                for (int c = 0; c < fp.GetFailedPlats().Count; c++)
                                 {
-                                    inFailed = true;
+                                    if (fp.GetFailedPlats()[c] == cols[i].transform)
+                                    {
+                                        inFailed = true;
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    foreach (var c in doNotRetryPlats)
-                    {
-                        if (c == cols[i].transform)
+                        foreach (var c in doNotRetryPlats)
+                        {
+                            if (c == cols[i].transform)
+                                inFailed = true;
+                        }
+
+                        if (Vector2.Distance(transform.position, cols[i].transform.position) > 15)
+                        {
                             inFailed = true;
-                    }
-
-                    if (Vector2.Distance(transform.position, cols[i].transform.position) > 15)
-                    {
-                        inFailed = true;
-                    }
-
-
-                    float xDist = Vector2.Distance(new Vector2(transform.position.x, 0), new Vector2(cols[i].transform.position.x, 0));
-                    float yDist = Vector2.Distance(new Vector2(0, transform.position.y), new Vector2(0, cols[i].transform.position.y));
-                    float tDist = xDist;
-
-                    if (cols[i].transform.position.y > transform.position.y - 1)
-                    {
-                        tDist += yDist;
-                    }
-                    else
-                    {
-                        tDist -= yDist * 1.5f;
-                    }
-
-                    if (tDist > 5)
-                    {
-                        inFailed = true;
-                    }
-
-
-                    if (inFailed == false)
-                    {
-                        //angle check
-                        Vector3 playerDir = cols[i].transform.position - transform.position;
-                        float angle = Vector3.Dot(playerDir, cols[i].transform.right);
-                        if (dirLeft)
-                        {
-                            angle = Vector3.Dot(playerDir, -cols[i].transform.right);
                         }
 
-                        if (angle > 0.2f)
+
+                        float xDist = Vector2.Distance(new Vector2(transform.position.x, 0),
+                            new Vector2(cols[i].transform.position.x, 0));
+                        float yDist = Vector2.Distance(new Vector2(0, transform.position.y),
+                            new Vector2(0, cols[i].transform.position.y));
+                        float tDist = xDist;
+
+                        if (cols[i].transform.position.y > transform.position.y - 1)
                         {
-                            bool failNear = false;
-                            if (lastTriedPlat != null)
+                            tDist += yDist;
+                        }
+                        else
+                        {
+                            tDist -= yDist * 1.5f;
+                        }
+
+                        if (tDist > 5)
+                        {
+                            inFailed = true;
+                        }
+
+
+                        if (inFailed == false)
+                        {
+                            //angle check
+                            Vector3 playerDir = cols[i].transform.position - transform.position;
+                            float angle = Vector3.Dot(playerDir, cols[i].transform.right);
+                            if (dirLeft)
                             {
-                                if (nearestCol == lastTriedPlat)
-                                {
-                                    failNear = true;
-                                }
+                                angle = Vector3.Dot(playerDir, -cols[i].transform.right);
                             }
 
-                            if (!failNear)
+                            if (angle > 0.2f)
                             {
-
-                                float dist = Vector2.Distance(transform.position, cols[i].transform.position);
-                                if (dist < nearestDist)
+                                bool failNear = false;
+                                if (lastTriedPlat != null)
                                 {
-
-
-                                    nearestDist = Vector2.Distance(transform.position, cols[i].transform.position);
-                                    nearestCol = cols[i].transform;
-                                    lastTriedPlat = nearestCol;
-
+                                    if (nearestCol == lastTriedPlat)
+                                    {
+                                        failNear = true;
+                                    }
                                 }
 
-                                possibleRoutes++;
-                            }
+                                if (!failNear)
+                                {
 
+                                    float dist = Vector2.Distance(transform.position, cols[i].transform.position);
+                                    if (dist < nearestDist)
+                                    {
+
+
+                                        nearestDist = Vector2.Distance(transform.position, cols[i].transform.position);
+                                        nearestCol = cols[i].transform;
+                                        lastTriedPlat = nearestCol;
+
+                                    }
+
+                                    possibleRoutes++;
+                                }
+
+                            }
                         }
                     }
+
                 }
-
             }
 
 
@@ -482,7 +536,21 @@ public class SimpleAIController : MonoBehaviour {
 
     public bool SpikeCheck()
     {
-        RaycastHit2D hitD = Physics2D.Raycast(transform.position + new Vector3(0.0f, -0.5f, 0), -Vector2.up, 0.5f);
+        RaycastHit2D hitD = Physics2D.Raycast(transform.position + new Vector3(0.2f, -0.5f, 0), -Vector2.up, 0.25f);
+        if (hitD.collider != null)
+        {
+            if (hitD.transform.gameObject.GetComponent<Spike>() != null)
+                return true;
+        }
+
+        hitD = Physics2D.Raycast(transform.position + new Vector3(-0.0f, -0.5f, 0), -Vector2.up, 0.4f);
+        if (hitD.collider != null)
+        {
+            if (hitD.transform.gameObject.GetComponent<Spike>() != null)
+                return true;
+        }
+
+        hitD = Physics2D.Raycast(transform.position + new Vector3(-0.2f, -0.5f, 0), -Vector2.up, 0.25f);
         if (hitD.collider != null)
         {
             if (hitD.transform.gameObject.GetComponent<Spike>() != null)

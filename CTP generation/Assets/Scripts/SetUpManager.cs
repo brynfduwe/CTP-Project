@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class SetUpManager : MonoBehaviour
 {
+    public bool saveImgs;
     public int testers;
     public int testersOnScreen;
     //  public Button start;

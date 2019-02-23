@@ -41,6 +41,8 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
     private int transitions = 0;
 
+    public bool saveImgs;
+
 
     // Use this for initialization
     void Start()
@@ -193,7 +195,8 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                         candidateScore++;
                         testersDone++;
 
-                        GetComponent<ScreenCaptureHandler>().ScreenGrab(levelGMs[i].transform.position, candidate, generation, testersDone);
+                        if(setUp.saveImgs)
+                            GetComponent<ScreenCaptureHandler>().ScreenGrab(levelGMs[i].transform.position, candidate, generation, testersDone);
 
                         GetComponent<CSVWriter>().Write(generation, candidate,
                             levelGMs[i].GetComponent<LevelGenerator>().player.gameObject
@@ -207,7 +210,8 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                         levelGMs[i].GetComponent<LevelGenerator>().LockPlayer();
                         testersDone++;
 
-                        GetComponent<ScreenCaptureHandler>().ScreenGrab(levelGMs[i].transform.position, generation, candidate, testersDone);
+                        if (setUp.saveImgs)
+                            GetComponent<ScreenCaptureHandler>().ScreenGrab(levelGMs[i].transform.position, generation, candidate, testersDone);
 
                         GetComponent<CSVWriter>().Write(generation, candidate,
                             levelGMs[i].GetComponent<LevelGenerator>().player.gameObject

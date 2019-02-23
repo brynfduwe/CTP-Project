@@ -259,7 +259,7 @@ public class LevelGenerator : MonoBehaviour
 
         if (!PlayerTesting)
         {
-            StartCoroutine(WaitAndDiffCheck());
+          //  StartCoroutine(WaitAndDiffCheck());
         }
         else
         {

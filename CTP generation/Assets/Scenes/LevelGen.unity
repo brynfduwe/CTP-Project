@@ -2061,7 +2061,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 904623991}
-  - component: {fileID: 904623990}
   - component: {fileID: 904623992}
   - component: {fileID: 904623993}
   - component: {fileID: 904623994}
@@ -2073,28 +2072,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &904623990
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 904623989}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d93be12672a6cae47beb9df8b6897164, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LevelGenerator: {fileID: 1435348092900312, guid: d336498f94979fa488d08fbfd4a4a8b8,
-    type: 2}
-  candidateGoal: 10
-  offSpringPopulation: 10
-  UImanager: {fileID: 1732767418}
-  generation: 1
-  CandidateFitness: []
-  levelGMs: []
-  failedJumpPlats: []
-  transitionMatrixVis: {fileID: 1014989345}
-  setUp: {fileID: 904623992}
 --- !u!4 &904623991
 Transform:
   m_ObjectHideFlags: 0
@@ -2119,9 +2096,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5203407679eab44f8bc006bdb8320c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  saveImgs: 0
   testers: 100
   testersOnScreen: 10
-  height: 10
+  height: 8
   length: 50
   populationOffspring: 100
   candidateReq: 10
@@ -2150,6 +2128,7 @@ MonoBehaviour:
   setUp: {fileID: 904623992}
   candidateScore: 0
   testersDone: 0
+  saveImgs: 0
 --- !u!114 &904623994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3575,6 +3554,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5203407679eab44f8bc006bdb8320c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  saveImgs: 0
   testers: 100
   testersOnScreen: 10
   height: 10
