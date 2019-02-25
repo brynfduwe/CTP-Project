@@ -305,6 +305,7 @@ MonoBehaviour:
   topPoint1: {fileID: 4511656394856640}
   topPoint2: {fileID: 4727054958413082}
   maxVelocity: {x: 3, y: 10}
+  doNotColor: 0
 --- !u!212 &212359022972710868
 SpriteRenderer:
   m_ObjectHideFlags: 1

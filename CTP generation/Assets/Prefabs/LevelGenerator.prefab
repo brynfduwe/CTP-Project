@@ -235,7 +235,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1530859446809146}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0707, y: -0.08899999, z: 0}
+  m_LocalPosition: {x: 0.06, y: -0.0725, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4574030040511764}
@@ -292,7 +292,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1398968037215296}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0719, y: -0.089, z: 0}
+  m_LocalPosition: {x: -0.06, y: -0.072501436, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4574030040511764}
@@ -493,9 +493,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpMin: 0.5
-  jumpMax: 2.3
-  jumpPower: 5
-  speed: 5
+  jumpMax: 2.5
+  jumpPower: 6
+  speed: 6
   groundPoint1: {fileID: 4799101608344928}
   groundPoint2: {fileID: 4430455151179504}
   topPoint1: {fileID: 4560701909889614}

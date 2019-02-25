@@ -159,7 +159,7 @@ public class LevelGenerator : MonoBehaviour
 
         //move player to start
         GameObject start = Instantiate(ground, new Vector3(platsformObjects[0].transform.position.x - 1, platsformObjects[0].transform.position.y), ground.transform.rotation, transform);
-        player.transform.position = new Vector3(platsformObjects[0].transform.position.x - 1, platsformObjects[0].transform.position.y + 2f);
+        player.transform.position = new Vector3(platsformObjects[0].transform.position.x - 1.5f, platsformObjects[0].transform.position.y + 1.5f);
         platsformObjects.Add(start);
 
         player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
@@ -236,15 +236,15 @@ public class LevelGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha0))
-        {
-            NewLevelCandidate();
-        }
+        //if (Input.GetKeyDown(KeyCode.Alpha0))
+        //{
+        //    NewLevelCandidate();
+        //}
 
-        if (player.GetComponent<SimpleAIController>().SpikeCheck())
-        {
-            player.transform.position -= new Vector3(0, 50, 0);
-        }
+        //if (player.GetComponent<SimpleAIController>().SpikeCheck())
+        //{
+        //    player.transform.position -= new Vector3(0, 50, 0);
+        //}
     }
 
 
