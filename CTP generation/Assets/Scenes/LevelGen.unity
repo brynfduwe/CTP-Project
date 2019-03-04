@@ -2100,7 +2100,7 @@ MonoBehaviour:
   testers: 100
   testersOnScreen: 10
   height: 8
-  length: 50
+  length: 25
   populationOffspring: 100
   candidateReq: 10
   minimumFitnessReq: 0.1

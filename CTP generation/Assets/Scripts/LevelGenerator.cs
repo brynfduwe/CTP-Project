@@ -125,7 +125,7 @@ public class LevelGenerator : MonoBehaviour
                 if ((int) currentState > levelHeight)
                 {
                     toSpawn = spikePlat;
-                    spawnY -= levelHeight;
+                    spawnY -= (levelHeight + 1);
                 }
 
                 GameObject plat = Instantiate(toSpawn, new Vector3(xPos, spawnY, 0),
@@ -163,6 +163,10 @@ public class LevelGenerator : MonoBehaviour
         platsformObjects.Add(start);
 
         player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+
+
+
+        GetComponent<EventTracker>().SetYSuccess(platsformObjects[platsformObjects.Count - 1].transform.localPosition.y -1);
 
 
         ////transition matrix visualisation

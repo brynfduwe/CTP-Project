@@ -6,6 +6,7 @@ public class EventTracker : MonoBehaviour
 {
     private float failY;
     private float successX;
+    private float successY;
     public Transform player;
 
     private float lastX;
@@ -34,6 +35,12 @@ public class EventTracker : MonoBehaviour
             StuckCheck();
             stucktimer = 0;
         }
+    }
+
+
+    public void SetYSuccess(float y)
+    {
+        successY = y;
     }
 
 
@@ -66,7 +73,7 @@ public class EventTracker : MonoBehaviour
 
     public bool SuccessCheck()
     {
-        if (player.transform.position.x > successX && player.transform.position.y >= failY)
+        if (player.transform.position.x > successX && player.transform.position.y >= failY && transform.position.y > successY)  
         {
             return true;
         }

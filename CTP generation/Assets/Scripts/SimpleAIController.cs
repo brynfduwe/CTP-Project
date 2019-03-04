@@ -29,7 +29,6 @@ public class SimpleAIController : MonoBehaviour {
     private bool jumpTargetHit = true;
     private Vector2 jumpTargetPos;
     private Transform jumpTargetTransform;
-    private Transform standingPlat;
     private bool stopMoveRight;
 
     private bool jumpHitIgnore = true;
@@ -39,8 +38,6 @@ public class SimpleAIController : MonoBehaviour {
     private bool waitJump;
 
     private List<Transform> failedPlatformMover;
-
-    private float MoverCounter;
 
     private bool tryThing;
 
@@ -84,7 +81,7 @@ public class SimpleAIController : MonoBehaviour {
                 actions.Add(1);
             }
 
-            if (jumpTime == 0.1f)
+            if (jumpTime == 0.3f)
             {
                 actions.Add(2);
             }
@@ -105,19 +102,40 @@ public class SimpleAIController : MonoBehaviour {
 
         if (grounded)
         {
+            spikeBelowStop = false;
+
             if (!hitGround)
             {
                 GetComponent<Rigidbody2D>().velocity = GetComponent<Rigidbody2D>().velocity / 3;
                 GetComponent<Rigidbody2D>().angularVelocity = GetComponent<Rigidbody2D>().angularVelocity / 3;
 
-                hitGround = true;
                 spikeBelowStop = false;
+                dirLeft = false;
+
+                jumpTargetHit = true;
+                jumpHitIgnore = true;
+                stopMoveRight = false;
+
+                waitJump = false;
             }
 
-            RaycastHit2D hitD = Physics2D.Raycast(transform.position + new Vector3(0.7f, 0, 0), -Vector2.up, 3f);
+            RaycastHit2D hitR = Physics2D.Raycast(transform.position + new Vector3(1, 0, 0), Vector2.right, 0.05f);
+            RaycastHit2D hitR2 = Physics2D.Raycast(transform.position + new Vector3(1, 1, 0), Vector2.right, 1f);
+            if (hitR.collider != null && hitR2.collider == null)
+            {
+                StartJump(0.15f);
+            }
+
+            if (hitR2.collider != null)
+            {
+                StartJump(0.4f);
+            }
+
+            RaycastHit2D hitD = Physics2D.Raycast(transform.position + new Vector3(0.7f, 0, 0), -Vector2.up, 3f); ///ahead of player down check
             if (hitD.collider == null)
             {
-                RaycastHit2D hitD2 = Physics2D.Raycast(transform.position + new Vector3(1.7f, 0, 0), -Vector2.up, 3f);
+                RaycastHit2D hitD2 = Physics2D.Raycast(transform.position + new Vector3(1.7f, 0, 0), -Vector2.up, 3f);///ahead x2 of player down check
+                                                                                                                      //
                 if (hitD2.collider == null)
                 {
                     StartJump(0.4f);
@@ -130,7 +148,16 @@ public class SimpleAIController : MonoBehaviour {
                     }
                     else
                     {
-                        StartJump(0.15f);
+                        RaycastHit2D hitRA = Physics2D.Raycast(transform.position + new Vector3(0, 0.7f, 0), Vector2.right, 0.05f);
+                        RaycastHit2D hitRAA = Physics2D.Raycast(transform.position + new Vector3(0, 1.7f, 0), Vector2.right, 0.05f);
+                        if (hitRA.collider != null || hitRAA.collider != null)
+                        {
+                            StartJump(0.4f);
+                        }
+                        else
+                        {
+                            StartJump(0.15f);
+                        }
                     }
                 }
             }
@@ -141,7 +168,7 @@ public class SimpleAIController : MonoBehaviour {
                     RaycastHit2D hitD2 = Physics2D.Raycast(transform.position + new Vector3(1.7f, 0, 0), -Vector2.up, 3f);
                     if (hitD2.collider == null)
                     {
-                        StartJump(0.3f);
+                        StartJump(0.4f);
                     }
                     else
                     {
@@ -170,21 +197,13 @@ public class SimpleAIController : MonoBehaviour {
                 }
             }
 
-            RaycastHit2D hitR = Physics2D.Raycast(transform.position + new Vector3(1, 0, 0), Vector2.right, 0.05f);
-            if (hitR.collider != null)
-            {
-                StartJump(0.15f);
-            }
-
-            RaycastHit2D hitR2 = Physics2D.Raycast(transform.position + new Vector3(1, 1, 0), Vector2.right, 1f);
-            if (hitR2.collider != null)
-            {
-                StartJump(0.4f);
-            }
+    
         }
         else
         {
             grounded = false;
+            hitGround = false;
+
         }
 
         if (jumpStarted)
@@ -195,22 +214,17 @@ public class SimpleAIController : MonoBehaviour {
             }
             else
             {
+                
                 if (!dirLeft)
                 {
-                    RaycastHit2D hitCeiling = Physics2D.Raycast(transform.position + new Vector3(0.3f, 0.5f, 0), Vector2.up, 0.5f);
+                    RaycastHit2D hitCeiling = Physics2D.Raycast(transform.position + new Vector3(0.45f, 0.5f, 0),
+                        Vector2.up, 0.1f);
                     if (hitCeiling.collider != null)
                     {
-                        transform.position = transform.position - new Vector3(0.2f, 0);
+                        transform.position = transform.position - new Vector3(0.3f, 0);
                     }
                 }
-                else
-                {
-                    RaycastHit2D hitCeiling = Physics2D.Raycast(transform.position + new Vector3(-0.3f, 0.5f, 0), Vector2.up, 0.5f);
-                    if (hitCeiling.collider != null)
-                    {
-                        transform.position = transform.position + new Vector3(0.2f, 0);
-                    }
-                }
+        
             }
 
             jumpInputTimer += Time.deltaTime;
@@ -246,27 +260,26 @@ public class SimpleAIController : MonoBehaviour {
         {
             if (!dirLeft)
             {
-                if (transform.position.x + 0.5f >= jumpTargetPos.x)
+                if (transform.position.x >= jumpTargetPos.x)
                 {
                     //  MoverCounter++;
                     stopMoveRight = true;
                     transform.position = new Vector3(jumpTargetPos.x, transform.position.y);
                     GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 
-
+                   // spikeBelowStop = false;
                 }
             }
         }
         else
         {
-            if (Vector2.Distance(transform.position, jumpTargetPos) < 1)
+            if (jumpTargetPos.y - jumpTargetPos.y < 0f)
             {
                 dirLeft = false;
-                stopMoveRight = false;
+               // stopMoveRight = false;
                 jumpTargetHit = true;
                 jumpHitIgnore = true;
 
-                standingPlat = jumpTargetTransform;
             }
         }
 
@@ -288,21 +301,57 @@ public class SimpleAIController : MonoBehaviour {
                 }
 
                 RaycastHit2D hitD =
-                    Physics2D.Raycast(transform.position - new Vector3(1f, 0.5f, 0), -Vector2.up, 0.75f);
-                if (!jumpStarted)
-                {
-                    hitD = Physics2D.Raycast(transform.position - new Vector3(1f, 0.5f, 0), -Vector2.up, 2.5f);
-                }
+                    Physics2D.Raycast(transform.position - new Vector3(1f, 0.5f, 0), -Vector2.up, 5f);
 
-                if (hitD.collider != null && !grounded)
+                if (hitD.collider != null && !grounded && !jumpStarted && !hitGround)
                 {
                     if (hitD.transform.gameObject.GetComponent<Spike>() != null)
                     {
                         spikeBelowStop = true;
-                        Debug.Log("OH CRAPPLE SPIKE");
+
+                        //RaycastHit2D hitD2 =
+                        //    Physics2D.Raycast(transform.position - new Vector3(2f, 0.5f, 0), -Vector2.up, 5f);
+
+                        //if (hitD2.collider != null)
+                        //{
+                        //    if (hitD2.transform.gameObject.GetComponent<Spike>() == null)                           
+                        //    {
+                        //       spikeBelowStop = false;
+                        //    }
+                        //}
+
+                    }
+                }
+
+
+                if (spikeBelowStop)
+                {
+                    hitD =
+                        Physics2D.Raycast(transform.position - new Vector3(0f, 0.5f, 0), -Vector2.up, 10f);
+
+                    if (!grounded && !jumpStarted)
+                    {
+                        if (hitD.collider == null)
+                        {
+                            spikeBelowStop = false;
+                        }
+                        else
+                        {
+                            if (hitD.transform.gameObject.GetComponent<Spike>() != null)
+                            {
+                                spikeBelowStop = false;
+                            }
+                            else
+                            {
+                                transform.position = new Vector3(hitD.transform.position.x, transform.position.y);
+                            }
+                        }
                     }
                 }
             }
+
+
+
 
             else
             {
@@ -535,8 +584,6 @@ public class SimpleAIController : MonoBehaviour {
                 jumpTime = 0.3f;
             }
 
-            MoverCounter += nearestDist;
-
              jumpTime = time;
         }
 
@@ -587,7 +634,6 @@ public class SimpleAIController : MonoBehaviour {
     {
         spikeBelowStop = false;
         dirLeft = false;
-        MoverCounter = 0;
 
         failedPlatfromList.Clear();
         doNotRetryPlats.Clear();
