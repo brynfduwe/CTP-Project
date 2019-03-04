@@ -8,6 +8,7 @@ using UnityEditor;
 public class CSVWriter : MonoBehaviour
 {
     public string csvFilePath;
+    private string writeData = "";
 	
 	// Update is called once per frame
 	void Awake ()
@@ -40,21 +41,14 @@ public class CSVWriter : MonoBehaviour
             actionList += a + ",";
         }
 
-        FileStream fs = new FileStream(csvFilePath, FileMode.Append, FileAccess.Write, FileShare.Write);
-        fs.Close();
-        StreamWriter writer = new StreamWriter(csvFilePath, append: true);
-        writer.Write(actionList + "\n");
-        writer.Close();
+        AddToCandidateData(actionList + "\n");
+
     }
 
 
     public void WriteFitness(float fitness)
     {
-        FileStream fs = new FileStream(csvFilePath, FileMode.Append, FileAccess.Write, FileShare.Write);
-        fs.Close();
-        StreamWriter writer = new StreamWriter(csvFilePath, append: true);
-        writer.Write("\nFitness," + fitness.ToString() + "\n\n");
-        writer.Close();
+        AddToCandidateData("\nFitness," + fitness.ToString() + "\n\n");
     }
 
     public void WriteCandidate(List<int[]> transitionMatrix, int candidate, int gen)
@@ -68,12 +62,27 @@ public class CSVWriter : MonoBehaviour
             }
             ptm += "\n";
         }
+        AddToCandidateData("\nCandidate," + (candidate+1).ToString() + "\nGeneration," + gen.ToString() + "\n" + ptm + "\n");
+    }
 
-        FileStream fs = new FileStream(csvFilePath, FileMode.Append, FileAccess.Write, FileShare.Write);
-        fs.Close();
-        StreamWriter writer = new StreamWriter(csvFilePath, append: true);
-        writer.Write("\nCandidate," + (candidate+1).ToString() + "\nGeneration," + gen.ToString() + "\n" + ptm + "\n");
-        writer.Close();
+
+    void AddToCandidateData(string s)
+    {
+        writeData += s;
+    }
+
+    public void CandidateToCSVAndClear(bool sucessfullCandidte)
+    {
+        if (sucessfullCandidte)
+        {
+            FileStream fs = new FileStream(csvFilePath, FileMode.Append, FileAccess.Write, FileShare.Write);
+            fs.Close();
+            StreamWriter writer = new StreamWriter(csvFilePath, append: true);
+            writer.Write(writeData + "\n");
+            writer.Close();
+        }
+
+        writeData = "";
     }
 }
 

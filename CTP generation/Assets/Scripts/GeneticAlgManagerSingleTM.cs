@@ -230,8 +230,14 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                 CandidateFitness.Add(fitness);
                 GetComponent<CSVWriter>().WriteFitness(fitness);
 
+                GetComponent<CSVWriter>().CandidateToCSVAndClear(true);
+
                 candidate++;
                 UImanager.UpdateCandidate(candidate);
+            }
+            else
+            {
+                GetComponent<CSVWriter>().CandidateToCSVAndClear(false);
             }
 
 
