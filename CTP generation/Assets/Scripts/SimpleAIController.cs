@@ -76,12 +76,12 @@ public class SimpleAIController : MonoBehaviour {
     {
         if (jumpStarted)
         {
-            if (jumpTime == 0.3f)
+            if (jumpTime == 0.15f)
             {
                 actions.Add(1);
             }
 
-            if (jumpTime == 0.3f)
+            if (jumpTime == 0.4f)
             {
                 actions.Add(2);
             }
