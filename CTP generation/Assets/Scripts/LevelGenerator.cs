@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class LevelGenerator : MonoBehaviour
@@ -40,6 +41,9 @@ public class LevelGenerator : MonoBehaviour
     private int startX = 0;
 
     Vector2 enforceBranchDirection = Vector2.zero;
+
+
+    List<int> transitionPath = new List<int>();
 
 
     // Use this for initialization
@@ -112,6 +116,8 @@ public class LevelGenerator : MonoBehaviour
         }
 
         platsformObjects.Clear();
+
+        transitionPath.Clear();
 
         for (int i = 0; i < levelLength; i++)
         {
@@ -199,6 +205,8 @@ public class LevelGenerator : MonoBehaviour
         }
 
         currentState = (States) selectedTransition;
+
+        transitionPath.Add((int)currentState);
 
     }
 
@@ -342,5 +350,11 @@ public class LevelGenerator : MonoBehaviour
         }
 
         return false;
+    }
+
+
+    public List<int> GetTransitionPath()
+    {
+        return transitionPath;
     }
 }

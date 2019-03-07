@@ -43,7 +43,9 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
 
 
-    public List<List<int>> candidateAllActions = new List<List<int>>();
+    public List<List<int>> candidateAllActions = new List<List<int>>(); //to learn cost
+
+    public List<List<int>> candidateAllTransitionPaths = new List<List<int>>(); //for 'history'
 
 
     // Use this for initialization
@@ -102,6 +104,8 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
             LGM.GetComponent<LevelGenerator>().SetNewChain(currentProbabilityTransMatrix);
             LGM.GetComponent<LevelGenerator>().NewLevelCandidate();
+
+            candidateAllTransitionPaths.Add(LGM.GetComponent<LevelGenerator>().GetTransitionPath());
         }
 
         transitionMatrixVis.text = "";
@@ -206,6 +210,9 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                         levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
 
 
+                        candidateAllTransitionPaths.Add(levelGMs[i].GetComponent<LevelGenerator>().GetTransitionPath());
+
+
                         candidateAllActions.Add(levelGMs[i].GetComponent<LevelGenerator>().player.gameObject
                             .GetComponent<SimpleAIController>().GetAllActions());
                     }
@@ -225,6 +232,9 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                         levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
 
 
+                        candidateAllTransitionPaths.Add(levelGMs[i].GetComponent<LevelGenerator>().GetTransitionPath());
+
+
                         candidateAllActions.Add(levelGMs[i].GetComponent<LevelGenerator>().player.gameObject
                             .GetComponent<SimpleAIController>().GetAllActions());
                     }
@@ -234,11 +244,37 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
         if (testersDone >= setUp.testers)
         {
+           // float worstFitness = 1;
+            float bestFitness = 0;
+            int bestIter = 0;
+
+            //fitness
             float totalCost = 0;
+
+            int iter = 0;
             foreach (var testerActions in candidateAllActions)
             {
-                totalCost += GetComponent<CostFunction>().CalculateCost(GetComponent<CSVReader>().getOrderedCurveValues(), testerActions);
+                float cost = GetComponent<CostFunction>().CalculateCost(GetComponent<CSVReader>().getOrderedCurveValues(), testerActions);
+                totalCost += cost;
+
+                //if (1 - cost < worstFitness)
+                //    worstFitness = 1 - cost;
+
+                if (1 - cost > bestFitness)
+                {
+                    bestFitness = 1 - cost;
+                    bestIter = iter;
+                }
+                iter++;
             }
+
+            foreach (var i in candidateAllTransitionPaths[bestIter])
+            {
+              // best testers transition path
+              //  Debug.Log(i);
+            }
+
+
 
             float totalAvg = totalCost / testersDone;
             float fitness = 1 - totalAvg;
@@ -260,6 +296,9 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
             }
 
             candidateAllActions.Clear();
+            
+            candidateAllTransitionPaths.Clear();//DO STUFF WITHIT
+
             testersDone = 0;
           //  candidateScore = 0;
 

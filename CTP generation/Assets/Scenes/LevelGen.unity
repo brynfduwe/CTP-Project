@@ -2116,7 +2116,7 @@ MonoBehaviour:
   height: 8
   length: 50
   populationOffspring: 2500
-  candidateReq: 20
+  candidateReq: 10
   minimumFitnessReq: 0.2
   spikes: 0
 --- !u!114 &904623993
