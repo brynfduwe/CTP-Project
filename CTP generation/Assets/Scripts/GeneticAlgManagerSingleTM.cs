@@ -36,10 +36,14 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
     public List<int[]> currentProbabilityTransMatrix = new List<int[]>();
 
-    public int candidateScore = 0;
+   // public int candidateScore = 0;
     public int testersDone = 0;
 
     private int transitions = 0;
+
+
+
+    public List<List<int>> candidateAllActions = new List<List<int>>();
 
 
     // Use this for initialization
@@ -76,7 +80,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
             currentProbabilityTransMatrix.Add(x.ToArray());
         }
 
-        candidateScore = 0;
+      //  candidateScore = 0;
         levelGMs.Clear();
         int y = 0;
 
@@ -190,7 +194,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                     if (levelGMs[i].GetComponent<EventTracker>().SuccessCheck())
                     {
                         levelGMs[i].GetComponent<LevelGenerator>().LockPlayer();
-                        candidateScore++;
+                        //candidateScore++;
                         testersDone++;
 
                         if(setUp.saveImgs)
@@ -200,6 +204,10 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                             levelGMs[i].GetComponent<LevelGenerator>().player.gameObject
                                 .GetComponent<SimpleAIController>().GetAllActions());
                         levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
+
+
+                        candidateAllActions.Add(levelGMs[i].GetComponent<LevelGenerator>().player.gameObject
+                            .GetComponent<SimpleAIController>().GetAllActions());
                     }
 
                     //if fail
@@ -215,6 +223,10 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                             levelGMs[i].GetComponent<LevelGenerator>().player.gameObject
                                 .GetComponent<SimpleAIController>().GetAllActions());
                         levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
+
+
+                        candidateAllActions.Add(levelGMs[i].GetComponent<LevelGenerator>().player.gameObject
+                            .GetComponent<SimpleAIController>().GetAllActions());
                     }
                 }
             }
@@ -222,7 +234,14 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
         if (testersDone >= setUp.testers)
         {
-            float fitness = ((float) candidateScore / testersDone);
+            float totalCost = 0;
+            foreach (var testerActions in candidateAllActions)
+            {
+                totalCost += GetComponent<CostFunction>().CalculateCost(GetComponent<CSVReader>().getOrderedCurveValues(), testerActions);
+            }
+
+            float totalAvg = totalCost / testersDone;
+            float fitness = 1 - totalAvg;
 
             if (fitness >= setUp.minimumFitnessReq)
             {
@@ -240,10 +259,9 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                 GetComponent<CSVWriter>().CandidateToCSVAndClear(false);
             }
 
-
+            candidateAllActions.Clear();
             testersDone = 0;
-            // testersDone = 0;
-            candidateScore = 0;
+          //  candidateScore = 0;
 
             if (generation == 1)
             {

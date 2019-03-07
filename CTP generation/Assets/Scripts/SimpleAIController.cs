@@ -22,7 +22,7 @@ public class SimpleAIController : MonoBehaviour {
     public Transform topPoint2;
 
     public Vector2 maxVelocity;
-
+    
     private float jumpInputTimer;
     private float jumpTime;
 
@@ -56,8 +56,10 @@ public class SimpleAIController : MonoBehaviour {
 
     private bool spikeBelowStop = false;
 
-
     private List<int> actions = new List<int>();
+
+    private float recordPosX = 0.5f;
+    private bool recordRepeat = false;
 
     // Use this for initialization
     void Start()
@@ -68,27 +70,40 @@ public class SimpleAIController : MonoBehaviour {
         jumpTargetPos = transform.position;
         startPos = transform.position + new Vector3(-1, -10);
 
-        InvokeRepeating("AddActions", 0.0f, 0.1f);
+        //InvokeRepeating("AddActions", 0.0f, 0.1f);
     }
 
 
     void AddActions()
     {
-        if (jumpStarted)
+        if (!recordRepeat)
         {
-            if (jumpTime == 0.15f)
+            //add current action
+            if (jumpStarted)
             {
-                actions.Add(1);
+                if (jumpTime == 0.1f)
+                {
+                    actions.Add(1);
+                }
+
+                if (jumpTime == 0.3f)
+                {
+                    actions.Add(2);
+                }
+            }
+            else
+            {
+                actions.Add(0);
+                
             }
 
-            if (jumpTime == 0.4f)
-            {
-                actions.Add(2);
-            }
+            recordRepeat = true;
         }
         else
         {
-            actions.Add(0);
+            //add last action
+            actions.Add(actions[actions.Count - 1]);
+            recordRepeat = false;
         }
     }
 
@@ -97,6 +112,13 @@ public class SimpleAIController : MonoBehaviour {
     void FixedUpdate()
     {
         // actions.Add(Random.Range(0,3));
+
+        if (transform.position.x >= recordPosX)
+        {
+            AddActions();
+            recordPosX++;
+        }
+
 
         grounded = Physics2D.OverlapArea(groundPoint1.position, groundPoint2.position);
 
@@ -123,12 +145,12 @@ public class SimpleAIController : MonoBehaviour {
             RaycastHit2D hitR2 = Physics2D.Raycast(transform.position + new Vector3(1, 1, 0), Vector2.right, 1f);
             if (hitR.collider != null && hitR2.collider == null)
             {
-                StartJump(0.15f);
+                StartJump(0.1f);
             }
 
             if (hitR2.collider != null)
             {
-                StartJump(0.4f);
+                StartJump(0.3f);
             }
 
             RaycastHit2D hitD = Physics2D.Raycast(transform.position + new Vector3(0.7f, 0, 0), -Vector2.up, 3f); ///ahead of player down check
@@ -138,13 +160,13 @@ public class SimpleAIController : MonoBehaviour {
                                                                                                                       //
                 if (hitD2.collider == null)
                 {
-                    StartJump(0.4f);
+                    StartJump(0.3f);
                 }
                 else
                 {
                     if (hitD2.transform.gameObject.GetComponent<Spike>() != null)
                     {
-                        StartJump(0.4f);
+                        StartJump(0.3f);
                     }
                     else
                     {
@@ -152,11 +174,11 @@ public class SimpleAIController : MonoBehaviour {
                         RaycastHit2D hitRAA = Physics2D.Raycast(transform.position + new Vector3(0, 1.7f, 0), Vector2.right, 0.05f);
                         if (hitRA.collider != null || hitRAA.collider != null)
                         {
-                            StartJump(0.4f);
+                            StartJump(0.3f);
                         }
                         else
                         {
-                            StartJump(0.15f);
+                            StartJump(0.1f);
                         }
                     }
                 }
@@ -168,17 +190,17 @@ public class SimpleAIController : MonoBehaviour {
                     RaycastHit2D hitD2 = Physics2D.Raycast(transform.position + new Vector3(1.7f, 0, 0), -Vector2.up, 3f);
                     if (hitD2.collider == null)
                     {
-                        StartJump(0.4f);
+                        StartJump(0.3f);
                     }
                     else
                     {
                         if (hitD2.transform.gameObject.GetComponent<Spike>() != null)
                         {
-                            StartJump(0.4f);
+                            StartJump(0.3f);
                         }
                         else
                         {
-                            StartJump(0.15f);
+                            StartJump(0.1f);
                         }
                     }
                 }
@@ -190,7 +212,7 @@ public class SimpleAIController : MonoBehaviour {
                         {
                             if (hitD.transform == doNotRetryPlats[i].transform)
                             {
-                                StartJump(0.4f);
+                                StartJump(0.3f);
                             }
                         }
                     }
@@ -649,7 +671,10 @@ public class SimpleAIController : MonoBehaviour {
 
         waitJump = false;
 
-        actions.Clear();
+        recordPosX = 0.5f;
+        recordRepeat = false;
+
+    actions.Clear();
     }
 
     public List<int> GetAllActions()

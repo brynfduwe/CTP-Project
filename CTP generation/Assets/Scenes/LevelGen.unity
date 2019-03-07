@@ -2066,6 +2066,7 @@ GameObject:
   - component: {fileID: 904623994}
   - component: {fileID: 904623995}
   - component: {fileID: 904623990}
+  - component: {fileID: 904623996}
   m_Layer: 0
   m_Name: GeneticManager
   m_TagString: GAManager
@@ -2084,8 +2085,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f8f64ee0e4bda246ad0c578fecbedf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  file: {fileID: 4900000, guid: 305b8d97ff3228f4cbec960c2838d2f8, type: 3}
-  values: []
+  file: {fileID: 4900000, guid: 8a1433e3eb40c38479cb3b4fcd9292e7, type: 3}
 --- !u!4 &904623991
 Transform:
   m_ObjectHideFlags: 0
@@ -2114,11 +2114,11 @@ MonoBehaviour:
   testers: 100
   testersOnScreen: 10
   height: 8
-  length: 120
-  populationOffspring: 100
-  candidateReq: 10
-  minimumFitnessReq: 0.1
-  spikes: 1
+  length: 50
+  populationOffspring: 2500
+  candidateReq: 20
+  minimumFitnessReq: 0.2
+  spikes: 0
 --- !u!114 &904623993
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2141,7 +2141,6 @@ MonoBehaviour:
   failedJumpPlats: []
   transitionMatrixVis: {fileID: 1014989345}
   setUp: {fileID: 904623992}
-  candidateScore: 0
   testersDone: 0
 --- !u!114 &904623994
 MonoBehaviour:
@@ -2167,6 +2166,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   folderPath: Assets/ScreenCaps/
+--- !u!114 &904623996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 904623989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0bd173a09b7efa4282ed90ef3f31229, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &909959604
 GameObject:
   m_ObjectHideFlags: 0
