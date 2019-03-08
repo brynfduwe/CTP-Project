@@ -124,15 +124,20 @@ public class LevelGenerator : MonoBehaviour
         {
             SwitchStates();
 
+            if ((int) currentState < levelHeight * 2 && (int) currentState > levelHeight)
+            {
+                currentState = States.NoGround;
+            }
+
             if (currentState != States.NoGround)
             {
                 GameObject toSpawn = ground;
                 int spawnY = yPos + (int) currentState;
 
-                if ((int) currentState > levelHeight)
+                if ((int) currentState > levelHeight * 2)
                 {
                     toSpawn = spikePlat;
-                    spawnY -= (levelHeight + 1);
+                    spawnY -= ((levelHeight / 2) + 1);
                 }
 
                 GameObject plat = Instantiate(toSpawn, new Vector3(xPos, spawnY, 0),

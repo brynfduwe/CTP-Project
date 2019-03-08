@@ -61,10 +61,11 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
         List<int> x = new List<int>();
 
-        transitions = setUp.height;
+        transitions = setUp.height; // ground 
+        transitions += setUp.height; // gaps
         if (setUp.spikes == true)
         {
-            transitions = transitions + setUp.height;
+            transitions = transitions + setUp.height; // spikes
         }
 
         for (int j = 0; j < transitions; j++)
@@ -278,7 +279,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
             if (fitness >= setUp.minimumFitnessReq)
             {
                 CandidateList.Add(currentProbabilityTransMatrix);
-                CandidateFitness.Add(fitness);
+                CandidateFitness.Add(fitness * 5);
                 GetComponent<CSVWriter>().WriteFitness(fitness);
 
                 GetComponent<CSVWriter>().CandidateToCSVAndClear(true);
@@ -403,7 +404,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
         float totalFitness = 0;
         foreach (var f in CandidateFitness)
         {
-            totalFitness += f;
+            totalFitness += f; //multiplcation to weed out worse candidates futher
         }
 
         float r = Random.Range(0, totalFitness);

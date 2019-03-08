@@ -2816,7 +2816,7 @@ MonoBehaviour:
   length: 50
   populationOffspring: 2500
   candidateReq: 10
-  minimumFitnessReq: 0.1
+  minimumFitnessReq: 0.125
   spikes: 0
   mapping: 0
 --- !u!4 &1294654220

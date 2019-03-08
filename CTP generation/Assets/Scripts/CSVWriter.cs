@@ -26,8 +26,7 @@ public class CSVWriter : MonoBehaviour
         StreamWriter writer = new StreamWriter(csvFilePath, append: true);
         writer.Write("Fitness Required," + fitnessReq.ToString() + "\n"
                      + "Level Height" + "," + height.ToString() + "\n" 
-                     + "Level Length" + "," + levelLength.ToString() + "\n"
-                      +"Actions Key, 0 = move right, 1 = small jump, 2 = high jump \n");
+                     + "Level Length" + "," + levelLength.ToString() + "\n");
         writer.Close();
     }
 

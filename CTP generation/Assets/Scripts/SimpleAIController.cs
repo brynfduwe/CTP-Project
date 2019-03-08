@@ -58,7 +58,7 @@ public class SimpleAIController : MonoBehaviour {
     private bool spikeBelowStop = false;
 
     private List<int> actions = new List<int>();
-    private float recordPosX = 0.3f;
+    private float recordPosX = 0.45f;
     private bool recordRepeat = false;
     SetUpManager.MappingType mapping;
     private int prevIterToCheck = 0;
@@ -109,14 +109,20 @@ void AddActions()
                 int[] changeVector = {0, 0};
                 for (int j = 0; j < inputVector.Length; j++)
                 {
-                    if (inputVector[j] != prevInputVector[prevIterToCheck - prevIterToCheck][j]) // compares the input from x tiles back
-                        changeVector[j] = 1;
+                    bool different = false;
+                    for (int i = 1; i < prevIterToCheck; i++)
+                    {
+                        if (inputVector[j] != prevInputVector[prevIterToCheck - i][j] ) // compares the input from x tiles back
+                            different = true;
+                    }
+                    if(different)
+                       changeVector[j] = 1;
                 }
 
                 actions.Add(changeVector.Sum());
 
-                if (prevInputVector.Count <= 2)
-                    prevIterToCheck++; // updates to be 3 behind after the tester has moved enough
+                if (prevInputVector.Count <= 5)
+                    prevIterToCheck++; // updates to be 5 behind after the tester has moved enough
 
              
                 break;
@@ -165,15 +171,16 @@ void AddActions()
     // Update is called once per frame
     void Update()
     {
-        // actions.Add(Random.Range(0,3));
-
         if (transform.position.x >= recordPosX)
         {
             AddActions();
             recordPosX = recordPosX + 1;
         }
+    }
 
-
+    void FixedUpdate()
+    {
+        // actions.Add(Random.Range(0,3));
         grounded = Physics2D.OverlapArea(groundPoint1.position, groundPoint2.position);
 
         if (grounded)
@@ -725,7 +732,7 @@ void AddActions()
 
         waitJump = false;
 
-        recordPosX = 0.3f;
+        recordPosX = 0.45f;
         recordRepeat = false;
 
         prevInputVector.Clear();
