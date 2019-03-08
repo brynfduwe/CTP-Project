@@ -17,27 +17,18 @@ public class SetUpManager : MonoBehaviour
 
     public bool spikes;
 
+    public enum MappingType
+    {
+        InputChangeRate,
+        ReactionDelay,
+        Health
+    }
+
+    public MappingType mapping;
+
     // Use this for initialization
     void Start()
     {
 
-    }
-
-
-    public float GetTesterNum()
-    {
-        return testers;
-    }
-
-
-    public void DisableStartUI()
-    {
-        //restCov.interactable = false;
-        //start.interactable = false;
-        //testers.interactable = false;
-        //height.interactable = false;
-        //length.interactable = false;
-        //candidateReq.interactable = false;
-        //populationOffspring.interactable = false;
     }
 }

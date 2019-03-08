@@ -8,10 +8,11 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
     public GameObject LevelGenerator;
 
-    public int candidateGoal = 10;
-    public int offSpringPopulation = 25;
-    private float failedYpos;
+    int candidateGoal = 10;
+    int offSpringPopulation = 25;
     public UIManager UImanager;
+    public Text transitionMatrixVis;
+    public SetUpManager setUp;
     public int generation = 1;
     private int candidate = 1;
     private float FitnessTimer;
@@ -22,17 +23,11 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
     public List<GameObject> levelGMs = new List<GameObject>();
 
-    public List<GameObject> failedJumpPlats = new List<GameObject>();
-
     int TimeScale = 1;
 
     List<int[]> finalCandidate = new List<int[]>();
 
     private int finalGen = 0;
-
-    public Text transitionMatrixVis;
-
-    public SetUpManager setUp;
 
     public List<int[]> currentProbabilityTransMatrix = new List<int[]>();
 
@@ -51,10 +46,11 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        GetComponent<CostFunction>().SetMapping(setUp.mapping);
+
+
         candidateGoal = setUp.candidateReq;
         offSpringPopulation = setUp.populationOffspring;
-
-        failedYpos = transform.position.y - 1;
 
         generation = 1;
         candidate = 0;
@@ -99,7 +95,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
         foreach (var LGM in levelGMs)
         {
-            LGM.GetComponent<LevelGenerator>().MyStart(setUp.height, setUp.length, transitions);
+            LGM.GetComponent<LevelGenerator>().MyStart(setUp.height, setUp.length, transitions, setUp.mapping);
           //  LGM.GetComponent<LevelGenerator>().SetRests(setUp.GetRestCov());
 
             LGM.GetComponent<LevelGenerator>().SetNewChain(currentProbabilityTransMatrix);
@@ -295,8 +291,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                 GetComponent<CSVWriter>().CandidateToCSVAndClear(false);
             }
 
-            candidateAllActions.Clear();
-            
+            candidateAllActions.Clear();       
             candidateAllTransitionPaths.Clear();//DO STUFF WITHIT
 
             testersDone = 0;

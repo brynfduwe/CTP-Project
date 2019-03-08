@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SimpleAIController : MonoBehaviour {
@@ -57,9 +58,11 @@ public class SimpleAIController : MonoBehaviour {
     private bool spikeBelowStop = false;
 
     private List<int> actions = new List<int>();
-
-    private float recordPosX = 0.5f;
+    private float recordPosX = 0.3f;
     private bool recordRepeat = false;
+    SetUpManager.MappingType mapping;
+    private int prevIterToCheck = 0;
+    private List<int[]> prevInputVector = new List<int[]>(); //right, a(jump)
 
     // Use this for initialization
     void Start()
@@ -74,49 +77,100 @@ public class SimpleAIController : MonoBehaviour {
     }
 
 
-    void AddActions()
+    public void SetMapping(SetUpManager.MappingType set)
     {
-        if (!recordRepeat)
+        mapping = set;
+    }
+
+    //if (jumpHitIgnore || !stopMoveRight)
+    //{
+    //    if (!waitJump && !spikeBelowStop)
+    //    {
+    //        if (!dirLeft)
+    //        {
+    //            transform.Translate(Vector3.right* Time.deltaTime* speed);
+    //        }
+
+void AddActions()
+    {
+        switch (mapping)
         {
-            //add current action
-            if (jumpStarted)
-            {
-                if (jumpTime == 0.1f)
+            case SetUpManager.MappingType.InputChangeRate:
+                int[] inputVector = { 0, 0 };
+                if (jumpHitIgnore || !stopMoveRight)
+                    if (!waitJump && !spikeBelowStop)
+                        if (!dirLeft)
+                            inputVector[0] = 1; // right
+                if(jumpStarted)
+                inputVector[1] = 1; //jump
+
+                prevInputVector.Add(inputVector); // ads to list
+
+                int[] changeVector = {0, 0};
+                for (int j = 0; j < inputVector.Length; j++)
                 {
-                    actions.Add(1);
+                    if (inputVector[j] != prevInputVector[prevIterToCheck - prevIterToCheck][j]) // compares the input from x tiles back
+                        changeVector[j] = 1;
                 }
 
-                if (jumpTime == 0.3f)
-                {
-                    actions.Add(2);
-                }
-            }
-            else
-            {
-                actions.Add(0);
-                
-            }
+                actions.Add(changeVector.Sum());
 
-            recordRepeat = true;
-        }
-        else
-        {
-            //add last action
-            actions.Add(actions[actions.Count - 1]);
-            recordRepeat = false;
+                if (prevInputVector.Count <= 2)
+                    prevIterToCheck++; // updates to be 3 behind after the tester has moved enough
+
+             
+                break;
+            case SetUpManager.MappingType.ReactionDelay:
+
+                break;
+            case SetUpManager.MappingType.Health:
+
+                break;
+            default:
+                if (!recordRepeat)
+                {
+                    //add current action
+                    if (jumpStarted)
+                    {
+                        if (jumpTime == 0.1f)
+                        {
+                            actions.Add(1);
+                        }
+
+                        if (jumpTime == 0.3f)
+                        {
+                            actions.Add(2);
+                        }
+                    }
+                    else
+                    {
+                        actions.Add(0);
+
+                    }
+
+                    recordRepeat = true;
+                }
+                else
+                {
+                    //add last action
+                    actions.Add(actions[actions.Count - 1]);
+                    recordRepeat = false;
+                }
+                break;
+
         }
     }
 
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         // actions.Add(Random.Range(0,3));
 
         if (transform.position.x >= recordPosX)
         {
             AddActions();
-            recordPosX++;
+            recordPosX = recordPosX + 1;
         }
 
 
@@ -671,10 +725,13 @@ public class SimpleAIController : MonoBehaviour {
 
         waitJump = false;
 
-        recordPosX = 0.5f;
+        recordPosX = 0.3f;
         recordRepeat = false;
 
-    actions.Clear();
+        prevInputVector.Clear();
+        prevIterToCheck = 0;
+
+        actions.Clear();
     }
 
     public List<int> GetAllActions()

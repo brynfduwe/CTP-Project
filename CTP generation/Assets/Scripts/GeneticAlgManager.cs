@@ -51,18 +51,18 @@ public class GeneticAlgManager : MonoBehaviour
 
         levelGMs.Clear();
         int y = 0;
-        for (int i = 0; i < setUp.GetTesterNum(); i++)
-        {
-            y += setUp.height;
-            Vector2 pos = transform.position - new Vector3(0, y);
-            GameObject gobj = Instantiate(LevelGenerator, pos, transform.rotation);
-            levelGMs.Add(gobj);
-            y += 10;
-        }
+        //for (int i = 0; i < setUp.GetTesterNum(); i++)
+        //{
+        //    y += setUp.height;
+        //    Vector2 pos = transform.position - new Vector3(0, y);
+        //    GameObject gobj = Instantiate(LevelGenerator, pos, transform.rotation);
+        //    levelGMs.Add(gobj);
+        //    y += 10;
+        //}
 
         foreach (var LGM in levelGMs)
         {
-            LGM.GetComponent<LevelGenerator>().MyStart(setUp.height, setUp.length, setUp.length);
+         //   LGM.GetComponent<LevelGenerator>().MyStart(setUp.height, setUp.length, setUp.length);
          //  LGM.GetComponent<LevelGenerator>().SetRests(setUp.GetRestCov());
             LGM.GetComponent<LevelGenerator>().RandomChain();
             LGM.GetComponent<LevelGenerator>().NewLevelCandidate();

@@ -59,8 +59,9 @@ public class LevelGenerator : MonoBehaviour
     }
 
 
-    public void MyStart(int height, int length, int transitions)
+    public void MyStart(int height, int length, int transitions, SetUpManager.MappingType mapping)
     {
+        player.GetComponent<SimpleAIController>().SetMapping(mapping);
 
         levelLength = length;
         levelHeight = height;
