@@ -32,6 +32,8 @@ public class SimpleAIController : MonoBehaviour {
     private Transform jumpTargetTransform;
     private bool stopMoveRight;
 
+    private Transform standingPlat;
+
     private bool jumpHitIgnore = true;
 
     private Vector2 startPos;
@@ -91,7 +93,7 @@ public class SimpleAIController : MonoBehaviour {
     //            transform.Translate(Vector3.right* Time.deltaTime* speed);
     //        }
 
-void AddActions()
+    void AddActions()
     {
         switch (mapping)
         {
@@ -202,14 +204,15 @@ void AddActions()
                 waitJump = false;
             }
 
-            RaycastHit2D hitR = Physics2D.Raycast(transform.position + new Vector3(1, 0, 0), Vector2.right, 0.05f);
-            RaycastHit2D hitR2 = Physics2D.Raycast(transform.position + new Vector3(1, 1, 0), Vector2.right, 1f);
-            if (hitR.collider != null && hitR2.collider == null)
+            RaycastHit2D hitR = Physics2D.Raycast(transform.position + new Vector3(0.5f, 0, 0), Vector2.right, 0.05f);
+            RaycastHit2D hitR2 = Physics2D.Raycast(transform.position + new Vector3(0.5f, 1, 0), Vector2.right, 1f);
+            RaycastHit2D hitR3 = Physics2D.Raycast(transform.position + new Vector3(0.5f, 2, 0), Vector2.right, 1f);
+            if (hitR.collider != null && hitR2.collider == null && hitR3.collider == null)
             {
                 StartJump(0.1f);
             }
 
-            if (hitR2.collider != null)
+            if (hitR2.collider != null || hitR3.collider != null)
             {
                 StartJump(0.3f);
             }
@@ -353,6 +356,16 @@ void AddActions()
                    // spikeBelowStop = false;
                 }
             }
+            else
+            {
+                if (transform.position.x + 0.5f <= jumpTargetPos.x)
+                {
+                    //  MoverCounter++;
+                    stopMoveRight = true;
+                    transform.position = new Vector3(jumpTargetPos.x, transform.position.y);
+                    GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                }
+            }
         }
         else
         {
@@ -362,6 +375,8 @@ void AddActions()
                // stopMoveRight = false;
                 jumpTargetHit = true;
                 jumpHitIgnore = true;
+
+                standingPlat = jumpTargetTransform;
 
             }
         }
@@ -380,7 +395,25 @@ void AddActions()
             {
                 if (!dirLeft)
                 {
-                    transform.Translate(Vector3.right * Time.deltaTime * speed);
+                    RaycastHit2D hitD0 = Physics2D.Raycast(groundPoint1.transform.position, -Vector2.up, 2.5f);
+                    RaycastHit2D hitD1 = Physics2D.Raycast(groundPoint2.transform.position, -Vector2.up, 2.5f);
+                    RaycastHit2D hitD2 = Physics2D.Raycast(transform.position + new Vector3(1f, -0.5f, 0), -Vector2.up, 2.5f);
+                    RaycastHit2D hitD3 = Physics2D.Raycast(transform.position + new Vector3(2f, -0.5f, 0), -Vector2.up, 3f);
+                    if (!grounded && !jumpStarted && hitD1.collider != null && hitD0.collider != null && hitD2.collider == null)
+                    {
+                        if (hitD1.collider.gameObject.GetComponent<Spike>() != null)
+                        {
+                            transform.Translate(Vector3.right * Time.deltaTime * speed);
+                        }
+                    }
+                    else
+                    {
+                        transform.Translate(Vector3.right * Time.deltaTime * speed);
+                    }
+                }
+                else
+                {
+                    transform.Translate(-Vector3.right * Time.deltaTime * speed);
                 }
 
                 RaycastHit2D hitD =
@@ -487,7 +520,7 @@ void AddActions()
 
             int possibleRoutes = 0;
             //target platform picker.
-            Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 20);
+            Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 30);
 
             Transform nearestCol = cols[0].transform;
             float nearestDist = 100;
@@ -523,7 +556,7 @@ void AddActions()
                                 inFailed = true;
                         }
 
-                        if (Vector2.Distance(transform.position, cols[i].transform.position) > 15)
+                        if (Vector2.Distance(transform.position, cols[i].transform.position) > 25)
                         {
                             inFailed = true;
                         }
@@ -544,7 +577,7 @@ void AddActions()
                             tDist -= yDist * 1.5f;
                         }
 
-                        if (tDist > 5)
+                        if (tDist > 10)
                         {
                             inFailed = true;
                         }
@@ -620,6 +653,93 @@ void AddActions()
                 {
                     lastJumpedOffPlat = hit.transform;
                 }
+            }
+            else
+            {
+                RaycastHit2D hit = Physics2D.Raycast(transform.position + new Vector3(-0.2f, -0.5f, 0), -Vector2.up, 3f);
+                if (hit.collider != null)
+                {
+                    doNotRetryPlats.Add(hit.transform);
+
+                    if (!doNotColor)
+                        hit.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+
+                }
+
+                dirLeft = true;
+                // failedPlats.Clear();           
+
+
+                if (standingPlat != null)
+                {
+                    //  doNotRetryPlats.Add(standingPlat);
+                    //  standingPlat.gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
+                }
+
+
+
+                if (lastJumpedOffPlat != null)
+                {
+                    //     doNotRetryPlats.Add(lastJumpedOffPlat);
+                    //     lastJumpedOffPlat.transform.GetComponent<SpriteRenderer>().color = Color.red;
+                }
+
+
+                for (int i = 0; i < cols.Length; i++)
+                {
+                    if (cols[i].gameObject != this.gameObject)
+                    {
+                        bool inFailed = false;
+
+                        foreach (var c in doNotRetryPlats)
+                        {
+                            if (c == cols[i].transform)
+                                inFailed = true;
+                        }
+
+                        if (inFailed == false)
+                        {
+                            //angle check
+                            Vector3 playerDir = cols[i].transform.position - transform.position;
+
+                            float angle = Vector3.Dot(playerDir, -cols[i].transform.right);
+
+
+                            if (angle > 2f)
+                            {
+                                bool failNear = false;
+                                if (lastTriedPlat != null)
+                                {
+                                    if (nearestCol == lastTriedPlat)
+                                    {
+                                        failNear = true;
+                                    }
+                                }
+
+                                if (!failNear)
+                                {
+                                    float dist = Vector2.Distance(transform.position, cols[i].transform.position);
+                                    if (dist < nearestDist)
+                                    {
+                                        nearestDist = Vector2.Distance(transform.position, cols[i].transform.position);
+                                        nearestCol = cols[i].transform;
+                                        lastTriedPlat = nearestCol;
+                                    }
+
+                                    possibleRoutes++;
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+                //  nearestCol.gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
+                jumpTargetTransform = nearestCol.transform;
+
+                jumpTargetPos = nearestCol.position;
+                //    Debug.Log(nearestDist.ToString());
+
             }
 
             if (lastTriedPlat != null)
@@ -739,6 +859,35 @@ void AddActions()
         prevIterToCheck = 0;
 
         actions.Clear();
+    }
+
+
+    public void BackToLastTile()
+    {
+        if (lastJumpedOffPlat != null && jumpTargetTransform != null)
+        {
+            spikeBelowStop = false;
+            dirLeft = false;
+            jumpTargetHit = true;
+            jumpHitIgnore = true;
+            stopMoveRight = false;
+            waitJump = false;
+
+            foreach (var fp in failedPlatfromList)
+            {
+                if (fp.referenceTransform == lastJumpedOffPlat.transform)
+                {
+                    fp.AddFailedPlat(jumpTargetTransform.transform);
+                }
+            }
+
+            transform.position = lastJumpedOffPlat.position + new Vector3(0, 1.1f, 0);
+        }
+        else
+        {
+
+        }
+
     }
 
     public List<int> GetAllActions()

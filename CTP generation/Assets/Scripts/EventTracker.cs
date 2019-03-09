@@ -73,7 +73,7 @@ public class EventTracker : MonoBehaviour
 
     public bool SuccessCheck()
     {
-        if (player.transform.position.x > successX && player.transform.position.y >= failY && transform.position.y > successY)  
+        if (player.transform.position.x > successX - 1 && player.transform.position.y >= failY && transform.position.y > successY - 1)  
         {
             return true;
         }
@@ -85,6 +85,7 @@ public class EventTracker : MonoBehaviour
     {
         if (player.transform.position.y < failY)
         {
+          //  player.GetComponent<SimpleAIController>().BackToLastTile();
             return true;
         }
 

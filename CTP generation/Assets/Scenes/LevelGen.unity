@@ -2813,10 +2813,10 @@ MonoBehaviour:
   testers: 100
   testersOnScreen: 10
   height: 10
-  length: 50
+  length: 100
   populationOffspring: 2500
   candidateReq: 10
-  minimumFitnessReq: 0.125
+  minimumFitnessReq: 0.15
   spikes: 0
   mapping: 0
 --- !u!4 &1294654220
