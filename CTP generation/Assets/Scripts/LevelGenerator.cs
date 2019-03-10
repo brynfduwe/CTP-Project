@@ -100,7 +100,7 @@ public class LevelGenerator : MonoBehaviour
     void GenerateLevel()
     {
         player.gameObject.SetActive(true);
-
+       
         player.transform.position = startPlayerPos + new Vector2(0, 2);
 
         if (player.GetComponent<SimpleAIController>() != null)
@@ -124,7 +124,7 @@ public class LevelGenerator : MonoBehaviour
         {
             SwitchStates();
 
-            if ((int) currentState < levelHeight * 2 && (int) currentState > levelHeight)
+            if ((int) currentState < (levelHeight) * 2 && (int) currentState > levelHeight)
             {
                 currentState = States.NoGround;
             }
@@ -132,12 +132,12 @@ public class LevelGenerator : MonoBehaviour
             if (currentState != States.NoGround)
             {
                 GameObject toSpawn = ground;
-                int spawnY = yPos + (int) currentState;
+                int spawnY = yPos + (int) currentState - 1;
 
-                if ((int) currentState > levelHeight * 2)
+                if ((int) currentState >= (levelHeight) * 2)
                 {
                     toSpawn = spikePlat;
-                    spawnY -= ((levelHeight / 2) + 1);
+                    spawnY = spawnY - (levelHeight * 2);
                 }
 
                 GameObject plat = Instantiate(toSpawn, new Vector3(xPos, spawnY, 0),
@@ -163,7 +163,18 @@ public class LevelGenerator : MonoBehaviour
         {
             currentState = States.Ground1;
         }
-        GameObject end = Instantiate(endFlag, new Vector3(xPos, transform.position.y + (int)currentState, 0), ground.transform.rotation, transform);
+
+        int ypos = yPos + (int)currentState - 1; ;
+        if ((int)currentState >= (levelHeight) * 2)
+        {
+            ypos = ypos - (levelHeight * 2);
+        }
+        if ((int)currentState >= (levelHeight))
+        {
+            ypos = ypos - (levelHeight);
+        }
+
+        GameObject end = Instantiate(endFlag, new Vector3(xPos, ypos, 0), ground.transform.rotation, transform);
         GameObject endPlus = Instantiate(ground, end.transform.position + new Vector3(1,0, 0), ground.transform.rotation, transform);
         platsformObjects.Add(end);
         platsformObjects.Add(endPlus);
@@ -178,7 +189,7 @@ public class LevelGenerator : MonoBehaviour
 
 
 
-        GetComponent<EventTracker>().SetYSuccess(platsformObjects[platsformObjects.Count - 1].transform.localPosition.y -1);
+        GetComponent<EventTracker>().SetSuccess(end.transform);
 
 
         ////transition matrix visualisation

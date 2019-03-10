@@ -5,8 +5,7 @@ using UnityEngine;
 public class EventTracker : MonoBehaviour
 {
     private float failY;
-    private float successX;
-    private float successY;
+    private Transform successPos;
     public Transform player;
 
     private float lastX;
@@ -19,7 +18,6 @@ public class EventTracker : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-	    successX = GetComponent<LevelGenerator>().levelLength - 1;
 	    failY = transform.position.y - 2;
 	    lastX = player.transform.position.x - 100;
 	    startX = lastX;
@@ -38,9 +36,9 @@ public class EventTracker : MonoBehaviour
     }
 
 
-    public void SetYSuccess(float y)
+    public void SetSuccess(Transform success)
     {
-        successY = y;
+        successPos = success;
     }
 
 
@@ -73,7 +71,7 @@ public class EventTracker : MonoBehaviour
 
     public bool SuccessCheck()
     {
-        if (player.transform.position.x > successX - 1 && player.transform.position.y >= failY && transform.position.y > successY - 1)  
+        if (player.transform.position.x > successPos.transform.position.x - 1 && player.transform.position.y > failY && transform.position.y > successPos.transform.position.y - 1)  
         {
             return true;
         }
@@ -81,11 +79,12 @@ public class EventTracker : MonoBehaviour
         return false;
     }
 
+
     public bool FailCheck()
     {
         if (player.transform.position.y < failY)
         {
-          //  player.GetComponent<SimpleAIController>().BackToLastTile();
+            //  player.GetComponent<SimpleAIController>().BackToLastTile();
             return true;
         }
 

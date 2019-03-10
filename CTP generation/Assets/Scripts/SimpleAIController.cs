@@ -272,11 +272,17 @@ public class SimpleAIController : MonoBehaviour {
                 {
                     for (int i = 0; i < doNotRetryPlats.Count; i++)
                     {
-                        if (doNotRetryPlats[i].gameObject != null)
+                        if (doNotRetryPlats[i] != null)
                         {
-                            if (hitD.transform == doNotRetryPlats[i].transform)
+                            if (doNotRetryPlats[i].gameObject.GetComponent<Spike>() != null)
                             {
-                                StartJump(0.3f);
+                                if (doNotRetryPlats[i].gameObject != null)
+                                {
+                                    if (hitD.transform == doNotRetryPlats[i].transform)
+                                    {
+                                        StartJump(0.3f);
+                                    }
+                                }
                             }
                         }
                     }
@@ -395,13 +401,49 @@ public class SimpleAIController : MonoBehaviour {
             {
                 if (!dirLeft)
                 {
-                    RaycastHit2D hitD0 = Physics2D.Raycast(groundPoint1.transform.position, -Vector2.up, 2.5f);
-                    RaycastHit2D hitD1 = Physics2D.Raycast(groundPoint2.transform.position, -Vector2.up, 2.5f);
-                    RaycastHit2D hitD2 = Physics2D.Raycast(transform.position + new Vector3(1f, -0.5f, 0), -Vector2.up, 2.5f);
-                    RaycastHit2D hitD3 = Physics2D.Raycast(transform.position + new Vector3(2f, -0.5f, 0), -Vector2.up, 3f);
-                    if (!grounded && !jumpStarted && hitD1.collider != null && hitD0.collider != null && hitD2.collider == null)
+                    if (!grounded)
                     {
-                        if (hitD1.collider.gameObject.GetComponent<Spike>() != null)
+                        RaycastHit2D hitD0 = Physics2D.Raycast(groundPoint1.transform.position , -Vector2.up, 3f);
+                        RaycastHit2D hitD1 = Physics2D.Raycast(groundPoint2.transform.position, -Vector2.up, 3f);
+                        RaycastHit2D hitD2 = Physics2D.Raycast(transform.position + new Vector3(1f, -0.5f, 0),
+                            -Vector2.up, 15f);
+                        RaycastHit2D hitD3 = Physics2D.Raycast(transform.position + new Vector3(2f, -0.5f, 0),
+                            -Vector2.up, 3f);
+
+
+                        if ((hitD0.collider != null && hitD1.collider != null) && !jumpStarted)
+                        {
+                            if (hitD0.collider.gameObject.GetComponent<Spike>() == null &&
+                                hitD1.collider.gameObject.GetComponent<Spike>() == null)
+                            {
+                                if (hitD2.collider == null)
+                                {
+                                    if (hitD1.collider.gameObject.GetComponent<Spike>() != null)
+                                    {
+                                        transform.Translate(Vector3.right * Time.deltaTime * speed);
+                                    }
+                                }
+                                else
+                                {
+                                    if (hitD2.collider.gameObject.GetComponent<Spike>() != null)
+                                    {
+                                        if (hitD1.collider.gameObject.GetComponent<Spike>() != null)
+                                        {
+                                            transform.Translate(Vector3.right * Time.deltaTime * speed);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        transform.Translate(Vector3.right * Time.deltaTime * speed);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                transform.Translate(Vector3.right * Time.deltaTime * speed);
+                            }
+                        }
+                        else
                         {
                             transform.Translate(Vector3.right * Time.deltaTime * speed);
                         }
@@ -410,6 +452,7 @@ public class SimpleAIController : MonoBehaviour {
                     {
                         transform.Translate(Vector3.right * Time.deltaTime * speed);
                     }
+
                 }
                 else
                 {
@@ -465,10 +508,6 @@ public class SimpleAIController : MonoBehaviour {
                     }
                 }
             }
-
-
-
-
             else
             {
             //    RaycastHit2D hitD = Physics2D.Raycast(transform.position + new Vector3(-0, -0.5f, 0), -Vector2.up, 4f);
@@ -533,9 +572,6 @@ public class SimpleAIController : MonoBehaviour {
 
                     if (cols[i].gameObject.GetComponent<Spike>() == null)
                     {
-
-
-
                         foreach (var fp in failedPlatfromList)
                         {
                             if (fp.referenceTransform == hitD.transform)
@@ -574,10 +610,10 @@ public class SimpleAIController : MonoBehaviour {
                         }
                         else
                         {
-                            tDist -= yDist * 1.5f;
+                            tDist -= yDist * 2;
                         }
 
-                        if (tDist > 10)
+                        if (tDist > 20)
                         {
                             inFailed = true;
                         }
@@ -645,7 +681,7 @@ public class SimpleAIController : MonoBehaviour {
 
 
                 jumpTargetTransform = nearestCol.transform;
-                jumpTargetPos = nearestCol.position;
+                jumpTargetPos = nearestCol.position + new Vector3(0, 0.5f, 0);
                 //    Debug.Log(nearestDist.ToString());
 
                 RaycastHit2D hit = Physics2D.Raycast(transform.position + new Vector3(-0.2f, -0.5f, 0), -Vector2.up, 3f);
@@ -659,10 +695,13 @@ public class SimpleAIController : MonoBehaviour {
                 RaycastHit2D hit = Physics2D.Raycast(transform.position + new Vector3(-0.2f, -0.5f, 0), -Vector2.up, 3f);
                 if (hit.collider != null)
                 {
-                    doNotRetryPlats.Add(hit.transform);
+                    if (hit.collider.gameObject.GetComponent<Spike>()  == null)
+                    {
+                        doNotRetryPlats.Add(hit.transform);
 
-                    if (!doNotColor)
-                        hit.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+                        if (!doNotColor)
+                            hit.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+                    }
 
                 }
 

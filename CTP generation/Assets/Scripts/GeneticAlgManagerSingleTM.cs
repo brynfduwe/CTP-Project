@@ -84,12 +84,11 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
         int y = 0;
 
         for (int i = 0; i < setUp.testersOnScreen; i++)
-        {
-            y += setUp.height;
+        {      
             Vector2 pos = transform.position - new Vector3(0, y);
             GameObject gobj = Instantiate(LevelGenerator, pos, transform.rotation);
             levelGMs.Add(gobj);
-            y += 10;
+            y += setUp.height + 10;
         }
 
         RandomChain();
