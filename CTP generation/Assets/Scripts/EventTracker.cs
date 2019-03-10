@@ -71,7 +71,7 @@ public class EventTracker : MonoBehaviour
 
     public bool SuccessCheck()
     {
-        if (player.transform.position.x > successPos.transform.position.x - 1 && player.transform.position.y > failY && transform.position.y > successPos.transform.position.y - 1)  
+        if (player.transform.position.x >= successPos.transform.position.x - 2 && player.transform.position.y > failY && transform.position.y >= successPos.transform.position.y - 1)  
         {
             return true;
         }

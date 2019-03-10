@@ -101,10 +101,10 @@ public class SimpleAIController : MonoBehaviour {
                 int[] inputVector = { 0, 0 };
                 if (jumpHitIgnore || !stopMoveRight)
                     if (!waitJump && !spikeBelowStop)
-                        if (!dirLeft)
+                        if (!dirLeft || dirLeft) // left and right are the same input value, as only one or none can be true, not both.  
                             inputVector[0] = 1; // right
                 if(jumpStarted)
-                inputVector[1] = 1; //jump
+                    inputVector[1] = 1; //jump
 
                 prevInputVector.Add(inputVector); // ads to list
 
@@ -123,8 +123,8 @@ public class SimpleAIController : MonoBehaviour {
 
                 actions.Add(changeVector.Sum());
 
-                if (prevInputVector.Count <= 5)
-                    prevIterToCheck++; // updates to be 5 behind after the tester has moved enough
+                if (prevInputVector.Count <= 3)
+                    prevIterToCheck++; // updates to be 3 behind after the tester has moved enough
 
              
                 break;
@@ -173,10 +173,21 @@ public class SimpleAIController : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if (transform.position.x >= recordPosX)
+        if (!dirLeft)
         {
-            AddActions();
-            recordPosX = recordPosX + 1;
+            if (transform.position.x >= recordPosX)
+            {
+                AddActions();
+                recordPosX = recordPosX + 1;
+            }
+        }
+        else
+        {
+            if (transform.position.x <= recordPosX)
+            {
+                actions.Remove(actions.Count);
+                recordPosX = recordPosX - 1;
+            }
         }
     }
 
