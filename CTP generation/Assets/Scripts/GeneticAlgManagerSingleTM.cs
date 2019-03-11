@@ -191,55 +191,32 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
         {
             if (testersDone < setUp.testers)
             {
-                if (!levelGMs[i].GetComponent<LevelGenerator>().CheckPlayerLocked())
+                //if success
+                if (levelGMs[i].GetComponent<EventTracker>().SuccessCheck() ||
+                    levelGMs[i].GetComponent<EventTracker>().FailCheck())
                 {
+                    levelGMs[i].GetComponent<LevelGenerator>().LockPlayer();
+                    //candidateScore++;
+                    testersDone++;
 
-                    //if success
-                    if (levelGMs[i].GetComponent<EventTracker>().SuccessCheck())
-                    {
-                        levelGMs[i].GetComponent<LevelGenerator>().LockPlayer();
-                        //candidateScore++;
-                        testersDone++;
+                    if (setUp.saveImgs)
+                        GetComponent<ScreenCaptureHandler>().ScreenGrab(levelGMs[i].transform.position, candidate,
+                            generation, testersDone);
 
-                        if(setUp.saveImgs)
-                            GetComponent<ScreenCaptureHandler>().ScreenGrab(levelGMs[i].transform.position, candidate, generation, testersDone);
-
-                        GetComponent<CSVWriter>().Write(generation, candidate,
-                            levelGMs[i].GetComponent<LevelGenerator>().player.gameObject
-                                .GetComponent<SimpleAIController>().GetAllActions());
-                        levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
-
-
-                        candidateAllTransitionPaths.Add(levelGMs[i].GetComponent<LevelGenerator>().GetTransitionPath());
-
-
-                        candidateAllActions.Add(levelGMs[i].GetComponent<LevelGenerator>().player.gameObject
+                    GetComponent<CSVWriter>().Write(generation, candidate,
+                        levelGMs[i].GetComponent<LevelGenerator>().player.gameObject
                             .GetComponent<SimpleAIController>().GetAllActions());
-                    }
-
-                    //if fail
-                    if (levelGMs[i].GetComponent<EventTracker>().FailCheck())
-                    {
-                        levelGMs[i].GetComponent<LevelGenerator>().LockPlayer();
-                        testersDone++;
-
-                        if (setUp.saveImgs)
-                            GetComponent<ScreenCaptureHandler>().ScreenGrab(levelGMs[i].transform.position, generation, candidate, testersDone);
-
-                        GetComponent<CSVWriter>().Write(generation, candidate,
-                            levelGMs[i].GetComponent<LevelGenerator>().player.gameObject
-                                .GetComponent<SimpleAIController>().GetAllActions());
-                        levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
+                    levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
 
 
-                        candidateAllTransitionPaths.Add(levelGMs[i].GetComponent<LevelGenerator>().GetTransitionPath());
+                    candidateAllTransitionPaths.Add(levelGMs[i].GetComponent<LevelGenerator>().GetTransitionPath());
 
 
-                        candidateAllActions.Add(levelGMs[i].GetComponent<LevelGenerator>().player.gameObject
-                            .GetComponent<SimpleAIController>().GetAllActions());
-                    }
+                    candidateAllActions.Add(levelGMs[i].GetComponent<LevelGenerator>().player.gameObject
+                        .GetComponent<SimpleAIController>().GetAllActions());
                 }
             }
+
         }
 
         if (testersDone >= setUp.testers)
@@ -255,7 +232,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
             foreach (var testerActions in candidateAllActions)
             {
                 float cost = GetComponent<CostFunction>().CalculateCost(GetComponent<CSVReader>().getOrderedCurveValues(), testerActions);
-                Debug.Log(cost);
+                Debug.Log(1 - cost);
                 totalCost += cost;
 
                 //if (1 - cost < worstFitness)

@@ -135,8 +135,8 @@ public class SimpleAIController : MonoBehaviour {
 
                 actions.Add(changeVector.Sum());
 
-                if (prevInputVector.Count <= 3)
-                    prevIterToCheck++; // updates to be 3 behind after the tester has moved enough
+                if (prevInputVector.Count <= 5)
+                    prevIterToCheck++; // updates to be 5 behind after the tester has moved enough
 
              
                 break;
@@ -145,7 +145,7 @@ public class SimpleAIController : MonoBehaviour {
                
                 break;
             case SetUpManager.MappingType.Health:
-                actions.Add(health);
+                actions.Add(health - 1);
                 break;
             default:
                 if (!recordRepeat)
@@ -622,7 +622,7 @@ public class SimpleAIController : MonoBehaviour {
                 {
                     bool inFailed = false;
 
-                    if (cols[i].gameObject.GetComponent<Spike>() == null)
+                    if (cols[i].gameObject.GetComponent<Spike>() == null && cols[i].gameObject.GetComponent<HealthPickUp>() == null)
                     {
                         foreach (var fp in failedPlatfromList)
                         {
@@ -747,7 +747,7 @@ public class SimpleAIController : MonoBehaviour {
                 RaycastHit2D hit = Physics2D.Raycast(transform.position + new Vector3(-0.2f, -0.5f, 0), -Vector2.up, 3f);
                 if (hit.collider != null)
                 {
-                    if (hit.collider.gameObject.GetComponent<Spike>()  == null)
+                    if (hit.collider.gameObject.GetComponent<Spike>()  == null && hit.collider.gameObject.GetComponent<HealthPickUp>() == null)
                     {
                         doNotRetryPlats.Add(hit.transform);
 

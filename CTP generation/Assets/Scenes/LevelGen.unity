@@ -2812,7 +2812,7 @@ MonoBehaviour:
   saveImgs: 0
   testers: 100
   testersOnScreen: 10
-  height: 7
+  height: 5
   length: 100
   populationOffspring: 2500
   candidateReq: 10
