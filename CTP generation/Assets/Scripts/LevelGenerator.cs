@@ -9,6 +9,7 @@ public class LevelGenerator : MonoBehaviour
     public GameObject ground;
     public GameObject endFlag;
     public GameObject spikePlat;
+    public GameObject heartPlat;
 
     public Text transitionMatrixVis;
 
@@ -134,10 +135,16 @@ public class LevelGenerator : MonoBehaviour
                 GameObject toSpawn = ground;
                 int spawnY = yPos + (int) currentState - 1;
 
-                if ((int) currentState >= (levelHeight) * 2)
+                if ((int) currentState >= (levelHeight) * 2 && (int)currentState  < (levelHeight) * 3)
                 {
                     toSpawn = spikePlat;
                     spawnY = spawnY - (levelHeight * 2);
+                }
+
+                if ((int)currentState >= (levelHeight) * 3)
+                {
+                    toSpawn = heartPlat;
+                    spawnY = spawnY - (levelHeight * 3);
                 }
 
                 GameObject plat = Instantiate(toSpawn, new Vector3(xPos, spawnY, 0),

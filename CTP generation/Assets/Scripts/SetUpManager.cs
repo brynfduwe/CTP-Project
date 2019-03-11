@@ -16,6 +16,7 @@ public class SetUpManager : MonoBehaviour
     public float minimumFitnessReq;
 
     public bool spikes;
+    public bool hearts;
 
     public enum MappingType
     {

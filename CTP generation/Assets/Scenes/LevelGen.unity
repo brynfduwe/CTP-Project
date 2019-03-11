@@ -2812,13 +2812,14 @@ MonoBehaviour:
   saveImgs: 0
   testers: 100
   testersOnScreen: 10
-  height: 10
+  height: 7
   length: 100
   populationOffspring: 2500
   candidateReq: 10
   minimumFitnessReq: 0.15
   spikes: 1
-  mapping: 0
+  hearts: 1
+  mapping: 2
 --- !u!4 &1294654220
 Transform:
   m_ObjectHideFlags: 0
@@ -3613,6 +3614,7 @@ MonoBehaviour:
   candidateReq: 10
   minimumFitnessReq: 0
   spikes: 0
+  hearts: 0
   mapping: 0
 --- !u!1 &1777287032
 GameObject:

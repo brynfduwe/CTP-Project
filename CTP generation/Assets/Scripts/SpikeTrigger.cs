@@ -20,7 +20,22 @@ public class SpikeTrigger : MonoBehaviour {
         {
             if (!col.gameObject.GetComponent<SimpleAIController>().getJumpingUp())
             {
-                col.transform.position -= new Vector3(0, 100, 10);
+                if (col.gameObject.GetComponent<SimpleAIController>().GetMapping() != SetUpManager.MappingType.Health)
+                {
+                    col.transform.position -= new Vector3(0, 100, 10);
+                }
+                else
+                {
+                    if (col.gameObject.GetComponent<SimpleAIController>().GetHealth() > 1)
+                    {
+                        if (col.gameObject.GetComponent<SimpleAIController>().CheckInvul() == false)
+                            col.gameObject.GetComponent<SimpleAIController>().HealthDown();
+                    }
+                    else
+                    {
+                        col.transform.position -= new Vector3(0, 100, 10);
+                    }
+                }
             }
         }
     }

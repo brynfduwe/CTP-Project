@@ -58,13 +58,25 @@ public class SimpleAIController : MonoBehaviour {
     private Transform lastTriedPlat;
 
     private bool spikeBelowStop = false;
-
+    
+    ///
+    ///
+    
     private List<int> actions = new List<int>();
     private float recordPosX = 0.45f;
     private bool recordRepeat = false;
     SetUpManager.MappingType mapping;
+
     private int prevIterToCheck = 0;
     private List<int[]> prevInputVector = new List<int[]>(); //right, a(jump)
+
+    private float inputDelay = 0f;
+    private float inputDelayTimer = 0;
+
+    private int health = 3;
+    private int maxHealth = 3;
+    private bool invul = false;
+    private float invulTimer = 0;
 
     // Use this for initialization
     void Start()
@@ -129,10 +141,11 @@ public class SimpleAIController : MonoBehaviour {
              
                 break;
             case SetUpManager.MappingType.ReactionDelay:
-
+                //how to map?
+               
                 break;
             case SetUpManager.MappingType.Health:
-
+                actions.Add(health);
                 break;
             default:
                 if (!recordRepeat)
@@ -173,6 +186,17 @@ public class SimpleAIController : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        if (invul)
+        {
+            invulTimer += Time.deltaTime;
+            if (invulTimer >= 0.5f)
+            {
+                invul = false;
+                GetComponent<SpriteRenderer>().color = Color.green;
+            }
+        }
+
+
         if (!dirLeft)
         {
             if (transform.position.x >= recordPosX)
@@ -183,7 +207,7 @@ public class SimpleAIController : MonoBehaviour {
         }
         else
         {
-            if (transform.position.x <= recordPosX)
+            if (transform.position.x <= recordPosX - 1)
             {
                 actions.Remove(actions.Count);
                 recordPosX = recordPosX - 1;
@@ -545,8 +569,25 @@ public class SimpleAIController : MonoBehaviour {
 
     void StartJump(float time)
     {
-        if (!jumpStarted)
+
+        bool go = true;
+        if (mapping == SetUpManager.MappingType.ReactionDelay)
         {
+            go = false;
+            if (inputDelayTimer >= inputDelay)
+            {
+                go = true;
+                inputDelayTimer = 0;
+            }
+            else
+            {
+                inputDelayTimer += Time.deltaTime;
+            }
+        }
+
+        if (!jumpStarted && go)
+        {
+            go = false;
 
             spikeBelowStop = false;
             bool fail = false;
@@ -885,6 +926,11 @@ public class SimpleAIController : MonoBehaviour {
 
     public void ResetPlayer()
     {
+        GetComponent<SpriteRenderer>().color = Color.green;
+        health = maxHealth;
+        invul = false;
+        invulTimer = 0;
+
         spikeBelowStop = false;
         dirLeft = false;
 
@@ -938,6 +984,39 @@ public class SimpleAIController : MonoBehaviour {
 
         }
 
+    }
+
+    public SetUpManager.MappingType GetMapping()
+    {
+        return mapping;
+    }
+
+
+    public bool CheckInvul()
+    {
+        return invul;
+    }
+
+
+    public int GetHealth()
+    {
+        return health;
+    }
+
+    public void HealthDown()
+    {
+        health--;
+        invul = true;
+        GetComponent<SpriteRenderer>().color = Color.red;
+        invulTimer = 0;
+    }
+
+    public void HealthUp()
+    {
+        if (health < maxHealth)
+        {
+            health++;
+        }
     }
 
     public List<int> GetAllActions()

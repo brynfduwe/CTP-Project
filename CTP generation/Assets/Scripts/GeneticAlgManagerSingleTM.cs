@@ -36,8 +36,6 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
     private int transitions = 0;
 
-
-
     public List<List<int>> candidateAllActions = new List<List<int>>(); //to learn cost
 
     public List<List<int>> candidateAllTransitionPaths = new List<List<int>>(); //for 'history'
@@ -63,9 +61,15 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
         transitions = setUp.height; // ground 
         transitions += setUp.height; // gaps
+
         if (setUp.spikes == true)
         {
             transitions = transitions + setUp.height; // spikes
+        }
+
+        if (setUp.hearts == true)
+        {
+            transitions = transitions + setUp.height; // hearts
         }
 
         for (int j = 0; j < transitions; j++)
@@ -251,6 +255,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
             foreach (var testerActions in candidateAllActions)
             {
                 float cost = GetComponent<CostFunction>().CalculateCost(GetComponent<CSVReader>().getOrderedCurveValues(), testerActions);
+                Debug.Log(cost);
                 totalCost += cost;
 
                 //if (1 - cost < worstFitness)
@@ -278,7 +283,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
             if (fitness >= setUp.minimumFitnessReq)
             {
                 CandidateList.Add(currentProbabilityTransMatrix);
-                CandidateFitness.Add(fitness * 5);
+                CandidateFitness.Add(fitness);
                 GetComponent<CSVWriter>().WriteFitness(fitness);
 
                 GetComponent<CSVWriter>().CandidateToCSVAndClear(true);
