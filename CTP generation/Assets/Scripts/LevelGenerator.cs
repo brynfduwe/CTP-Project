@@ -25,8 +25,9 @@ public class LevelGenerator : MonoBehaviour
 
     public List<int[]> probabilityTransList = new List<int[]>();
 
-    public int levelHeight = 10; 
+    public int levelHeight = 10;
 
+    public int stepHistory;
     private States currentState;
     private int xPos = 0;
     public int levelLength;
@@ -43,9 +44,10 @@ public class LevelGenerator : MonoBehaviour
 
     Vector2 enforceBranchDirection = Vector2.zero;
 
+    // List<int> history = new List<int>();
 
-    List<int> transitionPath = new List<int>();
-
+    public List<Vector2> transitionIndex = new List<Vector2>();
+    Vector2 currentIndex = new Vector2(0,0);
 
     // Use this for initialization
     void Start()
@@ -60,8 +62,15 @@ public class LevelGenerator : MonoBehaviour
     }
 
 
-    public void MyStart(int height, int length, int transitions, SetUpManager.MappingType mapping)
+    public void MyStart(int height, int length, int transitions, SetUpManager.MappingType mapping, int historyStep, int stateAmount)
     {
+        for (int i = 0; i < historyStep - 1; i++)
+        {
+        //    history.Add(0);
+        }
+
+        stepHistory = historyStep;
+
         player.GetComponent<SimpleAIController>().SetMapping(mapping);
 
         levelLength = length;
@@ -77,6 +86,26 @@ public class LevelGenerator : MonoBehaviour
         {
             x.Add(100 / transitions);
         }
+
+
+        int iterA = 0;
+        int iterB = 0;
+        for (int j = 0; j < transitions; j++)
+        {
+            Vector2 index = new Vector2(iterA, iterB);
+            transitionIndex.Add(index);
+
+            if (iterB >= (stateAmount - 1))
+            {
+                iterA++;
+                iterB = 0;
+            }
+            else
+            {
+                iterB++;
+            }
+        }
+
 
         probabilityTransList = new List<int[]>();
         for (int i = 0; i < transitions; i++)
@@ -118,8 +147,6 @@ public class LevelGenerator : MonoBehaviour
         }
 
         platsformObjects.Clear();
-
-        transitionPath.Clear();
 
         for (int i = 0; i < levelLength; i++)
         {
@@ -196,22 +223,7 @@ public class LevelGenerator : MonoBehaviour
 
         player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 
-
-
         GetComponent<EventTracker>().SetSuccess(end.transform);
-
-
-        ////transition matrix visualisation
-        //transitionMatrixVis.text = "";
-
-        //foreach (var ptl in probabilityTransList)
-        //{
-        //    foreach (var i in ptl)
-        //    {
-        //        transitionMatrixVis.text += (i.ToString() + ", ");
-        //    }
-        //    transitionMatrixVis.text += "\n";
-        //}
     }
 
 
@@ -221,19 +233,23 @@ public class LevelGenerator : MonoBehaviour
         int iter = 0;
         int selectedTransition = 0;
 
-        for (int i = 0; i < probabilityTransList[(int) currentState].Length; i++)
+        int trueState = int.Parse(currentIndex.x.ToString()) + int.Parse(currentIndex.y.ToString());
+
+        for (int i = 0; i < probabilityTransList[trueState].Length; i++)
         {
             if (iter < r)
             {
-                iter += probabilityTransList[(int) currentState][i];
+                iter += probabilityTransList[trueState][i];
                 selectedTransition = i;
             }
         }
 
-        currentState = (States) selectedTransition;
+        currentIndex.x = currentIndex.y;
+        currentIndex.y = transitionIndex[selectedTransition].y;
 
-        transitionPath.Add((int)currentState);
+        currentState = (States)currentIndex.y;
 
+     //   Debug.Log(currentIndex);
     }
 
 
@@ -376,11 +392,5 @@ public class LevelGenerator : MonoBehaviour
         }
 
         return false;
-    }
-
-
-    public List<int> GetTransitionPath()
-    {
-        return transitionPath;
     }
 }

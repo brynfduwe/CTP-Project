@@ -38,8 +38,6 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
     public List<List<int>> candidateAllActions = new List<List<int>>(); //to learn cost
 
-    public List<List<int>> candidateAllTransitionPaths = new List<List<int>>(); //for 'history'
-
 
     // Use this for initialization
     void Start()
@@ -72,6 +70,9 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
             transitions = transitions + setUp.height; // hearts
         }
 
+        int stateAmounts = transitions;
+        transitions = (int)Mathf.Pow(transitions, setUp.historySteps + 1);
+
         for (int j = 0; j < transitions; j++)
         {
             x.Add(100 / transitions);
@@ -83,7 +84,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
             currentProbabilityTransMatrix.Add(x.ToArray());
         }
 
-      //  candidateScore = 0;
+        //candidateScore = 0;
         levelGMs.Clear();
         int y = 0;
 
@@ -99,24 +100,13 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
         foreach (var LGM in levelGMs)
         {
-            LGM.GetComponent<LevelGenerator>().MyStart(setUp.height, setUp.length, transitions, setUp.mapping);
+            LGM.GetComponent<LevelGenerator>().MyStart(setUp.height, setUp.length, transitions, setUp.mapping, setUp.historySteps, stateAmounts);
           //  LGM.GetComponent<LevelGenerator>().SetRests(setUp.GetRestCov());
 
             LGM.GetComponent<LevelGenerator>().SetNewChain(currentProbabilityTransMatrix);
             LGM.GetComponent<LevelGenerator>().NewLevelCandidate();
-
-            candidateAllTransitionPaths.Add(LGM.GetComponent<LevelGenerator>().GetTransitionPath());
         }
 
-        transitionMatrixVis.text = "";
-        foreach (var ptl in currentProbabilityTransMatrix)
-        {
-            foreach (var i in ptl)
-            {
-                transitionMatrixVis.text += (i.ToString() + ", ");
-            }
-            transitionMatrixVis.text += "\n";
-        }
 
         GetComponent<CSVWriter>().WriteTestInfo(setUp.height, setUp.length, setUp.minimumFitnessReq);
         GetComponent<CSVWriter>().WriteCandidate(currentProbabilityTransMatrix, candidate, generation);
@@ -209,9 +199,6 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                     levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
 
 
-                    candidateAllTransitionPaths.Add(levelGMs[i].GetComponent<LevelGenerator>().GetTransitionPath());
-
-
                     candidateAllActions.Add(levelGMs[i].GetComponent<LevelGenerator>().player.gameObject
                         .GetComponent<SimpleAIController>().GetAllActions());
                 }
@@ -246,12 +233,6 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                 iter++;
             }
 
-            foreach (var i in candidateAllTransitionPaths[bestIter])
-            {
-              // best testers transition path
-              //  Debug.Log(i);
-            }
-
 
 
             float totalAvg = totalCost / testersDone;
@@ -273,8 +254,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                 GetComponent<CSVWriter>().CandidateToCSVAndClear(false);
             }
 
-            candidateAllActions.Clear();       
-            candidateAllTransitionPaths.Clear();//DO STUFF WITHIT
+            candidateAllActions.Clear();
 
             testersDone = 0;
           //  candidateScore = 0;
@@ -287,17 +267,6 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                 {
                     LGM.GetComponent<LevelGenerator>().SetNewChain(currentProbabilityTransMatrix);
                     LGM.GetComponent<LevelGenerator>().NewLevelCandidate();
-                }
-
-                transitionMatrixVis.text = "";
-                foreach (var ptl in currentProbabilityTransMatrix)
-                {
-                    foreach (var i in ptl)
-                    {
-                        transitionMatrixVis.text += (i.ToString() + ", ");
-                    }
-
-                    transitionMatrixVis.text += "\n";
                 }
             }
             else
@@ -312,17 +281,6 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                 {
                     LGM.GetComponent<LevelGenerator>().SetNewChain(currentProbabilityTransMatrix);
                     LGM.GetComponent<LevelGenerator>().NewLevelCandidate();
-                }
-
-                transitionMatrixVis.text = "";
-                foreach (var ptl in currentProbabilityTransMatrix)
-                {
-                    foreach (var i in ptl)
-                    {
-                        transitionMatrixVis.text += (i.ToString() + ", ");
-                    }
-
-                    transitionMatrixVis.text += "\n";
                 }
             }
 
@@ -355,17 +313,6 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                 {
                     LGM.GetComponent<LevelGenerator>().SetNewChain(currentProbabilityTransMatrix);
                     LGM.GetComponent<LevelGenerator>().NewLevelCandidate();
-                }
-
-                transitionMatrixVis.text = "";
-                foreach (var ptl in currentProbabilityTransMatrix)
-                {
-                    foreach (var i in ptl)
-                    {
-                        transitionMatrixVis.text += (i.ToString() + ", ");
-                    }
-
-                    transitionMatrixVis.text += "\n";
                 }
             }
 
