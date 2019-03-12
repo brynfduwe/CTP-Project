@@ -11,7 +11,6 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
     int candidateGoal = 10;
     int offSpringPopulation = 25;
     public UIManager UImanager;
-    public Text transitionMatrixVis;
     public SetUpManager setUp;
     public int generation = 1;
     private int candidate = 1;

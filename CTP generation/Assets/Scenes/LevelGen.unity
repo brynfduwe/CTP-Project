@@ -2112,7 +2112,6 @@ MonoBehaviour:
   LevelGenerator: {fileID: 1435348092900312, guid: d336498f94979fa488d08fbfd4a4a8b8,
     type: 2}
   UImanager: {fileID: 1732767418}
-  transitionMatrixVis: {fileID: 0}
   setUp: {fileID: 1294654219}
   generation: 1
   CandidateFitness: []
@@ -2664,11 +2663,11 @@ MonoBehaviour:
   saveImgs: 0
   testers: 100
   testersOnScreen: 10
-  height: 4
+  height: 3
   length: 50
   populationOffspring: 2500
   candidateReq: 10
-  minimumFitnessReq: 0.3
+  minimumFitnessReq: 0.25
   historySteps: 1
   spikes: 1
   hearts: 0

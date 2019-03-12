@@ -233,7 +233,15 @@ public class LevelGenerator : MonoBehaviour
         int iter = 0;
         int selectedTransition = 0;
 
-        int trueState = int.Parse(currentIndex.x.ToString()) + int.Parse(currentIndex.y.ToString());
+        int trueState = 0;
+        for (int i = 0; i < transitionIndex.Count; i++)
+        {
+            if (transitionIndex[i] == currentIndex)
+            {
+                trueState = i;
+                Debug.Log(currentIndex + ": " + trueState);
+            }
+        }
 
         for (int i = 0; i < probabilityTransList[trueState].Length; i++)
         {
