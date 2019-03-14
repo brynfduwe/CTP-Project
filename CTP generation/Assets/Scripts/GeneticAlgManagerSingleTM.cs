@@ -35,7 +35,14 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
     private int transitions = 0;
 
-    public List<List<int>> candidateAllActions = new List<List<int>>(); //to learn cost
+    List<List<int>> candidateAllActions = new List<List<int>>(); //to learn cost
+
+    List<List<int>> generationBestActions = new List<List<int>>(); // convergence graph
+
+    public List<Vector2> bestTransitionPath;
+    public float bestFitnessOverall = 0;
+
+
 
 
     // Use this for initialization
@@ -184,6 +191,21 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                 if (levelGMs[i].GetComponent<EventTracker>().SuccessCheck() ||
                     levelGMs[i].GetComponent<EventTracker>().FailCheck())
                 {
+
+                    float cost = GetComponent<CostFunction>().CalculateCost(GetComponent<CSVReader>().getOrderedCurveValues(), levelGMs[i].GetComponent<LevelGenerator>().player.gameObject
+                                     .GetComponent<SimpleAIController>().GetAllActions());
+                    cost = 1 - cost;
+
+                    if (cost > bestFitnessOverall + 0.1f)
+                    {
+                        // Debug.Log(cost);
+                        bestFitnessOverall = cost;
+                        bestTransitionPath = levelGMs[i].GetComponent<LevelGenerator>().getHistory();
+                    }
+
+
+
+
                     levelGMs[i].GetComponent<LevelGenerator>().LockPlayer();
                     //candidateScore++;
                     testersDone++;
@@ -207,40 +229,25 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
         if (testersDone >= setUp.testers)
         {
-           // float worstFitness = 1;
-            float bestFitness = 0;
-            int bestIter = 0;
-
             //fitness
             float totalCost = 0;
-
-            int iter = 0;
             foreach (var testerActions in candidateAllActions)
             {
                 float cost = GetComponent<CostFunction>().CalculateCost(GetComponent<CSVReader>().getOrderedCurveValues(), testerActions);
-                Debug.Log(1 - cost);
+               // Debug.Log(1 - cost);
                 totalCost += cost;
-
-                //if (1 - cost < worstFitness)
-                //    worstFitness = 1 - cost;
-
-                if (1 - cost > bestFitness)
-                {
-                    bestFitness = 1 - cost;
-                    bestIter = iter;
-                }
-                iter++;
             }
-
-
 
             float totalAvg = totalCost / testersDone;
             float fitness = 1 - totalAvg;
 
             if (fitness >= setUp.minimumFitnessReq)
             {
+                generationBestActions.Add(candidateAllActions[0]);
+                Debug.Log(candidateAllActions[0].Count);
+
                 CandidateList.Add(currentProbabilityTransMatrix);
-                CandidateFitness.Add(fitness);
+                CandidateFitness.Add(fitness * 5);
                 GetComponent<CSVWriter>().WriteFitness(fitness);
 
                 GetComponent<CSVWriter>().CandidateToCSVAndClear(true);
@@ -286,6 +293,9 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
             //new Generation
             if (CandidateList.Count >= setUp.candidateReq)
             {
+                GetComponent<CSVWriter>().WriteConvergence(generationBestActions[Random.Range(0, generationBestActions.Count)]);
+                generationBestActions.Clear();
+
                 generation++;
                 UImanager.UpdateGeneration(generation);
                 candidate = 0;

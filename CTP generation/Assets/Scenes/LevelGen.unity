@@ -2129,6 +2129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   csvFilePath: Assets/InputActions.csv
+  csvConvergenceCurvePath: Assets/ConvergenceCurve.csv
 --- !u!114 &904623995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2663,13 +2664,13 @@ MonoBehaviour:
   saveImgs: 0
   testers: 100
   testersOnScreen: 10
-  height: 3
+  height: 6
   length: 50
   populationOffspring: 2500
   candidateReq: 10
-  minimumFitnessReq: 0.25
+  minimumFitnessReq: 0
   historySteps: 1
-  spikes: 1
+  spikes: 0
   hearts: 0
   mapping: 0
 --- !u!4 &1294654220

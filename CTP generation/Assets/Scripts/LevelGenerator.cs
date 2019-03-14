@@ -44,7 +44,7 @@ public class LevelGenerator : MonoBehaviour
 
     Vector2 enforceBranchDirection = Vector2.zero;
 
-    // List<int> history = new List<int>();
+    List<Vector2> history = new List<Vector2>();
 
     public List<Vector2> transitionIndex = new List<Vector2>();
     Vector2 currentIndex = new Vector2(0,0);
@@ -148,8 +148,10 @@ public class LevelGenerator : MonoBehaviour
 
         platsformObjects.Clear();
 
+        history.Clear();
         for (int i = 0; i < levelLength; i++)
         {
+            history.Add(currentIndex);
             SwitchStates();
 
             if ((int) currentState < (levelHeight) * 2 && (int) currentState > levelHeight)
@@ -239,7 +241,7 @@ public class LevelGenerator : MonoBehaviour
             if (transitionIndex[i] == currentIndex)
             {
                 trueState = i;
-                Debug.Log(currentIndex + ": " + trueState);
+             //   Debug.Log(currentIndex + ": " + trueState);
             }
         }
 
@@ -400,5 +402,10 @@ public class LevelGenerator : MonoBehaviour
         }
 
         return false;
+    }
+
+    public List<Vector2> getHistory()
+    {
+        return history;
     }
 }

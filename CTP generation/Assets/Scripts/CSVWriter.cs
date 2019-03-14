@@ -8,14 +8,18 @@ using UnityEditor;
 public class CSVWriter : MonoBehaviour
 {
     public string csvFilePath;
+    public string csvConvergenceCurvePath;
     private string writeData = "";
-	
-	// Update is called once per frame
-	void Awake ()
+
+    // Update is called once per frame
+    void Awake ()
 	{
 	    StreamWriter writer = new StreamWriter(csvFilePath, append: false);
+	    StreamWriter writer2 = new StreamWriter(csvConvergenceCurvePath, append: false);
         writer.Flush();
 	    writer.Close();
+	    writer2.Flush();
+	    writer2.Close();
     }
 
 
@@ -81,6 +85,26 @@ public class CSVWriter : MonoBehaviour
         }
 
         writeData = "";
+    }
+
+
+
+
+
+    public void WriteConvergence(List<int> actions)
+    {
+        string actionList = "ACTIONS,";
+        foreach (var a in actions)
+        {
+            actionList += a + ",";
+        }
+
+        FileStream fs = new FileStream(csvConvergenceCurvePath, FileMode.Append, FileAccess.Write, FileShare.Write);
+        fs.Close();
+        StreamWriter writer = new StreamWriter(csvConvergenceCurvePath, append: true);
+        writer.Write(actionList + "\n");
+        writer.Close();
+
     }
 }
 
