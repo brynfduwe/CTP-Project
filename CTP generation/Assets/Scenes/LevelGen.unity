@@ -2117,6 +2117,9 @@ MonoBehaviour:
   CandidateFitness: []
   levelGMs: []
   testersDone: 0
+  bestTransitionPath: []
+  bestFitnessOverall: 0
+  bestCandidateActions: 
 --- !u!114 &904623994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2665,11 +2668,12 @@ MonoBehaviour:
   testers: 100
   testersOnScreen: 10
   height: 6
-  length: 50
+  length: 75
   populationOffspring: 2500
   candidateReq: 10
-  minimumFitnessReq: 0
+  minimumFitnessReq: 0.2
   historySteps: 1
+  endAfterGen: 5
   spikes: 0
   hearts: 0
   mapping: 0
@@ -3465,6 +3469,7 @@ MonoBehaviour:
   candidateReq: 10
   minimumFitnessReq: 0
   historySteps: 0
+  endAfterGen: 0
   spikes: 0
   hearts: 0
   mapping: 0

@@ -5,7 +5,7 @@ using UnityEngine;
 public class EventTracker : MonoBehaviour
 {
     private float failY;
-    private Transform successPos;
+    private Vector2 successXY;
     public Transform player;
 
     private float lastX;
@@ -38,7 +38,7 @@ public class EventTracker : MonoBehaviour
 
     public void SetSuccess(Transform success)
     {
-        successPos = success;
+        successXY = success.position;
     }
 
 
@@ -71,7 +71,7 @@ public class EventTracker : MonoBehaviour
 
     public bool SuccessCheck()
     {
-        if (player.transform.position.x >= successPos.transform.position.x - 2 && player.transform.position.y > failY && transform.position.y >= successPos.transform.position.y - 1)  
+        if (player.transform.position.x >= successXY.x - 1 && player.transform.position.y > failY)  
         {
             return true;
         }

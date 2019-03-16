@@ -135,8 +135,8 @@ public class SimpleAIController : MonoBehaviour {
 
                 actions.Add(changeVector.Sum());
 
-                if (prevInputVector.Count <= 5)
-                    prevIterToCheck++; // updates to be 5 behind after the tester has moved enough
+                if (prevInputVector.Count <= 2)
+                    prevIterToCheck++; // updates to be 2 behind after the tester has moved enough
 
              
                 break;

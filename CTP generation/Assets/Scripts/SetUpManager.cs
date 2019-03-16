@@ -15,6 +15,7 @@ public class SetUpManager : MonoBehaviour
     public int candidateReq;
     public float minimumFitnessReq;
     public int historySteps;
+    public int endAfterGen;
 
     public bool spikes;
     public bool hearts;

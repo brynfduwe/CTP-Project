@@ -39,10 +39,12 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
     List<List<int>> generationBestActions = new List<List<int>>(); // convergence graph
 
+    //
     public List<Vector2> bestTransitionPath;
     public float bestFitnessOverall = 0;
-
-
+    public List<int[]> bestTransitionMatrix = new List<int[]>();
+    public int[] bestCandidateActions;
+    //
 
 
     // Use this for initialization
@@ -113,6 +115,8 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
             LGM.GetComponent<LevelGenerator>().NewLevelCandidate();
         }
 
+        GetComponent<CSVWriter>().WriteConvergenceDesignCurve(GetComponent<CSVReader>().getOrderedCurveValues());
+        GetComponent<CSVWriter>().WriteConvergenceNewGen(generation);
 
         GetComponent<CSVWriter>().WriteTestInfo(setUp.height, setUp.length, setUp.minimumFitnessReq);
         GetComponent<CSVWriter>().WriteCandidate(currentProbabilityTransMatrix, candidate, generation);
@@ -191,21 +195,6 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                 if (levelGMs[i].GetComponent<EventTracker>().SuccessCheck() ||
                     levelGMs[i].GetComponent<EventTracker>().FailCheck())
                 {
-
-                    float cost = GetComponent<CostFunction>().CalculateCost(GetComponent<CSVReader>().getOrderedCurveValues(), levelGMs[i].GetComponent<LevelGenerator>().player.gameObject
-                                     .GetComponent<SimpleAIController>().GetAllActions());
-                    cost = 1 - cost;
-
-                    if (cost > bestFitnessOverall + 0.1f)
-                    {
-                        // Debug.Log(cost);
-                        bestFitnessOverall = cost;
-                        bestTransitionPath = levelGMs[i].GetComponent<LevelGenerator>().getHistory();
-                    }
-
-
-
-
                     levelGMs[i].GetComponent<LevelGenerator>().LockPlayer();
                     //candidateScore++;
                     testersDone++;
@@ -236,6 +225,20 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                 float cost = GetComponent<CostFunction>().CalculateCost(GetComponent<CSVReader>().getOrderedCurveValues(), testerActions);
                // Debug.Log(1 - cost);
                 totalCost += cost;
+
+
+
+                if (1 - cost > bestFitnessOverall + 0.01f)
+                {
+                    if (testerActions.Count > setUp.length / 2)
+                    {
+                        // Debug.Log(cost);
+                        bestFitnessOverall = 1 - cost;
+                        //  bestTransitionPath = levelGMs[i].GetComponent<LevelGenerator>().getHistory();
+                        bestTransitionMatrix = currentProbabilityTransMatrix;
+                        bestCandidateActions = testerActions.ToArray();
+                    }
+                }
             }
 
             float totalAvg = totalCost / testersDone;
@@ -243,11 +246,10 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
             if (fitness >= setUp.minimumFitnessReq)
             {
-                generationBestActions.Add(candidateAllActions[0]);
-                Debug.Log(candidateAllActions[0].Count);
+                GetComponent<CSVWriter>().WriteConvergence(candidateAllActions[Random.Range(0, testersDone)]);
 
                 CandidateList.Add(currentProbabilityTransMatrix);
-                CandidateFitness.Add(fitness * 5);
+                CandidateFitness.Add(fitness);
                 GetComponent<CSVWriter>().WriteFitness(fitness);
 
                 GetComponent<CSVWriter>().CandidateToCSVAndClear(true);
@@ -293,10 +295,18 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
             //new Generation
             if (CandidateList.Count >= setUp.candidateReq)
             {
-                GetComponent<CSVWriter>().WriteConvergence(generationBestActions[Random.Range(0, generationBestActions.Count)]);
                 generationBestActions.Clear();
 
                 generation++;
+
+                if (generation > setUp.endAfterGen)
+                {
+                    GetComponent<CSVWriter>().WriteFinal(bestCandidateActions);
+                    UnityEditor.EditorApplication.isPlaying = false;
+                }
+
+                GetComponent<CSVWriter>().WriteConvergenceNewGen(generation);
+
                 UImanager.UpdateGeneration(generation);
                 candidate = 0;
                 UImanager.UpdateCandidate(candidate);

@@ -91,6 +91,23 @@ public class CSVWriter : MonoBehaviour
 
 
 
+    public void WriteConvergenceDesignCurve(List<int> designCurve)
+    {
+        string actionList = "Desired Curve,";
+        foreach (var a in designCurve)
+        {
+            actionList += a + ",";
+        }
+
+        FileStream fs = new FileStream(csvConvergenceCurvePath, FileMode.Append, FileAccess.Write, FileShare.Write);
+        fs.Close();
+        StreamWriter writer = new StreamWriter(csvConvergenceCurvePath, append: true);
+        writer.Write(actionList + "\n");
+        writer.Close();
+
+    }
+
+
     public void WriteConvergence(List<int> actions)
     {
         string actionList = "ACTIONS,";
@@ -105,6 +122,30 @@ public class CSVWriter : MonoBehaviour
         writer.Write(actionList + "\n");
         writer.Close();
 
+    }
+
+    public void WriteConvergenceNewGen(int gen)
+    {
+        FileStream fs = new FileStream(csvConvergenceCurvePath, FileMode.Append, FileAccess.Write, FileShare.Write);
+        fs.Close();
+        StreamWriter writer = new StreamWriter(csvConvergenceCurvePath, append: true);
+        writer.Write("\n\n" + "Generation," + gen.ToString() + "\n");
+        writer.Close();
+    }
+
+    public void WriteFinal(int[] actions)
+    {
+        string actionList = "ACTIONS,";
+        foreach (var a in actions)
+        {
+            actionList += a + ",";
+        }
+
+        FileStream fs = new FileStream(csvConvergenceCurvePath, FileMode.Append, FileAccess.Write, FileShare.Write);
+        fs.Close();
+        StreamWriter writer = new StreamWriter(csvConvergenceCurvePath, append: true);
+        writer.Write("\n\n" + "END Best Candidate\n" + actionList);
+        writer.Close();
     }
 }
 
