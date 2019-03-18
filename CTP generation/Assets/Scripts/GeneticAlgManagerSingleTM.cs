@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,13 +35,16 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
     public int testersDone = 0;
 
     private int transitions = 0;
+    private int stateAmounts = 0;
 
     List<List<int>> candidateAllActions = new List<List<int>>(); //to learn cost
 
     List<List<int>> generationBestActions = new List<List<int>>(); // convergence graph
 
+    private List<List<Vector2>> candidateAllPaths = new List<List<Vector2>>();
+
     //
-    public List<Vector2> bestTransitionPath;
+    public Vector2[] bestTransitionPath;
     public float bestFitnessOverall = 0;
     public List<int[]> bestTransitionMatrix = new List<int[]>();
     public int[] bestCandidateActions;
@@ -78,7 +82,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
             transitions = transitions + setUp.height; // hearts
         }
 
-        int stateAmounts = transitions;
+        stateAmounts = transitions;
         transitions = (int)Mathf.Pow(transitions, setUp.historySteps + 1);
 
         for (int j = 0; j < transitions; j++)
@@ -211,6 +215,8 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
                     candidateAllActions.Add(levelGMs[i].GetComponent<LevelGenerator>().player.gameObject
                         .GetComponent<SimpleAIController>().GetAllActions());
+
+                    candidateAllPaths.Add(levelGMs[i].GetComponent<LevelGenerator>().getHistory());
                 }
             }
 
@@ -220,23 +226,22 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
         {
             //fitness
             float totalCost = 0;
-            foreach (var testerActions in candidateAllActions)
+            for (int i = 0; i < candidateAllActions.Count; i++)
             {
-                float cost = GetComponent<CostFunction>().CalculateCost(GetComponent<CSVReader>().getOrderedCurveValues(), testerActions);
+                float cost = GetComponent<CostFunction>().CalculateCost(GetComponent<CSVReader>().getOrderedCurveValues(), candidateAllActions[i]);
                // Debug.Log(1 - cost);
                 totalCost += cost;
 
-
-
                 if (1 - cost > bestFitnessOverall + 0.01f)
                 {
-                    if (testerActions.Count > setUp.length / 2)
+                    if (candidateAllActions[i].Count > setUp.length / 2)
                     {
                         // Debug.Log(cost);
                         bestFitnessOverall = 1 - cost;
                         //  bestTransitionPath = levelGMs[i].GetComponent<LevelGenerator>().getHistory();
                         bestTransitionMatrix = currentProbabilityTransMatrix;
-                        bestCandidateActions = testerActions.ToArray();
+                        bestCandidateActions = candidateAllActions[i].ToArray();
+                        bestTransitionPath = candidateAllPaths[i].ToArray();
                     }
                 }
             }
@@ -263,6 +268,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
             }
 
             candidateAllActions.Clear();
+            candidateAllPaths.Clear();
 
             testersDone = 0;
           //  candidateScore = 0;
@@ -295,6 +301,15 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
             //new Generation
             if (CandidateList.Count >= setUp.candidateReq)
             {
+                //float totalFitnessAvg = 0;
+                //foreach (var f in CandidateFitness)
+                //{
+                //    totalFitnessAvg += f;
+                //}
+                //totalFitnessAvg = totalFitnessAvg / setUp.candidateReq;
+                //setUp.minimumFitnessReq = totalFitnessAvg;
+
+
                 generationBestActions.Clear();
 
                 generation++;
@@ -302,7 +317,9 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                 if (generation > setUp.endAfterGen)
                 {
                     GetComponent<CSVWriter>().WriteFinal(bestCandidateActions);
-                    UnityEditor.EditorApplication.isPlaying = false;
+                    //UnityEditor.EditorApplication.isPlaying = false;
+                    GameObject.Find("StandAloneLevelManager").GetComponent<StandAloneLevelManager>().SetUp(setUp.height, setUp.length, transitions, stateAmounts, setUp.historySteps, bestTransitionPath, bestTransitionMatrix, setUp.mapping, bestFitnessOverall);
+                    GameObject.Find("SceneManager").GetComponent<SceneManager>().LoadScene(1);
                 }
 
                 GetComponent<CSVWriter>().WriteConvergenceNewGen(generation);

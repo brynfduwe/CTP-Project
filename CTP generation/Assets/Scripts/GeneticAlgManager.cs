@@ -237,8 +237,8 @@ public class GeneticAlgManager : MonoBehaviour
                     Debug.Log("END FOUND!");
                     UImanager.ShowEndSlate();
                  //   gameObject.SetActive(false);
-                    GameObject.Find("SceneManager").GetComponent<SceneManager>().SetChrmo(finalCandidate);
-                    GameObject.Find("SceneManager").GetComponent<SceneManager>().SetHeightAndLength(setUp.height, setUp.length);
+         //           GameObject.Find("SceneManager").GetComponent<SceneManager>().SetChrmo(finalCandidate);
+           //         GameObject.Find("SceneManager").GetComponent<SceneManager>().SetHeightAndLength(setUp.height, setUp.length);
 
                 }
                 else

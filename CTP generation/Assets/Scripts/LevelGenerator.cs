@@ -49,16 +49,12 @@ public class LevelGenerator : MonoBehaviour
     public List<Vector2> transitionIndex = new List<Vector2>();
     Vector2 currentIndex = new Vector2(0,0);
 
+    private Vector2[] manualTransitionPath;
+
     // Use this for initialization
     void Start()
     {
         startX = (int)transform.position.x;
-        if (PlayerTesting)
-        {
-            probabilityTransList = GameObject.Find("SceneManager").GetComponent<SceneManager>().GetChromo();
-            SetNewChain(GameObject.Find("SceneManager").GetComponent<SceneManager>().GetChromo());
-            //MyStart(GameObject.Find("SceneManager").GetComponent<SceneManager>().height, GameObject.Find("SceneManager").GetComponent<SceneManager>().length);
-        }
     }
 
 
@@ -117,11 +113,6 @@ public class LevelGenerator : MonoBehaviour
 
         RandomChain();
 
-        if (PlayerTesting)
-        {
-            SetNewChain(GameObject.Find("SceneManager").GetComponent<SceneManager>().GetChromo());
-        }
-
        // GenerateLevel();
         NewLevelCandidate();
     }
@@ -151,8 +142,17 @@ public class LevelGenerator : MonoBehaviour
         history.Clear();
         for (int i = 0; i < levelLength; i++)
         {
-            history.Add(currentIndex);
-            SwitchStates();
+            if (!PlayerTesting)
+            {
+                history.Add(currentIndex);
+                SwitchStates();
+            }
+            else
+            {
+                currentIndex = manualTransitionPath[i];
+                currentState = (States)currentIndex.y;
+            }
+
 
             if ((int) currentState < (levelHeight) * 2 && (int) currentState > levelHeight)
             {
@@ -258,8 +258,6 @@ public class LevelGenerator : MonoBehaviour
         currentIndex.y = transitionIndex[selectedTransition].y;
 
         currentState = (States)currentIndex.y;
-
-     //   Debug.Log(currentIndex);
     }
 
 
@@ -327,7 +325,7 @@ public class LevelGenerator : MonoBehaviour
         }
         else
         {
-            GetComponent<LevelDetailAnalyser>().CheckLevelDifficulty(platsformObjects.ToArray());
+         //   GetComponent<LevelDetailAnalyser>().CheckLevelDifficulty(platsformObjects.ToArray());
         }
     }
 
@@ -372,6 +370,13 @@ public class LevelGenerator : MonoBehaviour
         {
             probabilityTransList[i] = chain[i];
         }
+    }
+
+
+    public void SetTransitionPath(Vector2[] path, bool usePath)
+    {
+        manualTransitionPath = path;
+        PlayerTesting = usePath;
     }
 
 
