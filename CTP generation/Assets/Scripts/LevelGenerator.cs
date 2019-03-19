@@ -262,13 +262,14 @@ public class LevelGenerator : MonoBehaviour
         {
             currentIdxStr += id;
         }
+        Debug.Log(currentIdxStr);
 
         for (int i = 0; i < transitionIndexString.Count; i++)
         {
             if (transitionIndexString[i] == currentIdxStr)
             {
                 trueState = i;
-            //    Debug.Log(currentIndex.ToString() + ": " + trueState);
+             //   Debug.Log("TS: " + trueState);
             }
         }
 
@@ -287,15 +288,15 @@ public class LevelGenerator : MonoBehaviour
       //  currentIndex.x = currentIndex.y;
      //   currentIndex.y = transitionIndex[selectedTransition].y;
 
+        List<int> newIndex = new List<int>();
         for (int i = 0; i < currentIndex.Length - 1; i++)
         {
-            currentIndex[i + 1] = currentIndex[i];
+            newIndex.Add(currentIndex[i + 1]);
         }
+        newIndex.Add(stateString);
 
-        currentIndex[currentIndex.Length - 1] = stateString;
+        currentIndex = newIndex.ToArray();
         currentState = (States)currentIndex[currentIndex.Length - 1];
-
-        //Debug.Log((int)currentState);
     }
 
 

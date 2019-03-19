@@ -2718,10 +2718,10 @@ MonoBehaviour:
   minimumFitnessReq: 0
   historySteps: 6
   endAfterGen: 10
-  mutationRate: 0.01
+  mutationRate: 0.005
   spikes: 0
   hearts: 0
-  mapping: 3
+  mapping: 5
 --- !u!4 &1294654220
 Transform:
   m_ObjectHideFlags: 0

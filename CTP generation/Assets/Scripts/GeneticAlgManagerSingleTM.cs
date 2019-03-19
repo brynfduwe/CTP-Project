@@ -434,7 +434,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
             float mutate = Random.Range(0, 2);
             if (mutate < setUp.mutationRate)
             {
-                Debug.Log("Mutate!");
+             //   Debug.Log("Mutate!");
                 List<int> x = new List<int>();
 
                 for (int j = 0; j < transitions; j++)
