@@ -41,10 +41,10 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
     List<List<int>> generationBestActions = new List<List<int>>(); // convergence graph
 
-    private List<List<Vector2>> candidateAllPaths = new List<List<Vector2>>();
+    private List<List<int[]>> candidateAllPaths = new List<List<int[]>>();
 
     //
-    public Vector2[] bestTransitionPath;
+    public List<int[]> bestTransitionPath;
     public float bestFitnessOverall = 0;
     public List<int[]> bestTransitionMatrix = new List<int[]>();
     public int[] bestCandidateActions;
@@ -241,7 +241,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                         //  bestTransitionPath = levelGMs[i].GetComponent<LevelGenerator>().getHistory();
                         bestTransitionMatrix = currentProbabilityTransMatrix;
                         bestCandidateActions = candidateAllActions[i].ToArray();
-                        bestTransitionPath = candidateAllPaths[i].ToArray();
+                        bestTransitionPath = candidateAllPaths[i];
                     }
                 }
             }

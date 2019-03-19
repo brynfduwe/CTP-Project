@@ -10,7 +10,7 @@ public class StandAloneLevelManager : MonoBehaviour
     public int stateAmounts;
     public int historySteps;
 
-    public Vector2[] transitionPath;
+    public List<int[]> transitionPath;
     public List<int[]> transitionMatrix = new List<int[]>();
 
     public SetUpManager.MappingType mapping;
@@ -25,8 +25,8 @@ public class StandAloneLevelManager : MonoBehaviour
     }
 
 
-    public void SetUp(int _height, int _length, int _transitions, int _stateAmnts, int _historySteps, 
-        Vector2[] path, List<int[]> matrix, SetUpManager.MappingType map, float fit)
+    public void SetUp(int _height, int _length, int _transitions, int _stateAmnts, int _historySteps,
+        List<int[]> path, List<int[]> matrix, SetUpManager.MappingType map, float fit)
     {
         height = _height;
         length = _length;

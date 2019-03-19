@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class LevelGenerator : MonoBehaviour
 {
@@ -44,12 +46,14 @@ public class LevelGenerator : MonoBehaviour
 
     Vector2 enforceBranchDirection = Vector2.zero;
 
-    List<Vector2> history = new List<Vector2>();
+    List<int[]> history = new List<int[]>();
 
-    public List<Vector2> transitionIndex = new List<Vector2>();
-    Vector2 currentIndex = new Vector2(0,0);
+    public List<int[]> transitionIndex = new List<int[]>();
+    public List<string> transitionIndexString = new List<string>();
 
-    private Vector2[] manualTransitionPath;
+    private int[] currentIndex;
+
+    private List<int[]> manualTransitionPath;
 
     // Use this for initialization
     void Start()
@@ -65,7 +69,9 @@ public class LevelGenerator : MonoBehaviour
         //    history.Add(0);
         }
 
-        stepHistory = historyStep;
+        stepHistory = historyStep + 1;
+
+        currentIndex = new int[stepHistory];
 
         player.GetComponent<SimpleAIController>().SetMapping(mapping);
 
@@ -84,22 +90,36 @@ public class LevelGenerator : MonoBehaviour
         }
 
 
-        int iterA = 0;
-        int iterB = 0;
+        //int iterA = 0;
+        //int iterB = 0;
+        //for (int j = 0; j < transitions; j++)
+        //{
+        //    Vector2 index = new Vector2(iterA, iterB);
+        //    transitionIndex.Add(index);
+
+        //    if (iterB >= (stateAmount - 1))
+        //    {
+        //        iterA++;
+        //        iterB = 0;
+        //    }
+        //    else
+        //    {
+        //        iterB++;
+        //    }
+        //}
+
+
         for (int j = 0; j < transitions; j++)
         {
-            Vector2 index = new Vector2(iterA, iterB);
-            transitionIndex.Add(index);
+            var idx = Convert.ToString(j, stateAmount);
 
-            if (iterB >= (stateAmount - 1))
+            string addon = "";
+            for (int i = idx.Length - stepHistory; i < 0; i++)
             {
-                iterA++;
-                iterB = 0;
+                addon += '0';
             }
-            else
-            {
-                iterB++;
-            }
+
+            transitionIndexString.Add(addon + idx);
         }
 
 
@@ -150,8 +170,8 @@ public class LevelGenerator : MonoBehaviour
             else
             {
                 currentIndex = manualTransitionPath[i];
-                currentState = (States)currentIndex.y;
-            }
+                currentState = (States)currentIndex[currentIndex.Length -1];
+            }       
 
 
             if ((int) currentState < (levelHeight) * 2 && (int) currentState > levelHeight)
@@ -236,12 +256,19 @@ public class LevelGenerator : MonoBehaviour
         int selectedTransition = 0;
 
         int trueState = 0;
-        for (int i = 0; i < transitionIndex.Count; i++)
+
+        string currentIdxStr = "";
+        foreach (var id in currentIndex)
         {
-            if (transitionIndex[i] == currentIndex)
+            currentIdxStr += id;
+        }
+
+        for (int i = 0; i < transitionIndexString.Count; i++)
+        {
+            if (transitionIndexString[i] == currentIdxStr)
             {
                 trueState = i;
-             //   Debug.Log(currentIndex + ": " + trueState);
+            //    Debug.Log(currentIndex.ToString() + ": " + trueState);
             }
         }
 
@@ -254,10 +281,21 @@ public class LevelGenerator : MonoBehaviour
             }
         }
 
-        currentIndex.x = currentIndex.y;
-        currentIndex.y = transitionIndex[selectedTransition].y;
+        //IDK WIERD ISSUE
+        int stateString = (transitionIndexString[selectedTransition][currentIndex.Length - 1] - 48);
 
-        currentState = (States)currentIndex.y;
+      //  currentIndex.x = currentIndex.y;
+     //   currentIndex.y = transitionIndex[selectedTransition].y;
+
+        for (int i = 0; i < currentIndex.Length - 1; i++)
+        {
+            currentIndex[i + 1] = currentIndex[i];
+        }
+
+        currentIndex[currentIndex.Length - 1] = stateString;
+        currentState = (States)currentIndex[currentIndex.Length - 1];
+
+        //Debug.Log((int)currentState);
     }
 
 
@@ -373,7 +411,7 @@ public class LevelGenerator : MonoBehaviour
     }
 
 
-    public void SetTransitionPath(Vector2[] path, bool usePath)
+    public void SetTransitionPath(List<int[]> path, bool usePath)
     {
         manualTransitionPath = path;
         PlayerTesting = usePath;
@@ -409,7 +447,7 @@ public class LevelGenerator : MonoBehaviour
         return false;
     }
 
-    public List<Vector2> getHistory()
+    public List<int[]> getHistory()
     {
         return history;
     }

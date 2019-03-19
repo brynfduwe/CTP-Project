@@ -474,7 +474,6 @@ MonoBehaviour:
   transitions: 0
   stateAmounts: 0
   historySteps: 0
-  transitionPath: []
   mapping: 0
   fitness: 0
 --- !u!4 &222153277
@@ -2163,7 +2162,6 @@ MonoBehaviour:
   CandidateFitness: []
   levelGMs: []
   testersDone: 0
-  bestTransitionPath: []
   bestFitnessOverall: 0
   bestCandidateActions: 
 --- !u!114 &904623994
@@ -2713,12 +2711,12 @@ MonoBehaviour:
   saveImgs: 0
   testers: 100
   testersOnScreen: 10
-  height: 5
+  height: 1
   length: 75
   populationOffspring: 500
   candidateReq: 50
   minimumFitnessReq: 0
-  historySteps: 1
+  historySteps: 5
   endAfterGen: 25
   spikes: 0
   hearts: 0
