@@ -16,6 +16,7 @@ public class SetUpManager : MonoBehaviour
     public float minimumFitnessReq;
     public int historySteps;
     public int endAfterGen;
+    public float mutationRate;
 
     public bool spikes;
     public bool hearts;
@@ -24,7 +25,10 @@ public class SetUpManager : MonoBehaviour
     {
         InputChangeRate,
         ReactionDelay,
-        Health
+        Health,
+        JumpsPerSecond,
+        JumpsIn1SecondTo5secondRatio,
+        JumpAmountDifference,
     }
 
     public MappingType mapping;

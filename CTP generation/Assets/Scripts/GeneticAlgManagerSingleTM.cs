@@ -428,33 +428,76 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
         int r = Random.Range(0, parent1.Count);
 
+
         for (int i = 0; i < parent1.Count; i++)
         {
-            if (!flipped)
+            float mutate = Random.Range(0, 2);
+            if (mutate < setUp.mutationRate)
             {
-                if (r < i)
+                Debug.Log("Mutate!");
+                List<int> x = new List<int>();
+
+                for (int j = 0; j < transitions; j++)
                 {
-                    Offspring.Add(parent1[i]);
+                    x.Add(100 / transitions);
                 }
-                else
+
+                int leftVal = 100;
+                int decremter = currentProbabilityTransMatrix.Count - 1;
+                List<bool> usedCheck = new List<bool>();
+
+                foreach (var a in x)
                 {
-                    Offspring.Add(parent2[i]);
+                    usedCheck.Add(false);
                 }
+
+                while (decremter >= 0)
+                {
+                    int rT = Random.Range(0, x.Count);
+                    while (usedCheck[rT] == true)
+                    {
+                        rT = Random.Range(0, x.Count);
+                    }
+
+                    int rd = Random.Range(0, leftVal + 1);
+                    leftVal -= rd;
+                    //  usedList.Add(rT);
+                    x[rT] = rd;
+                    usedCheck[rT] = true;
+                    decremter--;
+                }
+
+                Offspring.Add(x.ToArray());
             }
             else
             {
-                if (r < i)
+                if (!flipped)
                 {
-                    Offspring.Add(parent2[i]);
+                    if (r < i)
+                    {
+                        Offspring.Add(parent1[i]);
+                    }
+                    else
+                    {
+                        Offspring.Add(parent2[i]);
+                    }
                 }
                 else
                 {
-                    Offspring.Add(parent1[i]);
+                    if (r < i)
+                    {
+                        Offspring.Add(parent2[i]);
+                    }
+                    else
+                    {
+                        Offspring.Add(parent1[i]);
+                    }
                 }
             }
+
         }
 
-   //     Debug.Log("Flipped = " + flipped.ToString());
+        //     Debug.Log("Flipped = " + flipped.ToString());
    //    Debug.Log("CrossoverPoint = " + r.ToString());
         return Offspring;
     }
