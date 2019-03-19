@@ -45,7 +45,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
     //
     public List<int[]> bestTransitionPath;
-    public float bestFitnessOverall = 0;
+    public float bestFitnessOverall = -1000;
     public List<int[]> bestTransitionMatrix = new List<int[]>();
     public int[] bestCandidateActions;
     //
@@ -225,25 +225,29 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
         if (testersDone >= setUp.testers)
         {
             //fitness
+          //  Debug.Log("cOUNT " + candidateAllActions.Count);
             float totalCost = 0;
             for (int i = 0; i < candidateAllActions.Count; i++)
             {
-                float cost = GetComponent<CostFunction>().CalculateCost(GetComponent<CSVReader>().getOrderedCurveValues(), candidateAllActions[i]);
-               // Debug.Log(1 - cost);
+              //  Debug.Log("CANNI cOUNT " + candidateAllActions[i].Count);
+                float cost = GetComponent<CostFunction>()
+                    .CalculateCost(GetComponent<CSVReader>().getOrderedCurveValues(), candidateAllActions[i]);
+                // Debug.Log(1 - cost);
                 totalCost += cost;
 
-                if (1 - cost > bestFitnessOverall + 0.01f)
+                float fits = 1 - cost;
+
+                if (fits > (float) bestFitnessOverall)
                 {
-                    if (candidateAllActions[i].Count > setUp.length / 2)
-                    {
-                        // Debug.Log(cost);
-                        bestFitnessOverall = 1 - cost;
-                        //  bestTransitionPath = levelGMs[i].GetComponent<LevelGenerator>().getHistory();
-                        bestTransitionMatrix = currentProbabilityTransMatrix;
-                        bestCandidateActions = candidateAllActions[i].ToArray();
-                        bestTransitionPath = candidateAllPaths[i];
-                    }
+                 //   Debug.Log("NEWBEST " + fits);
+                    bestFitnessOverall = fits;
+
+                    //  bestTransitionPath = levelGMs[i].GetComponent<LevelGenerator>().getHistory();
+                    bestTransitionMatrix = currentProbabilityTransMatrix;
+                    bestCandidateActions = candidateAllActions[i].ToArray();
+                    bestTransitionPath = candidateAllPaths[i];
                 }
+
             }
 
             float totalAvg = totalCost / testersDone;
@@ -407,7 +411,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
             p2 = Random.Range(0, CandidateList.Count);
         }
 
-        Debug.Log(p1.ToString() + " - " + p2.ToString());
+       // Debug.Log(p1.ToString() + " - " + p2.ToString());
 
         Offspring = Crossover(CandidateList[p1], CandidateList[p2]);
 

@@ -2709,19 +2709,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   saveImgs: 0
-  testers: 100
+  testers: 50
   testersOnScreen: 10
   height: 1
   length: 100
   populationOffspring: 500
   candidateReq: 10
   minimumFitnessReq: 0
-  historySteps: 6
+  historySteps: 5
   endAfterGen: 10
   mutationRate: 0.005
   spikes: 0
   hearts: 0
-  mapping: 5
+  mapping: 3
 --- !u!4 &1294654220
 Transform:
   m_ObjectHideFlags: 0

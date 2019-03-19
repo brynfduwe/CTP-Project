@@ -262,7 +262,7 @@ public class LevelGenerator : MonoBehaviour
         {
             currentIdxStr += id;
         }
-        Debug.Log(currentIdxStr);
+       // Debug.Log(currentIdxStr);
 
         for (int i = 0; i < transitionIndexString.Count; i++)
         {
