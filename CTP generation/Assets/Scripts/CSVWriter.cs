@@ -35,7 +35,7 @@ public class CSVWriter : MonoBehaviour
     }
 
 
-    public void Write(int generation, int candidate, List<int> actions)
+    public void Write(int generation, int candidate, List<float> actions)
     {
         string actionList = "ACTIONS,";
         foreach (var a in actions)
@@ -91,7 +91,7 @@ public class CSVWriter : MonoBehaviour
 
 
 
-    public void WriteConvergenceDesignCurve(List<int> designCurve)
+    public void WriteConvergenceDesignCurve(List<float> designCurve)
     {
         string actionList = "Desired Curve,";
         foreach (var a in designCurve)
@@ -108,7 +108,7 @@ public class CSVWriter : MonoBehaviour
     }
 
 
-    public void WriteConvergence(List<int> actions)
+    public void WriteConvergence(List<float> actions)
     {
         string actionList = "ACTIONS,";
         foreach (var a in actions)
@@ -133,7 +133,7 @@ public class CSVWriter : MonoBehaviour
         writer.Close();
     }
 
-    public void WriteFinal(int[] actions)
+    public void WriteFinal(float[] actions)
     {
         string actionList = "ACTIONS,";
         foreach (var a in actions)

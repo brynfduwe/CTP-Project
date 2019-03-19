@@ -12,7 +12,7 @@ public class CostFunction : MonoBehaviour
         mapping = set;
     }
 
-    public float CalculateCost(List<int> curveDesign, List<int> curveAgent)
+    public float CalculateCost(List<float> curveDesign, List<float> curveAgent)
     {
         float totalError = 0;
 
@@ -50,7 +50,7 @@ public class CostFunction : MonoBehaviour
                 max = 3 * curveDesign.Count;
                 break;
             case SetUpManager.MappingType.JumpsIn1SecondTo5secondRatio:
-                max = 2 * curveDesign.Count;
+                max = 3 * curveDesign.Count;
                 break;
             case SetUpManager.MappingType.JumpAmountDifference:
                 max = 1 * curveDesign.Count;

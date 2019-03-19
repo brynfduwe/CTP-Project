@@ -474,7 +474,7 @@ MonoBehaviour:
   transitions: 0
   stateAmounts: 0
   historySteps: 0
-  mapping: 0
+  mapping: 5
   fitness: 0
 --- !u!4 &222153277
 Transform:
@@ -2163,7 +2163,7 @@ MonoBehaviour:
   levelGMs: []
   testersDone: 0
   bestFitnessOverall: 0
-  bestCandidateActions: 
+  bestCandidateActions: []
 --- !u!114 &904623994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2715,13 +2715,13 @@ MonoBehaviour:
   length: 100
   populationOffspring: 500
   candidateReq: 10
-  minimumFitnessReq: 0
+  minimumFitnessReq: -10
   historySteps: 5
   endAfterGen: 10
   mutationRate: 0.005
   spikes: 0
   hearts: 0
-  mapping: 3
+  mapping: 5
 --- !u!4 &1294654220
 Transform:
   m_ObjectHideFlags: 0

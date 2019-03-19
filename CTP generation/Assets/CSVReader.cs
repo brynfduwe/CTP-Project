@@ -38,14 +38,14 @@ public class CSVReader : MonoBehaviour
     }
 
 
-    public List<int> getOrderedCurveValues()
+    public List<float> getOrderedCurveValues()
     {
-        List<int> orderedValues = new List<int>();
+        List<float> orderedValues = new List<float>();
 
         for(int i = 0; i < values.Count - 1; i++)
         {
             //add second column = value
-            orderedValues.Add(int.Parse(values[i][1]));
+            orderedValues.Add(float.Parse(values[i][0]));
         }
 
         return orderedValues;

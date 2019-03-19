@@ -37,9 +37,9 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
     private int transitions = 0;
     private int stateAmounts = 0;
 
-    List<List<int>> candidateAllActions = new List<List<int>>(); //to learn cost
+    List<List<float>> candidateAllActions = new List<List<float>>(); //to learn cost
 
-    List<List<int>> generationBestActions = new List<List<int>>(); // convergence graph
+    List<List<float>> generationBestActions = new List<List<float>>(); // convergence graph
 
     private List<List<int[]>> candidateAllPaths = new List<List<int[]>>();
 
@@ -47,7 +47,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
     public List<int[]> bestTransitionPath;
     public float bestFitnessOverall = -1000;
     public List<int[]> bestTransitionMatrix = new List<int[]>();
-    public int[] bestCandidateActions;
+    public float[] bestCandidateActions;
     //
 
 
