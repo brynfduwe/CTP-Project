@@ -83,9 +83,6 @@ public class SimpleAIController : MonoBehaviour {
 
     private int jumpsInSecond = 0;
 
-    private int toCheckBack = 0;
-    private int toCheckBackPrev = 0;
-
     private List<int> JumpsPerSecondAll = new List<int>();
 
     // Use this for initialization
@@ -143,7 +140,7 @@ public class SimpleAIController : MonoBehaviour {
                        changeVector[j] = 1;
                 }
 
-                actions.Add(changeVector.Sum());
+                actions.Add(changeVector.Sum() / 2);
 
                 if (prevInputVector.Count <= 3)
                     prevIterToCheck++; // updates to be 4 behind after the tester has moved enough
@@ -161,58 +158,55 @@ public class SimpleAIController : MonoBehaviour {
                 break;
 
             case SetUpManager.MappingType.JumpsPerSecond:
-                actions.Add((float)jumpsInSecond / 3);
-                jumpsInSecond = 0;
+                if (jumpsInSecond == 0)
+                    if (jumpStarted)
+                        jumpsInSecond++;
+
+                actions.Add((float)jumpsInSecond / 2);
                 break;
 
             case SetUpManager.MappingType.JumpsIn1SecondTo5secondRatio:
-                JumpsPerSecondAll.Add(jumpsInSecond / 3);
                 int lastJumps = 0;
-                if (toCheckBack < 5)
-                    toCheckBack++;
 
-
-                for (int i = JumpsPerSecondAll.Count - 1; i > JumpsPerSecondAll.Count - toCheckBack; i--)
+                for (int i = JumpsPerSecondAll.Count - 1; i > JumpsPerSecondAll.Count - 6; i--)
                 {
-                    lastJumps += JumpsPerSecondAll[i];
+                    if(i >= 0)
+                        lastJumps += JumpsPerSecondAll[i];
                 }
-                float ratio = lastJumps / ((float)jumpsInSecond * 5);
+
+                float ratio = lastJumps;
+                if (jumpsInSecond > 0)
+                    ratio = lastJumps / ((float)jumpsInSecond * 5);
+
+                if (ratio > 1)
+                    ratio = 1;
  
                 actions.Add(ratio);
-                jumpsInSecond = 0;
+               // jumpsInSecond = 0;
+                Debug.Log(ratio);
                 break;
 
             case SetUpManager.MappingType.JumpAmountDifference:
-                JumpsPerSecondAll.Add(jumpsInSecond / 3);
-                
-                if (toCheckBack < 5)
-                {
-                    toCheckBack++;
-                    toCheckBackPrev++;
-                }
-                else
-                {
-                    if (toCheckBackPrev < 10)
-                        toCheckBackPrev++;
-                }
-
+                JumpsPerSecondAll.Add(jumpsInSecond);
 
                 lastJumps = 0;
-                for (int i = JumpsPerSecondAll.Count - 1; i > JumpsPerSecondAll.Count - toCheckBack; i--)
+                for (int i = JumpsPerSecondAll.Count - 1; i > JumpsPerSecondAll.Count - 6; i--)
                 {
-                    lastJumps += JumpsPerSecondAll[i];
+                    if(i>=0)
+                        lastJumps += JumpsPerSecondAll[i];
                 }
-
                 float thisratio = lastJumps;
                 if (jumpsInSecond > 0)
                 {
                     thisratio = lastJumps / ((float)jumpsInSecond * 5);
                 }
 
+
                 int prevJumps = 0;
-                for (int i = JumpsPerSecondAll.Count - toCheckBack; i > JumpsPerSecondAll.Count - toCheckBackPrev; i--)
+                for (int i = JumpsPerSecondAll.Count - 6; i > JumpsPerSecondAll.Count - 11; i--)
                 {
-                    prevJumps += JumpsPerSecondAll[i];
+                    if (i >= 0)
+                        prevJumps += JumpsPerSecondAll[i];
                 }
                 float prevRatio = lastJumps;
                 if (jumpsInSecond > 0)
@@ -220,12 +214,18 @@ public class SimpleAIController : MonoBehaviour {
                     prevRatio = prevJumps / ((float)jumpsInSecond * 5);
                 }
 
+
                 float diff = thisratio - prevRatio;
-
                 diff+= 1;
-                diff = diff / 1;
+                diff = diff / 2;
 
-                
+                if (diff < 0) 
+            {
+                diff = 0;
+            }
+
+
+                actions.Add(diff);
 
                 break;
 
@@ -283,33 +283,45 @@ public class SimpleAIController : MonoBehaviour {
             mapping == SetUpManager.MappingType.JumpAmountDifference ||
             mapping == SetUpManager.MappingType.JumpsIn1SecondTo5secondRatio)
         {
-            JumpTrackTimer += Time.deltaTime;
+            if (jumpHitIgnore || !stopMoveRight)
+            {
+                if (!waitJump && !spikeBelowStop)
+                {
+                    if (!dirLeft)
+                    {
 
-            if (JumpTrackTimer >= 1)
+
+                        JumpTrackTimer += Time.deltaTime;
+
+                        if (JumpTrackTimer >= 1)
+                        {
+                            // AddActions();
+                            JumpsPerSecondAll.Add(jumpsInSecond);
+                            JumpTrackTimer = 0;
+                            jumpsInSecond = 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!dirLeft)
+        {
+            if (transform.position.x >= recordPosX)
             {
                 AddActions();
-                JumpTrackTimer = 0;
+                recordPosX = recordPosX + 1;
             }
         }
         else
         {
-            if (!dirLeft)
+            if (transform.position.x <= recordPosX - 1)
             {
-                if (transform.position.x >= recordPosX)
-                {
-                    AddActions();
-                    recordPosX = recordPosX + 1;
-                }
-            }
-            else
-            {
-                if (transform.position.x <= recordPosX - 1)
-                {
-                    actions.Remove(actions.Count);
-                    recordPosX = recordPosX - 1;
-                }
+                actions.Remove(actions.Count);
+                recordPosX = recordPosX - 1;
             }
         }
+
 
     }
 
@@ -978,7 +990,17 @@ public class SimpleAIController : MonoBehaviour {
 
              jumpTime = time;
 
-            jumpsInSecond++;
+            if (jumpHitIgnore || !stopMoveRight)
+            {
+                if (!waitJump && !spikeBelowStop)
+                {
+                    if (!dirLeft)
+                    {
+                        if(jumpsInSecond < 2)
+                            jumpsInSecond++;
+                    }
+                }
+            }
         }
 
 
@@ -1055,8 +1077,6 @@ public class SimpleAIController : MonoBehaviour {
         prevIterToCheck = 0;
 
 
-        toCheckBackPrev = 0;
-        toCheckBack = 0;
         JumpTrackTimer = 0;
         jumpsInSecond = 0;
 

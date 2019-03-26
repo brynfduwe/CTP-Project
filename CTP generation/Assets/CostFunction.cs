@@ -26,7 +26,7 @@ public class CostFunction : MonoBehaviour
             }
             else
             {
-                error = 3;
+                error = 1;
             }
 
             error = Mathf.Abs(error);
@@ -34,31 +34,7 @@ public class CostFunction : MonoBehaviour
             totalError += error;
         }
 
-        float max = 0;
-        switch (mapping)
-        {
-            case SetUpManager.MappingType.InputChangeRate:
-                max = 2 * curveDesign.Count;
-                break;
-            case SetUpManager.MappingType.ReactionDelay:
-                max = 2 * curveDesign.Count;
-                break;
-            case SetUpManager.MappingType.Health:
-                max = 2 * curveDesign.Count;
-                break;
-            case SetUpManager.MappingType.JumpsPerSecond:
-                max = 3 * curveDesign.Count;
-                break;
-            case SetUpManager.MappingType.JumpsIn1SecondTo5secondRatio:
-                max = 3 * curveDesign.Count;
-                break;
-            case SetUpManager.MappingType.JumpAmountDifference:
-                max = 1 * curveDesign.Count;
-                break;
-            default:
-                max = curveDesign.Count;
-                break;
-        }
+        float max = curveDesign.Count; ;
 
         float cost = (totalError / max); //noramlise data
         return cost;

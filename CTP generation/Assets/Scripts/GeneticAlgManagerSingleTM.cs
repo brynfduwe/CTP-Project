@@ -318,7 +318,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
                 generation++;
 
-                if (generation > setUp.endAfterGen)
+                if (generation > setUp.endAfterGen || bestFitnessOverall >= 0.9f)
                 {
                     GetComponent<CSVWriter>().WriteFinal(bestCandidateActions);
                     //UnityEditor.EditorApplication.isPlaying = false;
@@ -435,10 +435,8 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
         for (int i = 0; i < parent1.Count; i++)
         {
-            float mutate = Random.Range(0, 2);
-            if (mutate < setUp.mutationRate)
+            if (Random.Range(0, 1) < setUp.mutationRate)
             {
-             //   Debug.Log("Mutate!");
                 List<int> x = new List<int>();
 
                 for (int j = 0; j < transitions; j++)
@@ -474,7 +472,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                 Offspring.Add(x.ToArray());
             }
             else
-            {
+            { 
                 if (!flipped)
                 {
                     if (r < i)
@@ -498,6 +496,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                     }
                 }
             }
+
 
         }
 

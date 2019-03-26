@@ -17,6 +17,7 @@ public class SetUpManager : MonoBehaviour
     public int historySteps;
     public int endAfterGen;
     public float mutationRate;
+    public float endFitnessReq;
 
     public bool spikes;
     public bool hearts;

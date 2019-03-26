@@ -158,7 +158,6 @@ public class LevelGenerator : MonoBehaviour
         }
 
         platsformObjects.Clear();
-
         history.Clear();
         for (int i = 0; i < levelLength; i++)
         {
@@ -415,7 +414,7 @@ public class LevelGenerator : MonoBehaviour
     public void SetTransitionPath(List<int[]> path, bool usePath)
     {
         manualTransitionPath = path;
-        PlayerTesting = usePath;
+        PlayerTesting = true;
     }
 
 
