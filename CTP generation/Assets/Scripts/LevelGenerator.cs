@@ -46,14 +46,14 @@ public class LevelGenerator : MonoBehaviour
 
     Vector2 enforceBranchDirection = Vector2.zero;
 
-    List<int[]> history = new List<int[]>();
+    List<int> history = new List<int>();
 
     public List<int[]> transitionIndex = new List<int[]>();
     public List<string> transitionIndexString = new List<string>();
 
     private int[] currentIndex;
 
-    private List<int[]> manualTransitionPath;
+    public int[] manualTransitionPath;
 
     // Use this for initialization
     void Start()
@@ -163,17 +163,16 @@ public class LevelGenerator : MonoBehaviour
         {
             if (!PlayerTesting)
             {
-                history.Add(currentIndex);
+                history.Add(currentIndex[currentIndex.Length - 1]);
                 SwitchStates();
             }
             else
             {
-                currentIndex = manualTransitionPath[i];
-                currentState = (States)currentIndex[currentIndex.Length -1];
+                currentState = (States)manualTransitionPath[i];
             }       
 
 
-            if ((int) currentState < (levelHeight) * 2 && (int) currentState > levelHeight)
+            if ((int) currentState < (levelHeight) * 2 && (int) currentState > levelHeight || (int)currentState > (levelHeight) * 3)
             {
                 currentState = States.NoGround;
             }
@@ -183,16 +182,10 @@ public class LevelGenerator : MonoBehaviour
                 GameObject toSpawn = ground;
                 int spawnY = yPos + (int) currentState - 1;
 
-                if ((int) currentState >= (levelHeight) * 2 && (int)currentState  < (levelHeight) * 3)
+                if ((int) currentState > (levelHeight) * 2 && (int)currentState  < (levelHeight) * 3)
                 {
                     toSpawn = spikePlat;
                     spawnY = spawnY - (levelHeight * 2);
-                }
-
-                if ((int)currentState >= (levelHeight) * 3)
-                {
-                    toSpawn = heartPlat;
-                    spawnY = spawnY - (levelHeight * 3);
                 }
 
                 GameObject plat = Instantiate(toSpawn, new Vector3(xPos, spawnY, 0),
@@ -411,7 +404,7 @@ public class LevelGenerator : MonoBehaviour
     }
 
 
-    public void SetTransitionPath(List<int[]> path, bool usePath)
+    public void SetTransitionPath(int[] path, bool usePath)
     {
         manualTransitionPath = path;
         PlayerTesting = true;
@@ -447,8 +440,8 @@ public class LevelGenerator : MonoBehaviour
         return false;
     }
 
-    public List<int[]> getHistory()
+    public int[] getHistory()
     {
-        return history;
+        return history.ToArray();
     }
 }

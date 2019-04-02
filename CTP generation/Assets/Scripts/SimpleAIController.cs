@@ -148,15 +148,6 @@ public class SimpleAIController : MonoBehaviour {
              
                 break;
 
-            case SetUpManager.MappingType.ReactionDelay:
-                //how to map?
-               
-                break;
-
-            case SetUpManager.MappingType.Health:
-                actions.Add(health - 1);
-                break;
-
             case SetUpManager.MappingType.JumpsPerSecond:
                 if (jumpsInSecond == 0)
                     if (jumpStarted)
@@ -681,20 +672,7 @@ public class SimpleAIController : MonoBehaviour {
     {
 
         bool go = true;
-        if (mapping == SetUpManager.MappingType.ReactionDelay)
-        {
-            go = false;
-            if (inputDelayTimer >= inputDelay)
-            {
-                go = true;
-                inputDelayTimer = 0;
-            }
-            else
-            {
-                inputDelayTimer += Time.deltaTime;
-            }
-        }
-
+  
         if (!jumpStarted && go)
         {
             go = false;

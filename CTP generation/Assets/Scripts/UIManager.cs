@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] Text generation;
     [SerializeField] Text candidate;
     [SerializeField] Text timeScale;
+    [SerializeField] Text fitness;
 
     [SerializeField] GameObject EndSlate;
 
@@ -34,12 +35,15 @@ public class UIManager : MonoBehaviour
         candidate.text = "Candidates: " + cand.ToString() + "/" + setUp.candidateReq;
     }
 
-
     public void UpdateTimeScale(int ts)
     {
         timeScale.text = "Time Scale: x" + ts.ToString();
     }
 
+    public void UpdateFitness(int fit)
+    {
+        fitness.text = "Best accuracy: " + fit.ToString() + "%";
+    }
 
     public void ShowEndSlate()
     {

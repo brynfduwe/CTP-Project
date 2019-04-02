@@ -41,10 +41,10 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
     List<List<float>> generationBestActions = new List<List<float>>(); // convergence graph
 
-    private List<List<int[]>> candidateAllPaths = new List<List<int[]>>();
+    private List<int[]> candidateAllPaths = new List<int[]>();
 
     //
-    public List<int[]> bestTransitionPath;
+    public int[] bestTransitionPath;
     public float bestFitnessOverall = -1000;
     public List<int[]> bestTransitionMatrix = new List<int[]>();
     public float[] bestCandidateActions;
@@ -75,11 +75,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
         if (setUp.spikes == true)
         {
             transitions = transitions + setUp.height; // spikes
-        }
-
-        if (setUp.hearts == true)
-        {
-            transitions = transitions + setUp.height; // hearts
+            transitions = transitions + setUp.height; // spikes
         }
 
         stateAmounts = transitions;
@@ -239,7 +235,10 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
                 if (fits > (float) bestFitnessOverall)
                 {
-                 //   Debug.Log("NEWBEST " + fits);
+                    //   Debug.Log("NEWBEST " + fits);
+
+                    UImanager.UpdateFitness((int)(System.Math.Round(fits, 2) * 100));
+
                     bestFitnessOverall = fits;
 
                     //  bestTransitionPath = levelGMs[i].GetComponent<LevelGenerator>().getHistory();
@@ -318,7 +317,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
                 generation++;
 
-                if (generation > setUp.endAfterGen || bestFitnessOverall >= 0.9f)
+                if (generation > setUp.endAfterGen || bestFitnessOverall >= setUp.endFitnessReq)
                 {
                     GetComponent<CSVWriter>().WriteFinal(bestCandidateActions);
                     //UnityEditor.EditorApplication.isPlaying = false;

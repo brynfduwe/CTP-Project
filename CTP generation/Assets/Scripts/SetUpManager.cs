@@ -25,18 +25,19 @@ public class SetUpManager : MonoBehaviour
     public enum MappingType
     {
         InputChangeRate,
-        ReactionDelay,
-        Health,
         JumpsPerSecond,
         JumpsIn1SecondTo5secondRatio,
         JumpAmountDifference,
+        COUNT
     }
 
     public MappingType mapping;
 
-    // Use this for initialization
-    void Start()
-    {
 
+    public void SetSettingFromUI(int _height, MappingType _mapping, bool _spikes)
+    {
+        spikes = _spikes;
+        height = _height;
+        mapping = _mapping;
     }
 }
