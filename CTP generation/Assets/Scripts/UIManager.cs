@@ -10,15 +10,17 @@ public class UIManager : MonoBehaviour
     [SerializeField] Text candidate;
     [SerializeField] Text timeScale;
     [SerializeField] Text fitness;
+    [SerializeField] Text Tests;
 
     [SerializeField] GameObject EndSlate;
 
     [SerializeField] SetUpManager setUp;
 
     // Use this for initialization
-    void Start () {
-		
-	}
+    void Start ()
+    {
+        UpdateTests(0);
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -33,6 +35,11 @@ public class UIManager : MonoBehaviour
     public void UpdateCandidate(int cand)
     {
         candidate.text = "Candidates: " + cand.ToString() + "/" + setUp.candidateReq;
+    }
+
+    public void UpdateTests(int tsts)
+    {
+        Tests.text = "Tests: " + tsts.ToString() + "/" + setUp.testers;
     }
 
     public void UpdateTimeScale(int ts)

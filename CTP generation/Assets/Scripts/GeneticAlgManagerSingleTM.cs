@@ -198,6 +198,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                     levelGMs[i].GetComponent<LevelGenerator>().LockPlayer();
                     //candidateScore++;
                     testersDone++;
+                    UImanager.UpdateTests(testersDone);
 
                     if (setUp.saveImgs)
                         GetComponent<ScreenCaptureHandler>().ScreenGrab(levelGMs[i].transform.position, candidate,
@@ -220,6 +221,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
         if (testersDone >= setUp.testers)
         {
+            float currentBestFit = 0;
             //fitness
           //  Debug.Log("cOUNT " + candidateAllActions.Count);
             float totalCost = 0;
@@ -247,18 +249,23 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                     bestTransitionPath = candidateAllPaths[i];
                 }
 
+                if (fits > currentBestFit)
+                {
+                    currentBestFit = fits;
+                }
+
             }
 
             float totalAvg = totalCost / testersDone;
-            float fitness = 1 - totalAvg;
+           // float fitness = 1 - totalAvg;
 
-            if (fitness >= setUp.minimumFitnessReq)
+            if (currentBestFit >= setUp.minimumFitnessReq)
             {
                 GetComponent<CSVWriter>().WriteConvergence(candidateAllActions[Random.Range(0, testersDone)]);
 
                 CandidateList.Add(currentProbabilityTransMatrix);
-                CandidateFitness.Add(fitness);
-                GetComponent<CSVWriter>().WriteFitness(fitness);
+                CandidateFitness.Add((currentBestFit * currentBestFit));  //multiplcation to weed out worse candidates futher in Selection()
+                GetComponent<CSVWriter>().WriteFitness(currentBestFit);
 
                 GetComponent<CSVWriter>().CandidateToCSVAndClear(true);
 
@@ -330,6 +337,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                 UImanager.UpdateGeneration(generation);
                 candidate = 0;
                 UImanager.UpdateCandidate(candidate);
+                UImanager.UpdateTests(0);
 
 
                 CurrentOffspring.Clear();
@@ -371,7 +379,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
         float totalFitness = 0;
         foreach (var f in CandidateFitness)
         {
-            totalFitness += f; //multiplcation to weed out worse candidates futher
+            totalFitness += f;
         }
 
         float r = Random.Range(0, totalFitness);

@@ -22,6 +22,8 @@ public class SetUpManager : MonoBehaviour
     public bool spikes;
     public bool hearts;
 
+    public TextAsset curve;
+
     public enum MappingType
     {
         InputChangeRate,
@@ -34,10 +36,11 @@ public class SetUpManager : MonoBehaviour
     public MappingType mapping;
 
 
-    public void SetSettingFromUI(int _height, MappingType _mapping, bool _spikes)
+    public void SetSettingFromUI(int _height, MappingType _mapping, bool _spikes, TextAsset _curve)
     {
         spikes = _spikes;
         height = _height;
         mapping = _mapping;
+        curve = _curve;
     }
 }

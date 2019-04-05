@@ -13,10 +13,13 @@ public class CSVReader : MonoBehaviour
     public TextAsset file;
     public List<string[]> values = new List<string[]>();
 
+    public SetUpManager setUp;
+
 
     // Use this for initialization
     void Start ()
-	{
+    {
+        file = setUp.curve;
 		ReadValues();
 	}
 

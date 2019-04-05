@@ -12,12 +12,15 @@ public class SettingsUIManager : MonoBehaviour
     private SetUpManager.MappingType mappingSelected = 0;
     private int heightSelected = 1;
     private bool spikesSelected = false;
+    private int curveSelected = 1;
 
     public int[] heights;
+    public TextAsset[] curveFiles;
 
     public Text heightText;
     public Text mappingText;
     public Text spikeText;
+    public Text curveText;
 
     // Use this for initialization
     void Start ()
@@ -25,12 +28,13 @@ public class SettingsUIManager : MonoBehaviour
 	    heightText.text = heights[heightSelected].ToString();
 	    mappingText.text = mappingSelected.ToString();
 	    spikeText.text = "Spikes: Off";
+	    curveText.text = curveFiles[curveSelected].name;
 	}
 
 
     public void startGeneticAlgorthim()
     {
-        setUpManager.SetSettingFromUI(heights[heightSelected], mappingSelected, spikesSelected);
+        setUpManager.SetSettingFromUI(heights[heightSelected], mappingSelected, spikesSelected, curveFiles[curveSelected]);
 
         foreach (var btn in setUpButtons)
         {
@@ -95,5 +99,25 @@ public class SettingsUIManager : MonoBehaviour
             heightSelected = heights.Length - 1;
         }
         heightText.text = heights[heightSelected].ToString();
+    }
+
+    public void nextCurve()
+    {
+        curveSelected++;
+        if (curveSelected >= curveFiles.Length)
+        {
+            curveSelected = 0;
+        }
+        curveText.text = curveFiles[curveSelected].name;
+    }
+
+    public void lastCurve()
+    {
+        curveSelected--;
+        if (curveSelected < 0)
+        {
+            curveSelected = curveFiles.Length - 1;
+        }
+        curveText.text = curveFiles[curveSelected].name;
     }
 }
