@@ -22,6 +22,10 @@ public class SimpleAIController : MonoBehaviour {
     public Transform topPoint1;
     public Transform topPoint2;
 
+    public Transform wallCheck1;
+    public Transform wallCheck2;
+
+
     public Vector2 maxVelocity;
     
     private float jumpInputTimer;
@@ -531,37 +535,35 @@ public class SimpleAIController : MonoBehaviour {
             }
         }
 
-        if (jumpHitIgnore || !stopMoveRight)
+        bool fall = false;
+
+        if (Physics2D.OverlapArea(wallCheck1.position, wallCheck2.position) && !jumpStarted)
+            fall = true;
+
+        if(!fall)
         {
-            if (!waitJump && !spikeBelowStop)
+            if (jumpHitIgnore || !stopMoveRight)
             {
-                if (!dirLeft)
+                if (!waitJump && !spikeBelowStop)
                 {
-                    if (!grounded)
+                    if (!dirLeft)
                     {
-                        RaycastHit2D hitD0 = Physics2D.Raycast(groundPoint1.transform.position , -Vector2.up, 3f);
-                        RaycastHit2D hitD1 = Physics2D.Raycast(groundPoint2.transform.position, -Vector2.up, 3f);
-                        RaycastHit2D hitD2 = Physics2D.Raycast(transform.position + new Vector3(1f, -0.5f, 0),
-                            -Vector2.up, 15f);
-                        RaycastHit2D hitD3 = Physics2D.Raycast(transform.position + new Vector3(2f, -0.5f, 0),
-                            -Vector2.up, 3f);
-
-
-                        if ((hitD0.collider != null && hitD1.collider != null) && !jumpStarted)
+                        if (!grounded)
                         {
-                            if (hitD0.collider.gameObject.GetComponent<Spike>() == null &&
-                                hitD1.collider.gameObject.GetComponent<Spike>() == null)
+                            RaycastHit2D hitD0 = Physics2D.Raycast(groundPoint1.transform.position, -Vector2.up, 3f);
+                            RaycastHit2D hitD1 = Physics2D.Raycast(groundPoint2.transform.position, -Vector2.up, 3f);
+                            RaycastHit2D hitD2 = Physics2D.Raycast(transform.position + new Vector3(1f, -0.5f, 0),
+                                -Vector2.up, 15f);
+                            RaycastHit2D hitD3 = Physics2D.Raycast(transform.position + new Vector3(2f, -0.5f, 0),
+                                -Vector2.up, 3f);
+
+
+                            if ((hitD0.collider != null && hitD1.collider != null) && !jumpStarted)
                             {
-                                if (hitD2.collider == null)
+                                if (hitD0.collider.gameObject.GetComponent<Spike>() == null &&
+                                    hitD1.collider.gameObject.GetComponent<Spike>() == null)
                                 {
-                                    if (hitD1.collider.gameObject.GetComponent<Spike>() != null)
-                                    {
-                                        transform.Translate(Vector3.right * Time.deltaTime * speed);
-                                    }
-                                }
-                                else
-                                {
-                                    if (hitD2.collider.gameObject.GetComponent<Spike>() != null)
+                                    if (hitD2.collider == null)
                                     {
                                         if (hitD1.collider.gameObject.GetComponent<Spike>() != null)
                                         {
@@ -570,8 +572,22 @@ public class SimpleAIController : MonoBehaviour {
                                     }
                                     else
                                     {
-                                        transform.Translate(Vector3.right * Time.deltaTime * speed);
+                                        if (hitD2.collider.gameObject.GetComponent<Spike>() != null)
+                                        {
+                                            if (hitD1.collider.gameObject.GetComponent<Spike>() != null)
+                                            {
+                                                transform.Translate(Vector3.right * Time.deltaTime * speed);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            transform.Translate(Vector3.right * Time.deltaTime * speed);
+                                        }
                                     }
+                                }
+                                else
+                                {
+                                    transform.Translate(Vector3.right * Time.deltaTime * speed);
                                 }
                             }
                             else
@@ -583,78 +599,74 @@ public class SimpleAIController : MonoBehaviour {
                         {
                             transform.Translate(Vector3.right * Time.deltaTime * speed);
                         }
+
                     }
                     else
                     {
-                        transform.Translate(Vector3.right * Time.deltaTime * speed);
+                        transform.Translate(-Vector3.right * Time.deltaTime * speed);
                     }
 
-                }
-                else
-                {
-                    transform.Translate(-Vector3.right * Time.deltaTime * speed);
-                }
+                    RaycastHit2D hitD =
+                        Physics2D.Raycast(transform.position - new Vector3(1f, 0.5f, 0), -Vector2.up, 5f);
 
-                RaycastHit2D hitD =
-                    Physics2D.Raycast(transform.position - new Vector3(1f, 0.5f, 0), -Vector2.up, 5f);
-
-                if (hitD.collider != null && !grounded && !jumpStarted && !hitGround)
-                {
-                    if (hitD.transform.gameObject.GetComponent<Spike>() != null)
+                    if (hitD.collider != null && !grounded && !jumpStarted && !hitGround)
                     {
-                        spikeBelowStop = true;
-
-                        //RaycastHit2D hitD2 =
-                        //    Physics2D.Raycast(transform.position - new Vector3(2f, 0.5f, 0), -Vector2.up, 5f);
-
-                        //if (hitD2.collider != null)
-                        //{
-                        //    if (hitD2.transform.gameObject.GetComponent<Spike>() == null)                           
-                        //    {
-                        //       spikeBelowStop = false;
-                        //    }
-                        //}
-
-                    }
-                }
-
-
-                if (spikeBelowStop)
-                {
-                    hitD =
-                        Physics2D.Raycast(transform.position - new Vector3(0f, 0.5f, 0), -Vector2.up, 10f);
-
-                    if (!grounded && !jumpStarted)
-                    {
-                        if (hitD.collider == null)
+                        if (hitD.transform.gameObject.GetComponent<Spike>() != null)
                         {
-                            spikeBelowStop = false;
+                            spikeBelowStop = true;
+
+                            //RaycastHit2D hitD2 =
+                            //    Physics2D.Raycast(transform.position - new Vector3(2f, 0.5f, 0), -Vector2.up, 5f);
+
+                            //if (hitD2.collider != null)
+                            //{
+                            //    if (hitD2.transform.gameObject.GetComponent<Spike>() == null)                           
+                            //    {
+                            //       spikeBelowStop = false;
+                            //    }
+                            //}
+
                         }
-                        else
+                    }
+
+
+                    if (spikeBelowStop)
+                    {
+                        hitD =
+                            Physics2D.Raycast(transform.position - new Vector3(0f, 0.5f, 0), -Vector2.up, 10f);
+
+                        if (!grounded && !jumpStarted)
                         {
-                            if (hitD.transform.gameObject.GetComponent<Spike>() != null)
+                            if (hitD.collider == null)
                             {
                                 spikeBelowStop = false;
                             }
                             else
                             {
-                                transform.position = new Vector3(hitD.transform.position.x, transform.position.y);
+                                if (hitD.transform.gameObject.GetComponent<Spike>() != null)
+                                {
+                                    spikeBelowStop = false;
+                                }
+                                else
+                                {
+                                    transform.position = new Vector3(hitD.transform.position.x, transform.position.y);
+                                }
                             }
                         }
                     }
                 }
-            }
-            else
-            {
-            //    RaycastHit2D hitD = Physics2D.Raycast(transform.position + new Vector3(-0, -0.5f, 0), -Vector2.up, 4f);
-            //    if (hitD.collider != null)
-            //    {
-            //        if (hitD.transform.gameObject.GetComponent<Spike>() != null)
-            //        {
-            //            transform.Translate(Vector3.right * Time.deltaTime * speed);
-            //            waitJump = false;
-            //        }
-            //    }
+                else
+                {
+                    //    RaycastHit2D hitD = Physics2D.Raycast(transform.position + new Vector3(-0, -0.5f, 0), -Vector2.up, 4f);
+                    //    if (hitD.collider != null)
+                    //    {
+                    //        if (hitD.transform.gameObject.GetComponent<Spike>() != null)
+                    //        {
+                    //            transform.Translate(Vector3.right * Time.deltaTime * speed);
+                    //            waitJump = false;
+                    //        }
+                    //    }
+                }
             }
         }
 

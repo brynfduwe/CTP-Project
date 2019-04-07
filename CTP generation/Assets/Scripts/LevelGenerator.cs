@@ -9,6 +9,7 @@ using Random = UnityEngine.Random;
 public class LevelGenerator : MonoBehaviour
 {
     public GameObject ground;
+    public GameObject groundB;
     public GameObject endFlag;
     public GameObject spikePlat;
     public GameObject heartPlat;
@@ -18,6 +19,7 @@ public class LevelGenerator : MonoBehaviour
     // public string level;
 
     private List<GameObject> platsformObjects = new List<GameObject>();
+    private List<GameObject> additPlatsformObjects = new List<GameObject>();
 
     enum States
     {
@@ -238,6 +240,23 @@ public class LevelGenerator : MonoBehaviour
         player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 
         GetComponent<EventTracker>().SetSuccess(end.transform);
+
+        foreach (var plt in additPlatsformObjects)
+        {
+            Destroy(plt);
+        }
+
+        additPlatsformObjects.Clear();
+
+        //
+        foreach (var plt in platsformObjects)
+        {
+            for (int i = (int)plt.transform.position.y - 1; i >= transform.position.y; i--)
+            {
+                GameObject plat = Instantiate(groundB, new Vector3(plt.transform.position.x, i), ground.transform.rotation, transform);
+                additPlatsformObjects.Add(plat);
+            }
+        }
     }
 
 

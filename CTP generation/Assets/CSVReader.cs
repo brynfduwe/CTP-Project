@@ -17,7 +17,7 @@ public class CSVReader : MonoBehaviour
 
 
     // Use this for initialization
-    void Start ()
+    void Awake ()
     {
         file = setUp.curve;
 		ReadValues();

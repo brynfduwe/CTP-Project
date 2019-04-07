@@ -2149,12 +2149,12 @@ MonoBehaviour:
   height: 4
   length: 100
   populationOffspring: 500
-  candidateReq: 10
-  minimumFitnessReq: 0.25
-  historySteps: 1
+  candidateReq: 5
+  minimumFitnessReq: 0.35
+  historySteps: 0
   endAfterGen: 10
   mutationRate: 0.025
-  endFitnessReq: 0.8
+  endFitnessReq: 0.9
   spikes: 0
   hearts: 0
   curve: {fileID: 0}

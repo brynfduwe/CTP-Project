@@ -11,6 +11,21 @@ Prefab:
   m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1435348092900312}
   m_IsPrefabAsset: 1
+--- !u!1 &1045659716615678
+GameObject:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4512687726335534}
+  m_Layer: 0
+  m_Name: wallCheck (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1114717663546280
 GameObject:
   m_ObjectHideFlags: 1
@@ -78,6 +93,21 @@ GameObject:
   - component: {fileID: 114713477748287840}
   m_Layer: 0
   m_Name: Text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1350029318674558
+GameObject:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4576864350371798}
+  m_Layer: 0
+  m_Name: wallCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -242,6 +272,19 @@ Transform:
   m_Father: {fileID: 4574030040511764}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4512687726335534
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1045659716615678}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.07360007, y: -0.0602, z: 0}
+  m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4574030040511764}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4560701909889614
 Transform:
   m_ObjectHideFlags: 1
@@ -270,8 +313,23 @@ Transform:
   - {fileID: 4430455151179504}
   - {fileID: 4560701909889614}
   - {fileID: 4982551139173888}
+  - {fileID: 4576864350371798}
+  - {fileID: 4512687726335534}
   m_Father: {fileID: 4167241726786054}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4576864350371798
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1350029318674558}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.0736, y: 0.0623, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4574030040511764}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4765143688081294
 Transform:
@@ -476,14 +534,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ground: {fileID: 1939395781354114, guid: 5be56f2bfd70ca544900af5d9287e5dd, type: 2}
+  groundB: {fileID: 1550222944796328, guid: a90126d23f512a14c9c2d575cc34c09e, type: 2}
   endFlag: {fileID: 1427389136965790, guid: 67492496a1fb09040bcebb6691a33d84, type: 2}
   spikePlat: {fileID: 1278220323920274, guid: eb87fb508a9e412478735eee0c9b3a00, type: 2}
   heartPlat: {fileID: 1301413668100198, guid: 90b984fdcc089784c956f26b44e1b183, type: 2}
   transitionMatrixVis: {fileID: 114713477748287840}
   levelHeight: 10
+  stepHistory: 0
   levelLength: 185
   player: {fileID: 4574030040511764}
   PlayerTesting: 0
+  transitionIndexString: []
+  manualTransitionPath: 
 --- !u!114 &114227238697503778
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -517,6 +579,8 @@ MonoBehaviour:
   groundPoint2: {fileID: 4430455151179504}
   topPoint1: {fileID: 4560701909889614}
   topPoint2: {fileID: 4982551139173888}
+  wallCheck1: {fileID: 4576864350371798}
+  wallCheck2: {fileID: 4512687726335534}
   maxVelocity: {x: 4, y: 12}
   doNotColor: 1
 --- !u!114 &114379230975759792
