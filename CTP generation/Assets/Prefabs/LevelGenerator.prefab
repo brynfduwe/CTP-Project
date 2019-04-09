@@ -54,7 +54,6 @@ GameObject:
   - component: {fileID: 212250858032816106}
   - component: {fileID: 61124929737292578}
   - component: {fileID: 50323266473606632}
-  - component: {fileID: 114379230975759792}
   - component: {fileID: 114354217152884062}
   - component: {fileID: 70144520511653618}
   m_Layer: 0
@@ -137,9 +136,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4167241726786054}
   - component: {fileID: 114164870346033940}
-  - component: {fileID: 114227238697503778}
   - component: {fileID: 114133005542603026}
-  - component: {fileID: 114637339087211666}
   m_Layer: 0
   m_Name: LevelGenerator
   m_TagString: Untagged
@@ -546,20 +543,6 @@ MonoBehaviour:
   PlayerTesting: 0
   transitionIndexString: []
   manualTransitionPath: 
---- !u!114 &114227238697503778
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1435348092900312}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 120096389dca8e64c8b1a331aa6fd33f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 4574030040511764}
-  UImanager: {fileID: 0}
-  offspringIter: 0
 --- !u!114 &114354217152884062
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -583,42 +566,6 @@ MonoBehaviour:
   wallCheck2: {fileID: 4512687726335534}
   maxVelocity: {x: 4, y: 12}
   doNotColor: 1
---- !u!114 &114379230975759792
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1125097107976720}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca96c357406ba2349af386af212ad0be, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Jump: 0
-  Left: 0
-  Right: 0
-  jumpMin: 0.5
-  jumpMax: 2.3
-  jumpPower: 5
-  speed: 5
-  groundPoint1: {fileID: 4799101608344928}
-  groundPoint2: {fileID: 4430455151179504}
-  topPoint1: {fileID: 4560701909889614}
-  topPoint2: {fileID: 4982551139173888}
-  maxVelocity: {x: 3, y: 10}
-  doNotColor: 0
---- !u!114 &114637339087211666
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1435348092900312}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad630fd65ab894345bb557e0715276b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DifficultyUI: {fileID: 114081027008769154}
 --- !u!114 &114669685587025720
 MonoBehaviour:
   m_ObjectHideFlags: 1

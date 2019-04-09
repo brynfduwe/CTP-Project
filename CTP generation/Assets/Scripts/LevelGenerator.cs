@@ -92,25 +92,6 @@ public class LevelGenerator : MonoBehaviour
         }
 
 
-        //int iterA = 0;
-        //int iterB = 0;
-        //for (int j = 0; j < transitions; j++)
-        //{
-        //    Vector2 index = new Vector2(iterA, iterB);
-        //    transitionIndex.Add(index);
-
-        //    if (iterB >= (stateAmount - 1))
-        //    {
-        //        iterA++;
-        //        iterB = 0;
-        //    }
-        //    else
-        //    {
-        //        iterB++;
-        //    }
-        //}
-
-
         for (int j = 0; j < transitions; j++)
         {
             var idx = Convert.ToString(j, stateAmount);
@@ -174,20 +155,33 @@ public class LevelGenerator : MonoBehaviour
             }       
 
 
-            if ((int) currentState < (levelHeight) * 2 && (int) currentState > levelHeight || (int)currentState > (levelHeight) * 3)
+            if ((((int) currentState < (levelHeight) * 2 && (int) currentState > levelHeight)))
             {
                 currentState = States.NoGround;
             }
+
+            if ((int)currentState >= (levelHeight) * 3)
+            {
+                currentState = States.NoGround;
+            }
+
 
             if (currentState != States.NoGround)
             {
                 GameObject toSpawn = ground;
                 int spawnY = yPos + (int) currentState - 1;
 
-                if ((int) currentState > (levelHeight) * 2 && (int)currentState  < (levelHeight) * 3)
+                if ((int) currentState > levelHeight)
+                {
+                    spawnY = yPos + (int)currentState - (levelHeight);
+                    spawnY = spawnY - 1;
+                }
+
+                if ((int) currentState > (levelHeight) * 2)
                 {
                     toSpawn = spikePlat;
-                    spawnY = spawnY - (levelHeight * 2);
+                    spawnY = yPos + (int)currentState - (levelHeight * 2);
+                    spawnY = spawnY - 1;
                 }
 
                 GameObject plat = Instantiate(toSpawn, new Vector3(xPos, spawnY, 0),
@@ -345,21 +339,6 @@ public class LevelGenerator : MonoBehaviour
     }
 
 
-    // Update is called once per frame
-    void Update()
-    {
-        //if (Input.GetKeyDown(KeyCode.Alpha0))
-        //{
-        //    NewLevelCandidate();
-        //}
-
-        //if (player.GetComponent<SimpleAIController>().SpikeCheck())
-        //{
-        //    player.transform.position -= new Vector3(0, 50, 0);
-        //}
-    }
-
-
     public List<int[]> GetGeneratorChromosome()
     {
         return probabilityTransList;
@@ -368,15 +347,6 @@ public class LevelGenerator : MonoBehaviour
     public void NewLevelCandidate()
     {
         GenerateLevel();
-
-        if (!PlayerTesting)
-        {
-          //  StartCoroutine(WaitAndDiffCheck());
-        }
-        else
-        {
-         //   GetComponent<LevelDetailAnalyser>().CheckLevelDifficulty(platsformObjects.ToArray());
-        }
     }
 
 
@@ -385,11 +355,6 @@ public class LevelGenerator : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(5 * Time.timeScale);
-
-            if (GameObject.FindGameObjectWithTag("GAManager").GetComponent<GeneticAlgManager>().generation >= 1)
-            {
-            //    CheckDiffucultySuccess();
-            }
         }
     }
 
@@ -427,13 +392,6 @@ public class LevelGenerator : MonoBehaviour
     {
         manualTransitionPath = path;
         PlayerTesting = true;
-    }
-
-
-    public void SetRests(float _restFreq)
-    {
-        ////IDK
-        restFreqLevel = _restFreq;
     }
 
 

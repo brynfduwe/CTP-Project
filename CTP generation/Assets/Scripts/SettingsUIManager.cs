@@ -52,6 +52,14 @@ public class SettingsUIManager : MonoBehaviour
         if (spikesSelected)
         {
             spikeText.text = "Spikes: On";
+            for (int i = 0; i < heights.Length - 1; i++)
+            {
+                if (heights[i] == 4)
+                {
+                    heightSelected = i;
+                    heightText.text = heights[heightSelected].ToString();
+                }
+            }
         }
         else
         {
@@ -89,6 +97,9 @@ public class SettingsUIManager : MonoBehaviour
             heightSelected = 0;
         }
         heightText.text = heights[heightSelected].ToString();
+
+        spikesSelected = false;
+        spikeText.text = "Spikes: Off";
     }
 
     public void lastHeight()
@@ -99,6 +110,9 @@ public class SettingsUIManager : MonoBehaviour
             heightSelected = heights.Length - 1;
         }
         heightText.text = heights[heightSelected].ToString();
+
+        spikesSelected = false;
+        spikeText.text = "Spikes: Off";
     }
 
     public void nextCurve()

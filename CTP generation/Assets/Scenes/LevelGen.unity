@@ -604,6 +604,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1013319300}
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &197946936
@@ -1829,6 +1840,83 @@ CanvasRenderer:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 913941655}
+  m_CullTransparentMesh: 0
+--- !u!1 &1013319300
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1013319301}
+  - component: {fileID: 1013319303}
+  - component: {fileID: 1013319302}
+  m_Layer: 5
+  m_Name: SetUpMessage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1013319301
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1013319300}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1732767417}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -45.2, y: -33.7}
+  m_SizeDelta: {x: 240.2, y: 171.5}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1013319302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1013319300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 30
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 3
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 'Please Select Level Generation
+
+    Settings >>>>>>'
+--- !u!222 &1013319303
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1013319300}
   m_CullTransparentMesh: 0
 --- !u!1 &1082577746
 GameObject:
@@ -3415,6 +3503,7 @@ RectTransform:
   - {fileID: 91592789}
   - {fileID: 1448616519}
   - {fileID: 1806390745}
+  - {fileID: 1013319301}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3465,8 +3554,10 @@ MonoBehaviour:
   - {fileID: 1216788137}
   heights: 010000000400000008000000
   curveFiles:
-  - {fileID: 4900000, guid: ca232da899d8aa3468f35958d5dbcf85, type: 3}
+  - {fileID: 4900000, guid: ec3f1641d63e1054fbc74a286764bb2d, type: 3}
+  - {fileID: 4900000, guid: 68fcc14036ad8fb4f9a16403257b1c74, type: 3}
   - {fileID: 4900000, guid: c348a51ca915442409e7e6939d575162, type: 3}
+  - {fileID: 4900000, guid: ca232da899d8aa3468f35958d5dbcf85, type: 3}
   - {fileID: 4900000, guid: c53ba9e113a8bc34eb5cdfbbfcc355c8, type: 3}
   heightText: {fileID: 1771120684}
   mappingText: {fileID: 1690725383}
@@ -3727,8 +3818,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.1870422, y: 1.39}
-  m_SizeDelta: {x: 95, y: 18.98}
+  m_AnchoredPosition: {x: -0.41, y: -3.2724}
+  m_SizeDelta: {x: 96.05, y: 24.313}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1771120684
 MonoBehaviour:

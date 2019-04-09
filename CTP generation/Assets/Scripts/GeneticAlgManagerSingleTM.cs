@@ -75,7 +75,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
         if (setUp.spikes == true)
         {
             transitions = transitions + setUp.height; // spikes
-            transitions = transitions + setUp.height; // spikes
+            transitions = transitions + setUp.height; // spike gaps
         }
 
         stateAmounts = transitions;
@@ -176,12 +176,12 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             IncreaseTimeScale();
         }
 
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             DecreaseTimeScale();
         }
@@ -515,7 +515,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
     public void IncreaseTimeScale()
     {
-        if (TimeScale < 10)
+        if (TimeScale < 5)
         {
             TimeScale++;
             Time.timeScale = TimeScale;
