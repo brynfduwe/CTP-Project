@@ -5,33 +5,18 @@ using UnityEngine.UI;
 
 public class DifficultyTracker : MonoBehaviour
 {
-    private int rests = 0; // platform of 3 or more
     private List<int> restLengths = new List<int>(); // number of platforms in that rest
-    private int rhythmGroups = 0;
     private List<int> rhythmGroupLengths = new List<int>();
 
     private float fitness = 0;
     public Text DifficultyUI;
 
-    ///-
     private float restsNumOf;
     private float restLengthAvg;
 
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
     public void CheckLevelDifficulty(GameObject[] levelPlats)
     {
-        rests = 0;
-        rhythmGroups = 0;
-
         restLengths.Clear();
         rhythmGroupLengths.Clear();
 
@@ -62,7 +47,6 @@ public class DifficultyTracker : MonoBehaviour
                     //check to log rest
                     if (rbmCount > 0)
                     {
-                        rhythmGroups++;
                         rhythmGroupLengths.Add(rbmCount + 1);
 
                         rbmCount = 0;
@@ -75,9 +59,7 @@ public class DifficultyTracker : MonoBehaviour
                     //check to log rest
                     if (restCount > 0)
                     {
-                        rests++;
                         restLengths.Add(restCount + 1);
-
                         restCount = 0;
                     }
                 }
@@ -98,8 +80,6 @@ public class DifficultyTracker : MonoBehaviour
             r += ", ";
         }
 
-     //   Debug.Log("Diff Rests: " + rests.ToString() + " - " + s + " /// Diff Rhg: " + rhythmGroups + " - " + r);
-
         int rlScore = 0;
         int rglScore = 0;
 
@@ -116,9 +96,6 @@ public class DifficultyTracker : MonoBehaviour
         {
             rglScore += rgl;
         }
-
-     //   Debug.Log("FITNESS DIFFUCICULTY: " + fitness.ToString());
-        DifficultyUI.text = restsNumOf.ToString();
     }
 
 

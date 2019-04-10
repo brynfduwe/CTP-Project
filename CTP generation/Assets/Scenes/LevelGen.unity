@@ -1675,13 +1675,7 @@ MonoBehaviour:
     type: 2}
   UImanager: {fileID: 1732767418}
   setUp: {fileID: 1294654219}
-  generation: 1
-  CandidateFitness: []
   levelGMs: []
-  testersDone: 0
-  bestTransitionPath: 
-  bestFitnessOverall: 0
-  bestCandidateActions: []
 --- !u!114 &904623994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2240,9 +2234,9 @@ MonoBehaviour:
   candidateReq: 5
   minimumFitnessReq: 0.33
   historySteps: 0
-  endAfterGen: 25
+  endAfterGen: 15
   mutationRate: 0.025
-  endFitnessReq: 0.95
+  endFitnessReq: 0.9
   spikes: 0
   hearts: 0
   curve: {fileID: 0}

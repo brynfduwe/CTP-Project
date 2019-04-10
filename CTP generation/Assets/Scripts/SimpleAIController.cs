@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class SimpleAIController : MonoBehaviour {
 
+
+    public bool doNotColor;
+
     public float jumpMin;
     public float jumpMax;
     public float jumpPower;
@@ -25,69 +28,50 @@ public class SimpleAIController : MonoBehaviour {
     public Transform wallCheck1;
     public Transform wallCheck2;
 
-
     public Vector2 maxVelocity;
     
-    private float jumpInputTimer;
-    private float jumpTime;
 
-    private bool jumpTargetHit = true;
+
+
     private Vector2 jumpTargetPos;
-    private Transform jumpTargetTransform;
-    private bool stopMoveRight;
-
-    private Transform standingPlat;
-
-    private bool jumpHitIgnore = true;
-
     private Vector2 startPos;
 
-    private bool waitJump;
-
-    private List<Transform> failedPlatformMover;
-
-    private bool tryThing;
-
     private bool dirLeft = false;
+    private bool waitJump;
+    private bool jumpHitIgnore = true;
+    private bool stopMoveRight;
 
     private Transform lastJumpedOffPlat;
-
-    //  List<Transform> failedPlats = new List<Transform>();
-    List<Transform> doNotRetryPlats = new List<Transform>();
-
-    List<PlatformCheckClass> failedPlatfromList = new List<PlatformCheckClass>();
-
-    public bool doNotColor;
-
     private Transform lastTriedPlat;
-
-    private bool spikeBelowStop = false;
-    
-    ///
-    ///
-    
-    private List<float> actions = new List<float>();
-    private float recordPosX = 0.45f;
-    private bool recordRepeat = false;
-    SetUpManager.MappingType mapping;
-
-    private int prevIterToCheck = 0;
-    private List<int[]> prevInputVector = new List<int[]>(); //right, a(jump)
-
-    private float inputDelay = 0f;
-    private float inputDelayTimer = 0;
-
-    private int health = 3;
-    private int maxHealth = 3;
-    private bool invul = false;
-    private float invulTimer = 0;
-
-
-    private float JumpTrackTimer = 0;
+    private Transform standingPlat;
 
     private int jumpsInSecond = 0;
+    private int prevIterToCheck = 0;
+    private int health = 3;
+    private int maxHealth = 3;
 
+    private bool jumpTargetHit = true;
+    private bool invul = false;
+    private bool spikeBelowStop = false;
+    private bool recordRepeat = false;
+
+    private float jumpInputTimer;
+    private float jumpTime;
+    private float invulTimer = 0;
+    private float JumpTrackTimer = 0;
+    private float inputDelay = 0f;
+    private float inputDelayTimer = 0;
+    private float recordPosX = 0.45f;
+
+    private Transform jumpTargetTransform;
+    private List<Transform> failedPlatformMover;
+    private List<float> actions = new List<float>();
+    List<Transform> doNotRetryPlats = new List<Transform>();
+    List<PlatformCheckClass> failedPlatfromList = new List<PlatformCheckClass>();
     private List<int> JumpsPerSecondAll = new List<int>();
+    private List<int[]> prevInputVector = new List<int[]>(); //right, a(jump), none
+
+    SetUpManager.MappingType mapping;
 
     // Use this for initialization
     void Start()
@@ -107,26 +91,19 @@ public class SimpleAIController : MonoBehaviour {
         mapping = set;
     }
 
-    //if (jumpHitIgnore || !stopMoveRight)
-    //{
-    //    if (!waitJump && !spikeBelowStop)
-    //    {
-    //        if (!dirLeft)
-    //        {
-    //            transform.Translate(Vector3.right* Time.deltaTime* speed);
-    //        }
 
     void AddActions()
     {
         switch (mapping)
         {
             case SetUpManager.MappingType.InputChangeRate:
-                int[] inputVector = { 0, 0 };
+                int[] inputVector = {0, 0};
                 if (jumpHitIgnore || !stopMoveRight)
                     if (!waitJump && !spikeBelowStop)
-                        if (!dirLeft || dirLeft) // left and right are the same input value, as only one or none can be true, not both.  
+                        if (!dirLeft || dirLeft
+                        ) // left and right are the same input value, as only one or none can be true, not both.  
                             inputVector[0] = 1; // right
-                if(jumpStarted)
+                if (jumpStarted)
                     inputVector[1] = 1; //jump
 
                 prevInputVector.Add(inputVector); // ads to list
@@ -137,11 +114,13 @@ public class SimpleAIController : MonoBehaviour {
                     bool different = false;
                     for (int i = 1; i < prevIterToCheck; i++)
                     {
-                        if (inputVector[j] != prevInputVector[prevIterToCheck - i][j] ) // compares the input from x tiles back
+                        if (inputVector[j] != prevInputVector[prevIterToCheck - i][j]
+                        ) // compares the input from x tiles back
                             different = true;
                     }
-                    if(different)
-                       changeVector[j] = 1;
+
+                    if (different)
+                        changeVector[j] = 1;
                 }
 
                 actions.Add(changeVector.Sum() / 2);
@@ -149,7 +128,7 @@ public class SimpleAIController : MonoBehaviour {
                 if (prevInputVector.Count <= 3)
                     prevIterToCheck++; // updates to be 4 behind after the tester has moved enough
 
-             
+
                 break;
 
             case SetUpManager.MappingType.JumpsPerSecond:
@@ -157,7 +136,7 @@ public class SimpleAIController : MonoBehaviour {
                     if (jumpStarted)
                         jumpsInSecond++;
 
-                actions.Add((float)jumpsInSecond / 2);
+                actions.Add((float) jumpsInSecond / 2);
                 break;
 
             case SetUpManager.MappingType.JumpsIn1SecondTo5secondRatio:
@@ -165,19 +144,19 @@ public class SimpleAIController : MonoBehaviour {
 
                 for (int i = JumpsPerSecondAll.Count - 1; i > JumpsPerSecondAll.Count - 6; i--)
                 {
-                    if(i >= 0)
+                    if (i >= 0)
                         lastJumps += JumpsPerSecondAll[i];
                 }
 
                 float ratio = lastJumps;
                 if (jumpsInSecond > 0)
-                    ratio = lastJumps / ((float)jumpsInSecond * 5);
+                    ratio = lastJumps / ((float) jumpsInSecond * 5);
 
                 if (ratio > 1)
                     ratio = 1;
- 
+
                 actions.Add(ratio);
-               // jumpsInSecond = 0;
+                // jumpsInSecond = 0;
                 Debug.Log(ratio);
                 break;
 
@@ -187,13 +166,14 @@ public class SimpleAIController : MonoBehaviour {
                 lastJumps = 0;
                 for (int i = JumpsPerSecondAll.Count - 1; i > JumpsPerSecondAll.Count - 6; i--)
                 {
-                    if(i>=0)
+                    if (i >= 0)
                         lastJumps += JumpsPerSecondAll[i];
                 }
+
                 float thisratio = lastJumps;
                 if (jumpsInSecond > 0)
                 {
-                    thisratio = lastJumps / ((float)jumpsInSecond * 5);
+                    thisratio = lastJumps / ((float) jumpsInSecond * 5);
                 }
 
 
@@ -203,21 +183,22 @@ public class SimpleAIController : MonoBehaviour {
                     if (i >= 0)
                         prevJumps += JumpsPerSecondAll[i];
                 }
+
                 float prevRatio = lastJumps;
                 if (jumpsInSecond > 0)
                 {
-                    prevRatio = prevJumps / ((float)jumpsInSecond * 5);
+                    prevRatio = prevJumps / ((float) jumpsInSecond * 5);
                 }
 
 
                 float diff = thisratio - prevRatio;
-                diff+= 1;
+                diff += 1;
                 diff = diff / 2;
 
-                if (diff < 0) 
-            {
-                diff = 0;
-            }
+                if (diff < 0)
+                {
+                    diff = 0;
+                }
 
 
                 actions.Add(diff);
@@ -254,8 +235,8 @@ public class SimpleAIController : MonoBehaviour {
                     actions.Add(actions[actions.Count - 1]);
                     recordRepeat = false;
                 }
-                break;
 
+                break;
         }
     }
 
@@ -322,9 +303,70 @@ public class SimpleAIController : MonoBehaviour {
 
     void FixedUpdate()
     {
-        // actions.Add(Random.Range(0,3));
+        //check ground triggers
         grounded = Physics2D.OverlapArea(groundPoint1.position, groundPoint2.position);
 
+        SensorChecks(); // series of sensor checks determine whether the ai moves, jumps or stops
+
+        if (!stopMoveRight && !jumpHitIgnore)
+        {
+            if (!dirLeft)
+            {
+                if (transform.position.x >= jumpTargetPos.x)
+                {
+                    stopMoveRight = true;
+                    transform.position = new Vector3(jumpTargetPos.x, transform.position.y);
+                    GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                }
+            }
+            else
+            {
+                if (transform.position.x + 0.5f <= jumpTargetPos.x)
+                {
+                    stopMoveRight = true;
+                    transform.position = new Vector3(jumpTargetPos.x, transform.position.y);
+                    GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                }
+            }
+        }
+        else
+        {
+            if (jumpTargetPos.y - jumpTargetPos.y < 0f)
+            {
+                dirLeft = false;
+                jumpTargetHit = true;
+                jumpHitIgnore = true;
+                standingPlat = jumpTargetTransform;
+            }
+        }
+
+        //adds delay 
+        if (waitJump)
+        {
+            if (jumpTargetPos.y - transform.position.y < 0f)
+            {
+                waitJump = false;
+            }
+        }
+
+        bool fall = false;
+        if (Physics2D.OverlapArea(wallCheck1.position, wallCheck2.position) && !jumpStarted)
+            fall = true;
+
+
+        Move(fall); // move ai
+
+
+        if (GetComponent<Rigidbody2D>().velocity.x > maxVelocity.x)
+            GetComponent<Rigidbody2D>().velocity = new Vector2(maxVelocity.x, GetComponent<Rigidbody2D>().velocity.y);
+
+        if (GetComponent<Rigidbody2D>().velocity.y > maxVelocity.y)
+            GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, maxVelocity.y);
+    }
+
+
+    void SensorChecks()
+    {
         if (grounded)
         {
             spikeBelowStop = false;
@@ -429,7 +471,7 @@ public class SimpleAIController : MonoBehaviour {
                 }
             }
 
-    
+
         }
         else
         {
@@ -446,7 +488,7 @@ public class SimpleAIController : MonoBehaviour {
             }
             else
             {
-                
+
                 if (!dirLeft)
                 {
                     RaycastHit2D hitCeiling = Physics2D.Raycast(transform.position + new Vector3(0.45f, 0.5f, 0),
@@ -456,7 +498,7 @@ public class SimpleAIController : MonoBehaviour {
                         transform.position = transform.position - new Vector3(0.3f, 0);
                     }
                 }
-        
+
             }
 
             jumpInputTimer += Time.deltaTime;
@@ -487,60 +529,11 @@ public class SimpleAIController : MonoBehaviour {
                 }
             }
         }
+    }
 
-        if (!stopMoveRight && !jumpHitIgnore)
-        {
-            if (!dirLeft)
-            {
-                if (transform.position.x >= jumpTargetPos.x)
-                {
-                    //  MoverCounter++;
-                    stopMoveRight = true;
-                    transform.position = new Vector3(jumpTargetPos.x, transform.position.y);
-                    GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-
-                   // spikeBelowStop = false;
-                }
-            }
-            else
-            {
-                if (transform.position.x + 0.5f <= jumpTargetPos.x)
-                {
-                    //  MoverCounter++;
-                    stopMoveRight = true;
-                    transform.position = new Vector3(jumpTargetPos.x, transform.position.y);
-                    GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-                }
-            }
-        }
-        else
-        {
-            if (jumpTargetPos.y - jumpTargetPos.y < 0f)
-            {
-                dirLeft = false;
-               // stopMoveRight = false;
-                jumpTargetHit = true;
-                jumpHitIgnore = true;
-
-                standingPlat = jumpTargetTransform;
-
-            }
-        }
-
-        if (waitJump)
-        {
-            if (jumpTargetPos.y - transform.position.y < 0f)
-            {
-                waitJump = false;
-            }
-        }
-
-        bool fall = false;
-
-        if (Physics2D.OverlapArea(wallCheck1.position, wallCheck2.position) && !jumpStarted)
-            fall = true;
-
-        if(!fall)
+    private void Move(bool fall)
+    {
+        if (!fall)
         {
             if (jumpHitIgnore || !stopMoveRight)
             {
@@ -599,7 +592,6 @@ public class SimpleAIController : MonoBehaviour {
                         {
                             transform.Translate(Vector3.right * Time.deltaTime * speed);
                         }
-
                     }
                     else
                     {
@@ -614,18 +606,6 @@ public class SimpleAIController : MonoBehaviour {
                         if (hitD.transform.gameObject.GetComponent<Spike>() != null)
                         {
                             spikeBelowStop = true;
-
-                            //RaycastHit2D hitD2 =
-                            //    Physics2D.Raycast(transform.position - new Vector3(2f, 0.5f, 0), -Vector2.up, 5f);
-
-                            //if (hitD2.collider != null)
-                            //{
-                            //    if (hitD2.transform.gameObject.GetComponent<Spike>() == null)                           
-                            //    {
-                            //       spikeBelowStop = false;
-                            //    }
-                            //}
-
                         }
                     }
 
@@ -655,28 +635,8 @@ public class SimpleAIController : MonoBehaviour {
                         }
                     }
                 }
-                else
-                {
-                    //    RaycastHit2D hitD = Physics2D.Raycast(transform.position + new Vector3(-0, -0.5f, 0), -Vector2.up, 4f);
-                    //    if (hitD.collider != null)
-                    //    {
-                    //        if (hitD.transform.gameObject.GetComponent<Spike>() != null)
-                    //        {
-                    //            transform.Translate(Vector3.right * Time.deltaTime * speed);
-                    //            waitJump = false;
-                    //        }
-                    //    }
-                }
             }
         }
-
-        if (GetComponent<Rigidbody2D>().velocity.x > maxVelocity.x)
-            GetComponent<Rigidbody2D>().velocity = new Vector2(maxVelocity.x, GetComponent<Rigidbody2D>().velocity.y);
-
-
-        if (GetComponent<Rigidbody2D>().velocity.y > maxVelocity.y)
-            GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, maxVelocity.y);
-
     }
 
 
@@ -1151,5 +1111,27 @@ public class SimpleAIController : MonoBehaviour {
         }
 
         return false;
+    }
+}
+
+
+public class PlatformCheckClass
+{
+    public Transform referenceTransform;
+    List<Transform> failedJumpToPlats = new List<Transform>();
+
+    public PlatformCheckClass(Transform reference)
+    {
+        referenceTransform = reference;
+    }
+
+    public void AddFailedPlat(Transform fail)
+    {
+        failedJumpToPlats.Add(fail);
+    }
+
+    public List<Transform> GetFailedPlats()
+    {
+        return failedJumpToPlats;
     }
 }

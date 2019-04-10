@@ -16,7 +16,6 @@ public class LevelDetailAnalyser : MonoBehaviour
 
     private float fitness = 0;
 
-    ///-
     private float restsNumOf;
     private float restLengthAvg;
 
@@ -25,14 +24,10 @@ public class LevelDetailAnalyser : MonoBehaviour
 
     int average_height = 0;
 
-
-
     // Use this for initialization
     void Start ()
     {
-
         Time.timeScale = 3;
-
     }
 	
 	// Update is called once per frame
@@ -183,8 +178,6 @@ public class LevelDetailAnalyser : MonoBehaviour
             r += ", ";
         }
 
-        //   Debug.Log("Diff Rests: " + rests.ToString() + " - " + s + " /// Diff Rhg: " + rhythmGroups + " - " + r);
-
         int rlScore = 0;
         int rglScore = 0;
 
@@ -202,11 +195,6 @@ public class LevelDetailAnalyser : MonoBehaviour
             rglScore += rgl;
         }
 
-        //   Debug.Log("FITNESS DIFFUCICULTY: " + fitness.ToString());
-        //DifficultyUI.text = restsNumOf.ToString();
-
-
-
         AIsuccesses.Clear();
         
         foreach (var rgt in rhythmGroupTransforms)
@@ -219,7 +207,7 @@ public class LevelDetailAnalyser : MonoBehaviour
             GameObject ait = Instantiate(AI, rgt[0].transform.position + new Vector3(0, 1), transform.rotation);
             AITesters.Add(ait);
             AIsuccesses.Add(false);
-            ait.GetComponent<AITesterController>().doNotColor = true;
+            ait.GetComponent<SimpleAIController>().doNotColor = true;
         }
     }
 }
