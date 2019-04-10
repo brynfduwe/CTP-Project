@@ -25,8 +25,6 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
     int TimeScale = 1;
 
-    List<int[]> finalCandidate = new List<int[]>();
-
     private int finalGen = 0;
 
     public List<int[]> currentProbabilityTransMatrix = new List<int[]>();
@@ -92,7 +90,6 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
             currentProbabilityTransMatrix.Add(x.ToArray());
         }
 
-        //candidateScore = 0;
         levelGMs.Clear();
         int y = 0;
 
@@ -109,7 +106,6 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
         foreach (var LGM in levelGMs)
         {
             LGM.GetComponent<LevelGenerator>().MyStart(setUp.height, setUp.length, transitions, setUp.mapping, setUp.historySteps, stateAmounts);
-          //  LGM.GetComponent<LevelGenerator>().SetRests(setUp.GetRestCov());
 
             LGM.GetComponent<LevelGenerator>().SetNewChain(currentProbabilityTransMatrix);
             LGM.GetComponent<LevelGenerator>().NewLevelCandidate();
@@ -161,13 +157,10 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
                 int r = Random.Range(0, leftVal + 1);
                 leftVal -= r;
-                //  usedList.Add(rT);
                 pa[rT] = r;
                 usedCheck[rT] = true;
                 decremter--;
             }
-
-            // probablitiyLists[i] = new List<int>(usedList);
         }
     }
 
@@ -208,7 +201,6 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                         levelGMs[i].GetComponent<LevelGenerator>().player.gameObject
                             .GetComponent<SimpleAIController>().GetAllActions());
                     levelGMs[i].GetComponent<LevelGenerator>().NewLevelCandidate();
-
 
                     candidateAllActions.Add(levelGMs[i].GetComponent<LevelGenerator>().player.gameObject
                         .GetComponent<SimpleAIController>().GetAllActions());
@@ -296,8 +288,6 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
             else
             {
                 offspringIter++;
-                //  if (offspringIter >= CurrentOffspring.Count)
-                //     offspringIter = 0;
 
                 currentProbabilityTransMatrix = CurrentOffspring[Random.Range(0, CurrentOffspring.Count)];
 
@@ -311,51 +301,32 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
             //new Generation
             if (CandidateList.Count >= setUp.candidateReq)
             {
-                //float totalFitnessAvg = 0;
-                //foreach (var f in CandidateFitness)
-                //{
-                //    totalFitnessAvg += f;
-                //}
-                //totalFitnessAvg = totalFitnessAvg / setUp.candidateReq;
-                //setUp.minimumFitnessReq = totalFitnessAvg;
-
-
                 generationBestActions.Clear();
-
                 generation++;
-
+                
                 if (generation > setUp.endAfterGen || bestFitnessOverall >= setUp.endFitnessReq)
                 {
-                    GetComponent<CSVWriter>().WriteFinal(bestCandidateActions);
-                    //UnityEditor.EditorApplication.isPlaying = false;
-                    GameObject.Find("StandAloneLevelManager").GetComponent<StandAloneLevelManager>().SetUp(setUp.height, setUp.length, transitions, stateAmounts, setUp.historySteps, bestTransitionPath, bestTransitionMatrix, setUp.mapping, bestFitnessOverall);
-                    GameObject.Find("SceneManager").GetComponent<SceneManager>().LoadScene(1);
+                    EndGeneration();
                 }
-
-                GetComponent<CSVWriter>().WriteConvergenceNewGen(generation);
+                GetComponent<CSVWriter>().WriteConvergenceNewGen(generation); //write out generation data.
 
                 UImanager.UpdateGeneration(generation);
                 candidate = 0;
                 UImanager.UpdateCandidate(candidate);
                 UImanager.UpdateTests(0);
 
-
+                //clear old offspring
                 CurrentOffspring.Clear();
-
+                //generate new offspring
                 for (int i = 0; i < offSpringPopulation; i++)
                 {
                     Selection();
                 }
 
+                //preperation for new generation
                 CandidateList.Clear();
                 CandidateFitness.Clear();
-
-                //   offspringIter++;
-                //  if (offspringIter >= CurrentOffspring.Count)
-                //      offspringIter = 0;
-
                 currentProbabilityTransMatrix = CurrentOffspring[Random.Range(0, CurrentOffspring.Count)];
-
                 foreach (var LGM in levelGMs)
                 {
                     LGM.GetComponent<LevelGenerator>().SetNewChain(currentProbabilityTransMatrix);
@@ -367,10 +338,11 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// Selects 2 parents for offspring matrix based on fitness.
+    /// </summary>
     void Selection()
     {
-
         List<int[]> Offspring = new List<int[]>();
 
         int p1 = 0;
@@ -384,7 +356,6 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
         float r = Random.Range(0, totalFitness);
         float iter = 0;
-        int selected = 0;
 
         for (int i = 0; i < CandidateFitness.Count; i++)
         {
@@ -397,7 +368,6 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
         r = Random.Range(0, totalFitness);
         iter = 0;
-        selected = 0;
 
         for (int i = 0; i < CandidateFitness.Count; i++)
         {
@@ -407,26 +377,21 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                 p2 = i;
             }
         }
-
-        //Random.seed = System.DateTime.Now.Millisecond;
-        //p1 = Random.Range(0, CandidateList.Count);
-        //Random.seed = System.DateTime.Now.Millisecond;
-        //p2 = Random.Range(0, CandidateList.Count);
-
         while (p1 == p2)
         {
             p2 = Random.Range(0, CandidateList.Count);
         }
 
-       // Debug.Log(p1.ToString() + " - " + p2.ToString());
-
         Offspring = Crossover(CandidateList[p1], CandidateList[p2]);
-
         CurrentOffspring.Add(Offspring);
-
     }
 
-
+    /// <summary>
+    /// Crossover for genetic algothim
+    /// </summary>
+    /// <param name="parent1"></param>
+    /// <param name="parent2"></param>
+    /// <returns></returns>
     List<int[]> Crossover(List<int[]> parent1, List<int[]> parent2)
     {
         List<int[]> Offspring = new List<int[]>();
@@ -442,6 +407,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
         for (int i = 0; i < parent1.Count; i++)
         {
+            //if less than mutation rate, the gene(transition array) is randomised
             if (Random.Range(0, 1) < setUp.mutationRate)
             {
                 List<int> x = new List<int>();
@@ -470,7 +436,6 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
                     int rd = Random.Range(0, leftVal + 1);
                     leftVal -= rd;
-                    //  usedList.Add(rT);
                     x[rT] = rd;
                     usedCheck[rT] = true;
                     decremter--;
@@ -478,7 +443,7 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
 
                 Offspring.Add(x.ToArray());
             }
-            else
+            else //otherwise it is formed from the 2 parents.
             { 
                 if (!flipped)
                 {
@@ -503,13 +468,18 @@ public class GeneticAlgManagerSingleTM : MonoBehaviour
                     }
                 }
             }
-
-
         }
-
-        //     Debug.Log("Flipped = " + flipped.ToString());
-   //    Debug.Log("CrossoverPoint = " + r.ToString());
         return Offspring;
+    }
+
+    /// <summary>
+    /// Ends generation process, setsup and loads stand alone level.
+    /// </summary>
+    void EndGeneration()
+    {
+        GetComponent<CSVWriter>().WriteFinal(bestCandidateActions);
+        GameObject.Find("StandAloneLevelManager").GetComponent<StandAloneLevelManager>().SetUp(setUp.height, setUp.length, transitions, stateAmounts, setUp.historySteps, bestTransitionPath, bestTransitionMatrix, setUp.mapping, bestFitnessOverall);
+        GameObject.Find("SceneManager").GetComponent<SceneManager>().LoadScene(1);
     }
 
 

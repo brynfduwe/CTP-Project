@@ -2238,11 +2238,11 @@ MonoBehaviour:
   length: 100
   populationOffspring: 500
   candidateReq: 5
-  minimumFitnessReq: 0.35
+  minimumFitnessReq: 0.33
   historySteps: 0
-  endAfterGen: 10
+  endAfterGen: 25
   mutationRate: 0.025
-  endFitnessReq: 0.9
+  endFitnessReq: 0.95
   spikes: 0
   hearts: 0
   curve: {fileID: 0}

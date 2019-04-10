@@ -8,136 +8,119 @@ using Random = UnityEngine.Random;
 
 public class LevelGenerator : MonoBehaviour
 {
-    public GameObject ground;
-    public GameObject groundB;
-    public GameObject endFlag;
-    public GameObject spikePlat;
-    public GameObject heartPlat;
-
-    public Text transitionMatrixVis;
-
-    // public string level;
-
-    private List<GameObject> platsformObjects = new List<GameObject>();
-    private List<GameObject> additPlatsformObjects = new List<GameObject>();
-
     enum States
     {
         NoGround,
         Ground1,
     }
 
-    public List<int[]> probabilityTransList = new List<int[]>();
+    public bool PlayerTesting;
 
-    public int levelHeight = 10;
+    public GameObject ground;
+    public GameObject groundB;
+    public GameObject endFlag;
+    public GameObject spikePlat;
 
-    public int stepHistory;
-    private States currentState;
-    private int xPos = 0;
-    public int levelLength;
+    public List<int[]> probabilityTransList = new List<int[]>(); //transition matrix used for level generation
 
     public Transform player;
-    private Vector2 startPlayerPos;
+
+    private States currentState;
+
+    private List<GameObject> platsformObjects = new List<GameObject>(); //generated level objects
+    private List<GameObject> additPlatsformObjects = new List<GameObject>(); //additional, non essitential generated level objects
+
+
+
+    private int startX = 0;
+    private int xPos = 0;
+    private int levelLength;
+    private int levelHeight = 10;
+    private int stepHistory;
 
     private float restFreqLevel = 0;
     private float restAmountLevel = 0;
 
-    public bool PlayerTesting;
+    private Vector2 enforceBranchDirection = Vector2.zero;
+    private Vector2 startPlayerPos;
 
-    private int startX = 0;
-
-    Vector2 enforceBranchDirection = Vector2.zero;
-
-    List<int> history = new List<int>();
-
-    public List<int[]> transitionIndex = new List<int[]>();
-    public List<string> transitionIndexString = new List<string>();
-
+    private List<int> history = new List<int>(); //list of states used to create each level instance. 
+    private List<string> transitionIndexString = new List<string>(); //transition state reference.
     private int[] currentIndex;
+    private int[] manualTransitionPath;
 
-    public int[] manualTransitionPath;
 
-    // Use this for initialization
     void Start()
     {
         startX = (int)transform.position.x;
     }
 
-
+    /// <summary>
+    /// Sets up generation parameters
+    /// </summary>
+    /// <param name="height"></param>
+    /// <param name="length"></param>
+    /// <param name="transitions"></param>
+    /// <param name="mapping"></param>
+    /// <param name="historyStep"></param>
+    /// <param name="stateAmount"></param>
     public void MyStart(int height, int length, int transitions, SetUpManager.MappingType mapping, int historyStep, int stateAmount)
     {
-        for (int i = 0; i < historyStep - 1; i++)
-        {
-        //    history.Add(0);
-        }
-
         stepHistory = historyStep + 1;
-
         currentIndex = new int[stepHistory];
 
-        player.GetComponent<SimpleAIController>().SetMapping(mapping);
+        player.GetComponent<SimpleAIController>().SetMapping(mapping); //sets mapping to level testing agen for correct output
 
         levelLength = length;
         levelHeight = height;
-
         startPlayerPos = player.transform.position;
 
+        //Generates empty transition matrix
         List<int> x = new List<int>();
-
-        Debug.Log(transitions.ToString());
-
         for (int j = 0; j < transitions; j++)
         {
             x.Add(100 / transitions);
         }
 
-
+        //Generates transition index, used to refrence transition state.
         for (int j = 0; j < transitions; j++)
         {
             var idx = Convert.ToString(j, stateAmount);
-
             string addon = "";
             for (int i = idx.Length - stepHistory; i < 0; i++)
             {
                 addon += '0';
             }
-
             transitionIndexString.Add(addon + idx);
         }
-
 
         probabilityTransList = new List<int[]>();
         for (int i = 0; i < transitions; i++)
         {
-            // probabilityTransList.Add(new int[] { 1, 2, 3 });
-
             probabilityTransList.Add(x.ToArray());
         }
 
-        RandomChain();
-
-       // GenerateLevel();
-        NewLevelCandidate();
+        //begins generation 1, using randomly generated transition matrix.
+        NewLevelCandidate(); 
     }
 
-
+    /// <summary>
+    /// Generates level using current transition matrix.
+    /// </summary>
     void GenerateLevel()
     {
-        player.gameObject.SetActive(true);
-       
+        player.gameObject.SetActive(true);    
         player.transform.position = startPlayerPos + new Vector2(0, 2);
-
         if (player.GetComponent<SimpleAIController>() != null)
         {
             player.GetComponent<SimpleAIController>().ResetPlayer();
         }
-
         int xPos = (int)transform.position.x;
         int yPos = (int) transform.position.y;
 
         foreach (var plat in platsformObjects)
         {
-            Destroy(plat.gameObject);
+            Destroy(plat.gameObject); //Destroy existing level
         }
 
         platsformObjects.Clear();
@@ -151,20 +134,20 @@ public class LevelGenerator : MonoBehaviour
             }
             else
             {
-                currentState = (States)manualTransitionPath[i];
-            }       
+                //generates level from a manually set state list - used in specific level generation
+                currentState = (States) manualTransitionPath[i];
+            }
 
-
+            //Determines type of platform too spawn based, by comparing heights to states.
             if ((((int) currentState < (levelHeight) * 2 && (int) currentState > levelHeight)))
             {
                 currentState = States.NoGround;
             }
 
-            if ((int)currentState >= (levelHeight) * 3)
+            if ((int) currentState >= (levelHeight) * 3)
             {
                 currentState = States.NoGround;
             }
-
 
             if (currentState != States.NoGround)
             {
@@ -173,41 +156,42 @@ public class LevelGenerator : MonoBehaviour
 
                 if ((int) currentState > levelHeight)
                 {
-                    spawnY = yPos + (int)currentState - (levelHeight);
+                    spawnY = yPos + (int) currentState - (levelHeight);
                     spawnY = spawnY - 1;
                 }
 
                 if ((int) currentState > (levelHeight) * 2)
                 {
                     toSpawn = spikePlat;
-                    spawnY = yPos + (int)currentState - (levelHeight * 2);
+                    spawnY = yPos + (int) currentState - (levelHeight * 2);
                     spawnY = spawnY - 1;
                 }
 
                 GameObject plat = Instantiate(toSpawn, new Vector3(xPos, spawnY, 0),
-                toSpawn.transform.rotation, transform);
+                    toSpawn.transform.rotation, transform);
                 platsformObjects.Add(plat);
             }
 
+            //used for tree branch generation upwards
             if (enforceBranchDirection.y == 1)
             {
                 yPos++;
             }
 
+            //used for tree branch generation downwards
             if (enforceBranchDirection.y == -1)
             {
                 yPos--;
             }
 
-                xPos++;
+            xPos++;
         }
 
-        //end space
+        //end space height
         if (currentState == States.NoGround)
         {
             currentState = States.Ground1;
         }
-
         int ypos = yPos + (int)currentState - 1; ;
         if ((int)currentState >= (levelHeight) * 2)
         {
@@ -218,6 +202,7 @@ public class LevelGenerator : MonoBehaviour
             ypos = ypos - (levelHeight);
         }
 
+        //final platforms for level
         GameObject end = Instantiate(endFlag, new Vector3(xPos, ypos, 0), ground.transform.rotation, transform);
         GameObject endPlus = Instantiate(ground, end.transform.position + new Vector3(1,0, 0), ground.transform.rotation, transform);
         GameObject endPlusPlus = Instantiate(ground, end.transform.position + new Vector3(2, 0, 0), ground.transform.rotation, transform);
@@ -225,24 +210,19 @@ public class LevelGenerator : MonoBehaviour
         platsformObjects.Add(endPlus);
         platsformObjects.Add(endPlusPlus);
 
-
         //move player to start
         GameObject start = Instantiate(ground, new Vector3(platsformObjects[0].transform.position.x - 1, platsformObjects[0].transform.position.y), ground.transform.rotation, transform);
         player.transform.position = new Vector3(platsformObjects[0].transform.position.x - 1.5f, platsformObjects[0].transform.position.y + 1.5f);
         platsformObjects.Add(start);
-
         player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 
-        GetComponent<EventTracker>().SetSuccess(end.transform);
+        GetComponent<EventTracker>().SetSuccess(end.transform); //sets end of level target for AI
 
         foreach (var plt in additPlatsformObjects)
         {
             Destroy(plt);
         }
-
         additPlatsformObjects.Clear();
-
-        //
         foreach (var plt in platsformObjects)
         {
             for (int i = (int)plt.transform.position.y - 1; i >= transform.position.y; i--)
@@ -253,7 +233,9 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// State change, based on transition probablilties.
+    /// </summary>
     void SwitchStates()
     {
         int r = Random.Range(0, 100);
@@ -265,19 +247,18 @@ public class LevelGenerator : MonoBehaviour
         string currentIdxStr = "";
         foreach (var id in currentIndex)
         {
-            currentIdxStr += id;
+            currentIdxStr += id; //index as string
         }
-       // Debug.Log(currentIdxStr);
 
         for (int i = 0; i < transitionIndexString.Count; i++)
         {
             if (transitionIndexString[i] == currentIdxStr)
             {
                 trueState = i;
-             //   Debug.Log("TS: " + trueState);
             }
         }
 
+        //adds value from each transtion indx until the randomly selected value is surpassed to find transition index.
         for (int i = 0; i < probabilityTransList[trueState].Length; i++)
         {
             if (iter < r)
@@ -287,11 +268,8 @@ public class LevelGenerator : MonoBehaviour
             }
         }
 
-        //IDK WIERD ISSUE
+        //WIERD ISSUE
         int stateString = (transitionIndexString[selectedTransition][currentIndex.Length - 1] - 48);
-
-      //  currentIndex.x = currentIndex.y;
-     //   currentIndex.y = transitionIndex[selectedTransition].y;
 
         List<int> newIndex = new List<int>();
         for (int i = 0; i < currentIndex.Length - 1; i++)
@@ -303,41 +281,6 @@ public class LevelGenerator : MonoBehaviour
         currentIndex = newIndex.ToArray();
         currentState = (States)currentIndex[currentIndex.Length - 1];
     }
-
-
-    public void RandomChain()
-    {
-        foreach (var pa in probabilityTransList)
-        {
-            int leftVal = 100;
-            int decremter = probabilityTransList.Count - 1;
-            List<bool> usedCheck = new List<bool>();
-
-            foreach (var x in pa)
-            {
-                usedCheck.Add(false);
-            }
-
-            while (decremter >= 0)
-            {
-                int rT = Random.Range(0, pa.Length);
-                while (usedCheck[rT] == true)
-                {
-                    rT = Random.Range(0, pa.Length);
-                }
-
-                int r = Random.Range(0, leftVal + 1);
-                leftVal -= r;
-                //  usedList.Add(rT);
-                pa[rT] = r;
-                usedCheck[rT] = true;
-                decremter--;
-            }
-
-            // probablitiyLists[i] = new List<int>(usedList);
-        }
-    }
-
 
     public List<int[]> GetGeneratorChromosome()
     {
@@ -357,6 +300,7 @@ public class LevelGenerator : MonoBehaviour
             yield return new WaitForSeconds(5 * Time.timeScale);
         }
     }
+
 
     public bool CheckDiffucultySuccess()
     {
@@ -378,6 +322,7 @@ public class LevelGenerator : MonoBehaviour
 
         return true;
     }
+
 
     public void SetNewChain(List<int[]> chain)
     {
