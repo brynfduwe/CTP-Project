@@ -4,13 +4,14 @@ Creative Technologies Project
 Procedural Level Generation and Deisgn
 
 
-
+Project Repository: https://github.com/brynfduwe/CTP-Project
+Video Summary: https://youtu.be/ly_yQigkQBM
 
 
 When opening as a Unity Project please use Unity 2.2f1. Please ensure the 'LevelGen' scene is opened prior to hitting play.
 
 
-If you wish, you can change the values of the of the file 'Assets/Design/Curves/Custom.csv' in the Unity project folder for use in the project.
+You can change the curve values of the file 'Assets/Design/Curves/Custom.csv' in the Unity project folder for use in the project.
 When doing so, please ensure 100 values are present from 0-1, layed vertiacally in the first coloumn only.
 This curve can then be selected when running the project in Unity.
 
