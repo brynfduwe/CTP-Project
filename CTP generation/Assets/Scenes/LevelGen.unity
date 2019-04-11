@@ -1687,8 +1687,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c1623fafc7675e46857d84bfd635f52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  csvFilePath: Assets/InputActions.csv
-  csvConvergenceCurvePath: Assets/ConvergenceCurve.csv
+  csvFilePath: InputActions.csv
+  csvConvergenceCurvePath: ConvergenceCurve.csv
 --- !u!114 &904623995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1700,7 +1700,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a826350cd60d8a241be99a72a522a65f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  folderPath: Assets/ScreenCaps/
+  folderPath: ScreenCaps/
 --- !u!114 &904623996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2234,7 +2234,7 @@ MonoBehaviour:
   candidateReq: 5
   minimumFitnessReq: 0.33
   historySteps: 0
-  endAfterGen: 15
+  endAfterGen: 10
   mutationRate: 0.025
   endFitnessReq: 0.9
   spikes: 0
